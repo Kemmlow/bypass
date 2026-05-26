@@ -46,238 +46,193 @@ class _WORD;
 #define _BYTE long
 #define _WORD long
 
-__int64 (*osub_493A18)(__int64 a1, __int64 a2, __int64 a3, ...);
-__int64 hsub_493A18(__int64 a1, __int64 a2, __int64 a3, ...) { return 0; }
-
-void (*osub_51F940)();
-void hsub_51F940() { return; }
-
-__int64 (*osub_3BBD00)();
-__int64 hsub_3BBD00() { return 0; }
-
-__int64 (*osub_5058AC)();
-__int64 hsub_5058AC() { return 0; }
+__int64 (*osub_456EEC)();
+void hsub_456EEC() { return; }
+void (*osub_4EA870)();
+void hsub_4EA870() { return; }
+void (*osub_4DA95C)();
+void hsub_4DA95C() { return; }
+void (*osub_4B2C58)();
+void hsub_4B2C58() { return; }
 
 void (*osub_3F2104)();
 void hsub_3F2104() { return; }
-
-__int64 (*osub_4F7E28)();
-__int64 hsub_4F7E28() { return 0; }
-
-__int64 (*osub_4B6D8C)(__int64 a1, const char *a2, ...);
-__int64 hsub_4B6D8C(__int64 a1, const char *a2, ...) { return 0; }
-
-__int64 (*osub_48AE3C)();
-__int64 hsub_48AE3C() { return 0; }
-
-void (*osub_456EEC)();
-void hsub_456EEC() { return; }
-
-__int64 (*osub_4CA688)();
-__int64 hsub_4CA688() { return 0; }
-
-__int64 (*osub_4C11E4)(__int64 a1);
-__int64 hsub_4C11E4(__int64 a1) { return 0; }
-
 void (*osub_3A54F0)();
 void hsub_3A54F0() { return; }
-
-void (*osub_50137C)();
-void hsub_50137C() { return; }
-
-__int64 (*osub_393DE0)(__int64 a1);
-__int64 hsub_393DE0(__int64 a1) { return 0; }
-
-__int64 (*osub_404D14)();
-__int64 hsub_404D14() { return 0; }
-
-void (*osub_4E17CC)(__int64 a1);
-void hsub_4E17CC(__int64 a1) { return; }
-
-__int64 (*osub_425608)();
-__int64 hsub_425608() { return 0; }
-
-__int64 (*osub_2E7E60)(__int64 a1);
-__int64 hsub_2E7E60(__int64 a1) { return 0; }
-
 void (*osub_4B3E34)();
 void hsub_4B3E34() { return; }
-
-__int64 (*osub_3E80A8)();
-__int64 hsub_3E80A8() { return 0; }
-
-__int64 (*osub_4E58EC)(__int64 a1);
-__int64 hsub_4E58EC(__int64 a1) { return 0; }
-
-void (*osub_4EA870)();
-void hsub_4EA870() { return; }
-
-void (*osub_51C3E0)();
-void hsub_51C3E0() { return; }
-
-__int64 (*osub_3CA8B4)();
-__int64 hsub_3CA8B4() { return 0; }
-
-__int64 (*osub_4F10CC)();
-__int64 hsub_4F10CC() { return 0; }
-
-void (*osub_1D37A8)();
-void hsub_1D37A8() { return; }
-
-void (*osub_4ED6BC)();
-void hsub_4ED6BC() { return; }
-
-__int64 (*osub_1C79D4)();
-__int64 hsub_1C79D4() { return 0; }
-
-__int64 (*osub_487600)();
-__int64 hsub_487600() { return 0; }
-
-void (*osub_4D8950)();
-void hsub_4D8950() { return; }
-
-__int64 (*osub_317068)();
-__int64 hsub_317068() { return 0; }
-
 __int64 (*osub_47B5CC)();
 __int64 hsub_47B5CC() { return 0; }
-
-void (*osub_1CCA4C)();
-void hsub_1CCA4C() { return; }
-
-__int64 (*osub_515578)();
-__int64 hsub_515578() { return 0; }
-
-void (*osub_4DA95C)();
-void hsub_4DA95C() { return; }
-
-void (*osub_4E89C0)();
-void hsub_4E89C0() { return; }
-
-void (*osub_1EB98C)();
-void hsub_1EB98C() { return; }
-
-__int64 (*osub_1EF328)();
-__int64 hsub_1EF328() { return 0; }
-
-__int64 (*osub_32E308)();
-__int64 hsub_32E308() { return 0; }
-
 __int64 (*osub_23AEF4)();
 __int64 hsub_23AEF4() { return 0; }
-
-__int64 (*osub_4D66D4)();
-__int64 hsub_4D66D4() { return 0; }
-
-void (*osub_31DCA0)();
-void hsub_31DCA0() { return; }
-
-__int64 (*osub_3D3EE0)();
-__int64 hsub_3D3EE0() { return 0; }
-
-void (*osub_37B2EC)();
-void hsub_37B2EC() { return; }
-
-__int64 (*osub_1FE854)();
-__int64 hsub_1FE854() { return 0; }
-
-__int64 (*osub_3D9FD0)();
-__int64 hsub_3D9FD0() { return 0; }
-
 void (*osub_1E2830)();
 void hsub_1E2830() { return; }
 
+__int64 (*osub_493A18)(__int64 a1, __int64 a2, __int64 a3, ...);
+__int64 hsub_493A18(__int64 a1, __int64 a2, __int64 a3, ...) { return 0; }
+__int64 (*osub_5058AC)();
+__int64 hsub_5058AC() { return 0; }
+void (*osub_50137C)();
+void hsub_50137C() { return; }
+void (*osub_51C3E0)();
+void hsub_51C3E0() { return; }
+__int64 (*osub_1C79D4)();
+__int64 hsub_1C79D4() { return 0; }
+void (*osub_1EB98C)();
+void hsub_1EB98C() { return; }
+void (*osub_37B2EC)();
+void hsub_37B2EC() { return; }
+
+__int64 (*osub_4F7E28)();
+__int64 hsub_4F7E28() { return 0; }
+__int64 (*osub_393DE0)(__int64 a1);
+__int64 hsub_393DE0(__int64 a1) { return 0; }
+__int64 (*osub_3E80A8)();
+__int64 hsub_3E80A8() { return 0; }
+void (*osub_4D8950)();
+void hsub_4D8950() { return; }
+__int64 (*osub_4D66D4)();
+__int64 hsub_4D66D4() { return 0; }
 __int64 (*osub_489534)(__int64 a1);
 __int64 hsub_489534(__int64 a1) { return 0; }
 
+void (*osub_51F940)();
+void hsub_51F940() { return; }
+__int64 (*osub_3BBD00)();
+__int64 hsub_3BBD00() { return 0; }
+__int64 (*osub_48AE3C)();
+__int64 hsub_48AE3C() { return 0; }
+__int64 (*osub_4CA688)();
+__int64 hsub_4CA688() { return 0; }
+__int64 (*osub_4C11E4)(__int64 a1);
+__int64 hsub_4C11E4(__int64 a1) { return 0; }
+void (*osub_4E17CC)(__int64 a1);
+void hsub_4E17CC(__int64 a1) { return; }
+__int64 (*osub_2E7E60)(__int64 a1);
+__int64 hsub_2E7E60(__int64 a1) { return 0; }
+__int64 (*osub_4E58EC)(__int64 a1);
+__int64 hsub_4E58EC(__int64 a1) { return 0; }
+__int64 (*osub_4F10CC)();
+__int64 hsub_4F10CC() { return 0; }
+void (*osub_4ED6BC)();
+void hsub_4ED6BC() { return; }
+__int64 (*osub_317068)();
+__int64 hsub_317068() { return 0; }
+__int64 (*osub_515578)();
+__int64 hsub_515578() { return 0; }
+__int64 (*osub_4E89C0)();
+void hsub_4E89C0() { return; }
+__int64 (*osub_32E308)();
+__int64 hsub_32E308() { return 0; }
+__int64 (*osub_3D3EE0)();
+__int64 hsub_3D3EE0() { return 0; }
+__int64 (*osub_1FE854)();
+__int64 hsub_1FE854() { return 0; }
+__int64 (*osub_3D9FD0)();
+__int64 hsub_3D9FD0() { return 0; }
 __int64 (*osub_230848)();
 __int64 hsub_230848() { return 0; }
+__int64 (*osub_3A564C)(__int64 a1, unsigned __int64 a2, void *a3, double a4);
+__int64 hsub_3A564C(__int64 a1, unsigned __int64 a2, void *a3, double a4) { return 0; }
+void *(*osub_46ED30)(__int64 a1, FILE *a2, unsigned int *a3);
+void *hsub_46ED30(__int64 a1, FILE *a2, unsigned int *a3) { return nullptr; }
 
-void (*osub_4B2C58)();
-void hsub_4B2C58() { return; }
+__int64 (*osub_21248C)(__int64 a1);
+__int64 hsub_21248C(__int64 a1) { return 0; }
+__int64 (*osub_36A5B8)(_DWORD *a1, _QWORD *a2);
+__int64 hsub_36A5B8(_DWORD *a1, _QWORD *a2) { return 0; }
 
 __int64 (*osub_4B5E48)(unsigned __int8 *a1, unsigned __int8 *a2, __int64 a3);
 __int64 hsub_4B5E48(unsigned __int8 *a1, unsigned __int8 *a2, __int64 a3)
 {
     if (a3 == 16 || a3 == 20 || a3 == 32) return 0;
-    __int64 res = osub_4B5E48(a1, a2, a3);
+    __int64 res = osub_4B5E48 ? osub_4B5E48(a1, a2, a3) : 0;
     if (res != 0 && a3 > 8) return 0;
     return res;
 }
-
 __int64 (*osub_49AA00)(char *a1, __int64 a2);
 __int64 hsub_49AA00(char *a1, __int64 a2) { return 0; }
-
 __int64 (*osub_39F56C)(unsigned __int8 *a1, unsigned int a2);
 __int64 hsub_39F56C(unsigned __int8 *a1, unsigned int a2) { return 0; }
-
 __int64 (*osub_330494)(__int64 a1, unsigned int a2);
 __int64 hsub_330494(__int64 a1, unsigned int a2) { return 0; }
-
 __int64 (*osub_37C904)(__int64 a1, __int64 a2, __int64 *a3, unsigned int *a4);
 __int64 hsub_37C904(__int64 a1, __int64 a2, __int64 *a3, unsigned int *a4) { return 0; }
-
 __int64 (*osub_2124C8)(__int64 a1, char a2);
 __int64 hsub_2124C8(__int64 a1, char a2)
 {
     if (a1) { *(uint8_t *)(a1 + 112) = 1; return 0; }
     return osub_2124C8 ? osub_2124C8(a1, a2) : 0;
 }
-
 __int64 (*osub_228168)(__int64 a1, unsigned __int8 *a2, unsigned int a3);
 __int64 hsub_228168(__int64 a1, unsigned __int8 *a2, unsigned int a3)
 {
     if (a3 == 0x1A) return 0;
     return osub_228168 ? osub_228168(a1, a2, a3) : 0;
 }
-
+__int64 (*osub_228560)();
+__int64 devil() { return 0; }
 __int64 (*osub_404D50)(__int64 a1, __int64 a2);
 __int64 hsub_404D50(__int64 a1, __int64 a2) { return 0; }
-
 void (*osub_313810)(__int64 a1);
 void hsub_313810(__int64 a1) { return; }
-
 __int64 (*osub_37BC4C)(__int64 a1, __int64 a2, __int64 a3);
 __int64 hsub_37BC4C(__int64 a1, __int64 a2, __int64 a3) { return 0; }
-
 __int64 (*osub_2ECE70)(__int64 a1, __int64 a2);
 __int64 hsub_2ECE70(__int64 a1, __int64 a2) { return 0; }
-
 void (*osub_4690CC)(__int64 a1, __int64 a2);
 void hsub_4690CC(__int64 a1, __int64 a2) { return; }
-
 __int64 (*osub_50B808)(__int64 a1);
 __int64 hsub_50B808(__int64 a1) { return 0; }
-
 __int64 (*osub_320470)(__int64 a1, __int64 a2, __int64 a3);
 __int64 hsub_320470(__int64 a1, __int64 a2, __int64 a3) { return 0; }
-
 __int64 (*osub_35E5DC)(__int64 a1);
 __int64 hsub_35E5DC(__int64 a1) { return 0; }
-
 void (*osub_5026EC)(__int64 a1);
 void hsub_5026EC(__int64 a1) { return; }
-
 __int64 (*osub_37FD78)(__int64 a1, __int64 a2);
 __int64 hsub_37FD78(__int64 a1, __int64 a2) { return 0; }
-
 void (*osub_1F64D8)(int a1, int a2, unsigned __int8 *a3);
 void hsub_1F64D8(int a1, int a2, unsigned __int8 *a3) { return; }
-
 __int64 (*osub_4F5604)(__int64 a1, _BYTE *a2);
 __int64 hsub_4F5604(__int64 a1, _BYTE *a2) { return 0; }
-
 void (*osub_1F9028)(__int64 a1);
 void hsub_1F9028(__int64 a1) { return; }
-
 __int64 (*osub_4B5F64)(void *a1, void *a2);
 __int64 hsub_4B5F64(void *a1, void *a2) { return 1; }
-
 void (*osub_4DB148)(__int64 a1);
 void hsub_4DB148(__int64 a1) { return; }
-
 __int64 (*osub_4EEA08)(void *a1);
 __int64 hsub_4EEA08(void *a1) { return 0; }
+__int64 (*osub_461F04)(_BYTE *a1, int a2, __int64 a3, int a4);
+__int64 hsub_461F04(_BYTE *a1, int a2, __int64 a3, int a4) { return 0; }
+__int64 (*osub_471B68)(__int64 a1, int a2);
+__int64 hsub_471B68(__int64 a1, int a2) { return 0; }
+__int64 (*osub_447750)(__int64 a1, __int64 a2);
+__int64 hsub_447750(__int64 a1, __int64 a2) { return 0; }
+_QWORD *(*osub_4D4C94)(int a1, int a2);
+_QWORD *hsub_4D4C94(int a1, int a2) { return nullptr; }
+__int64 (*osub_1CCA7C)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, int a9);
+__int64 hsub_1CCA7C(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, int a9) { return 0; }
+__int64 (*osub_404D14)();
+__int64 hsub_404D14() { return 0; }
+
+__int64 (*osub_4B6D8C)(__int64 a1, const char *a2, ...);
+__int64 hsub_4B6D8C(__int64 a1, const char *a2, ...) { return 0; }
+__int64 (*osub_425608)();
+__int64 hsub_425608() { return 0; }
+__int64 (*osub_3CA8B4)();
+__int64 hsub_3CA8B4() { return 0; }
+void (*osub_1D37A8)();
+void hsub_1D37A8() { return; }
+__int64 (*osub_487600)();
+__int64 hsub_487600() { return 0; }
+__int64 (*osub_1CCA4C)();
+void hsub_1CCA4C() { return; }
+__int64 (*osub_1EF328)();
+__int64 hsub_1EF328() { return 0; }
+void (*osub_31DCA0)();
+void hsub_31DCA0() { return; }
 
 void *ue4_thread(void *)
 {
@@ -292,57 +247,51 @@ void *anogs_thread(void *)
 {
     do { sleep(1); } while (!isLibraryLoaded("libanogs.so"));
 
-    HOOK_LIB("libanogs.so", "0x493A18", hsub_493A18, osub_493A18); // violation termination
+    HOOK_LIB("libanogs.so", "0x456EEC", hsub_456EEC, osub_456EEC); // 1 day
+    HOOK_LIB("libanogs.so", "0x4EA870", hsub_4EA870, osub_4EA870); // 1 day
+    HOOK_LIB("libanogs.so", "0x4DA95C", hsub_4DA95C, osub_4DA95C); // 1 day
+    HOOK_LIB("libanogs.so", "0x4B2C58", hsub_4B2C58, osub_4B2C58); // 1 day
+    HOOK_LIB("libanogs.so", "0x3F2104", hsub_3F2104, osub_3F2104); // 7 day
+    HOOK_LIB("libanogs.so", "0x3A54F0", hsub_3A54F0, osub_3A54F0); // 7 day
+    HOOK_LIB("libanogs.so", "0x4B3E34", hsub_4B3E34, osub_4B3E34); // 7 day
+    HOOK_LIB("libanogs.so", "0x47B5CC", hsub_47B5CC, osub_47B5CC); // 7 day
+    HOOK_LIB("libanogs.so", "0x23AEF4", hsub_23AEF4, osub_23AEF4); // 7 day
+    HOOK_LIB("libanogs.so", "0x1E2830", hsub_1E2830, osub_1E2830); // 7 day
+    HOOK_LIB("libanogs.so", "0x493A18", hsub_493A18, osub_493A18); // 30 min termination
+    HOOK_LIB("libanogs.so", "0x5058AC", hsub_5058AC, osub_5058AC); // 30 min termination
+    HOOK_LIB("libanogs.so", "0x50137C", hsub_50137C, osub_50137C); // 30 min termination
+    HOOK_LIB("libanogs.so", "0x51C3E0", hsub_51C3E0, osub_51C3E0); // 30 min termination
+    HOOK_LIB("libanogs.so", "0x1C79D4", hsub_1C79D4, osub_1C79D4); // 30 min termination
+    HOOK_LIB("libanogs.so", "0x1EB98C", hsub_1EB98C, osub_1EB98C); // 30 min termination
+    HOOK_LIB("libanogs.so", "0x37B2EC", hsub_37B2EC, osub_37B2EC); // 30 min termination
+    HOOK_LIB("libanogs.so", "0x4F7E28", hsub_4F7E28, osub_4F7E28); // 1 month
+    HOOK_LIB("libanogs.so", "0x393DE0", hsub_393DE0, osub_393DE0); // 1 month
+    HOOK_LIB("libanogs.so", "0x3E80A8", hsub_3E80A8, osub_3E80A8); // 1 month
+    HOOK_LIB("libanogs.so", "0x4D8950", hsub_4D8950, osub_4D8950); // 1 month
+    HOOK_LIB("libanogs.so", "0x4D66D4", hsub_4D66D4, osub_4D66D4); // 1 month
+    HOOK_LIB("libanogs.so", "0x489534", hsub_489534, osub_489534); // 1 month
     HOOK_LIB("libanogs.so", "0x51F940", hsub_51F940, osub_51F940); // 10 years
     HOOK_LIB("libanogs.so", "0x3BBD00", hsub_3BBD00, osub_3BBD00); // 10 years
-    HOOK_LIB("libanogs.so", "0x5058AC", hsub_5058AC, osub_5058AC); // violation termination
-    HOOK_LIB("libanogs.so", "0x3F2104", hsub_3F2104, osub_3F2104); // 7 day
-    HOOK_LIB("libanogs.so", "0x4F7E28", hsub_4F7E28, osub_4F7E28); // 1 month
-    HOOK_LIB("libanogs.so", "0x4B6D8C", hsub_4B6D8C, osub_4B6D8C); // flag delay
     HOOK_LIB("libanogs.so", "0x48AE3C", hsub_48AE3C, osub_48AE3C); // 10 years
-    HOOK_LIB("libanogs.so", "0x456EEC", hsub_456EEC, osub_456EEC); // 1 day
     HOOK_LIB("libanogs.so", "0x4CA688", hsub_4CA688, osub_4CA688); // 10 years
     HOOK_LIB("libanogs.so", "0x4C11E4", hsub_4C11E4, osub_4C11E4); // 10 years
-    HOOK_LIB("libanogs.so", "0x3A54F0", hsub_3A54F0, osub_3A54F0); // 7 day
-    HOOK_LIB("libanogs.so", "0x50137C", hsub_50137C, osub_50137C); // violation termination
-    HOOK_LIB("libanogs.so", "0x393DE0", hsub_393DE0, osub_393DE0); // 1 month
-    HOOK_LIB("libanogs.so", "0x404D14", hsub_404D14, osub_404D14); // flag fix
     HOOK_LIB("libanogs.so", "0x4E17CC", hsub_4E17CC, osub_4E17CC); // 10 years
-    HOOK_LIB("libanogs.so", "0x425608", hsub_425608, osub_425608); // flag delay
     HOOK_LIB("libanogs.so", "0x2E7E60", hsub_2E7E60, osub_2E7E60); // 10 years
-    HOOK_LIB("libanogs.so", "0x4B3E34", hsub_4B3E34, osub_4B3E34); // 7 day
-    HOOK_LIB("libanogs.so", "0x3E80A8", hsub_3E80A8, osub_3E80A8); // 1 month
     HOOK_LIB("libanogs.so", "0x4E58EC", hsub_4E58EC, osub_4E58EC); // 10 years
-    HOOK_LIB("libanogs.so", "0x4EA870", hsub_4EA870, osub_4EA870); // 1 day
-    HOOK_LIB("libanogs.so", "0x51C3E0", hsub_51C3E0, osub_51C3E0); // violation termination
-    HOOK_LIB("libanogs.so", "0x3CA8B4", hsub_3CA8B4, osub_3CA8B4); // flag delay
     HOOK_LIB("libanogs.so", "0x4F10CC", hsub_4F10CC, osub_4F10CC); // 10 years
-    HOOK_LIB("libanogs.so", "0x1D37A8", hsub_1D37A8, osub_1D37A8); // flag delay
     HOOK_LIB("libanogs.so", "0x4ED6BC", hsub_4ED6BC, osub_4ED6BC); // 10 years
-    HOOK_LIB("libanogs.so", "0x1C79D4", hsub_1C79D4, osub_1C79D4); // violation termination
-    HOOK_LIB("libanogs.so", "0x487600", hsub_487600, osub_487600); // flag delay
-    HOOK_LIB("libanogs.so", "0x4D8950", hsub_4D8950, osub_4D8950); // 1 month
     HOOK_LIB("libanogs.so", "0x317068", hsub_317068, osub_317068); // 10 years
-    HOOK_LIB("libanogs.so", "0x47B5CC", hsub_47B5CC, osub_47B5CC); // 7 day
-    HOOK_LIB("libanogs.so", "0x1CCA4C", hsub_1CCA4C, osub_1CCA4C); // flag delay
     HOOK_LIB("libanogs.so", "0x515578", hsub_515578, osub_515578); // 10 years
-    HOOK_LIB("libanogs.so", "0x4DA95C", hsub_4DA95C, osub_4DA95C); // 1 day
     HOOK_LIB("libanogs.so", "0x4E89C0", hsub_4E89C0, osub_4E89C0); // 10 years
-    HOOK_LIB("libanogs.so", "0x1EB98C", hsub_1EB98C, osub_1EB98C); // violation termination
-    HOOK_LIB("libanogs.so", "0x1EF328", hsub_1EF328, osub_1EF328); // flag delay
     HOOK_LIB("libanogs.so", "0x32E308", hsub_32E308, osub_32E308); // 10 years
-    HOOK_LIB("libanogs.so", "0x23AEF4", hsub_23AEF4, osub_23AEF4); // 7 day
-    HOOK_LIB("libanogs.so", "0x4D66D4", hsub_4D66D4, osub_4D66D4); // 1 month
-    HOOK_LIB("libanogs.so", "0x31DCA0", hsub_31DCA0, osub_31DCA0); // flag delay
     HOOK_LIB("libanogs.so", "0x3D3EE0", hsub_3D3EE0, osub_3D3EE0); // 10 years
-    HOOK_LIB("libanogs.so", "0x37B2EC", hsub_37B2EC, osub_37B2EC); // violation termination
-    HOOK_LIB("libanogs.so", "0x1FE854", hsub_1FE854, osub_1FE854); // flag delay
+    HOOK_LIB("libanogs.so", "0x1FE854", hsub_1FE854, osub_1FE854); // 10 years
     HOOK_LIB("libanogs.so", "0x3D9FD0", hsub_3D9FD0, osub_3D9FD0); // 10 years
-    HOOK_LIB("libanogs.so", "0x1E2830", hsub_1E2830, osub_1E2830); // 7 day
-    HOOK_LIB("libanogs.so", "0x489534", hsub_489534, osub_489534); // 1 month
     HOOK_LIB("libanogs.so", "0x230848", hsub_230848, osub_230848); // 10 years
-    HOOK_LIB("libanogs.so", "0x4B2C58", hsub_4B2C58, osub_4B2C58); // 1 day
-
+    HOOK_LIB("libanogs.so", "0x3A564C", hsub_3A564C, osub_3A564C); // 10 years
+    HOOK_LIB("libanogs.so", "0x46ED30", (void *)hsub_46ED30, (void **)&osub_46ED30); // 10 years
+    HOOK_LIB("libanogs.so", "0x21248C", hsub_21248C, osub_21248C); // violation termination
+    HOOK_LIB("libanogs.so", "0x36A5B8", hsub_36A5B8, osub_36A5B8); // violation termination
     HOOK_LIB("libanogs.so", "0x4B5E48", hsub_4B5E48, osub_4B5E48); // flag fix
     HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00); // flag fix
     HOOK_LIB("libanogs.so", "0x39F56C", hsub_39F56C, osub_39F56C); // flag fix
@@ -350,6 +299,7 @@ void *anogs_thread(void *)
     HOOK_LIB("libanogs.so", "0x37C904", hsub_37C904, osub_37C904); // flag fix
     HOOK_LIB("libanogs.so", "0x2124C8", hsub_2124C8, osub_2124C8); // flag fix
     HOOK_LIB("libanogs.so", "0x228168", hsub_228168, osub_228168); // flag fix
+    HOOK_LIB("libanogs.so", "0x228560", (void *)devil, (void **)&osub_228560); // flag fix
     HOOK_LIB("libanogs.so", "0x404D50", hsub_404D50, osub_404D50); // flag fix
     HOOK_LIB("libanogs.so", "0x313810", hsub_313810, osub_313810); // flag fix
     HOOK_LIB("libanogs.so", "0x37BC4C", hsub_37BC4C, osub_37BC4C); // flag fix
@@ -366,33 +316,47 @@ void *anogs_thread(void *)
     HOOK_LIB("libanogs.so", "0x4B5F64", hsub_4B5F64, osub_4B5F64); // flag fix
     HOOK_LIB("libanogs.so", "0x4DB148", hsub_4DB148, osub_4DB148); // flag fix
     HOOK_LIB("libanogs.so", "0x4EEA08", hsub_4EEA08, osub_4EEA08); // flag fix
+    HOOK_LIB("libanogs.so", "0x461F04", hsub_461F04, osub_461F04); // flag fix
+    HOOK_LIB("libanogs.so", "0x471B68", hsub_471B68, osub_471B68); // flag fix
+    HOOK_LIB("libanogs.so", "0x447750", hsub_447750, osub_447750); // flag fix
+    HOOK_LIB("libanogs.so", "0x4D4C94", (void *)hsub_4D4C94, (void **)&osub_4D4C94); // flag fix
+    HOOK_LIB("libanogs.so", "0x1CCA7C", hsub_1CCA7C, osub_1CCA7C); // flag fix
+    HOOK_LIB("libanogs.so", "0x404D14", hsub_404D14, osub_404D14); // flag fix
+    HOOK_LIB("libanogs.so", "0x4B6D8C", hsub_4B6D8C, osub_4B6D8C); // flag delay
+    HOOK_LIB("libanogs.so", "0x425608", hsub_425608, osub_425608); // flag delay
+    HOOK_LIB("libanogs.so", "0x3CA8B4", hsub_3CA8B4, osub_3CA8B4); // flag delay
+    HOOK_LIB("libanogs.so", "0x1D37A8", hsub_1D37A8, osub_1D37A8); // flag delay
+    HOOK_LIB("libanogs.so", "0x487600", hsub_487600, osub_487600); // flag delay
+    HOOK_LIB("libanogs.so", "0x1CCA4C", hsub_1CCA4C, osub_1CCA4C); // flag delay
+    HOOK_LIB("libanogs.so", "0x1EF328", hsub_1EF328, osub_1EF328); // flag delay
+    HOOK_LIB("libanogs.so", "0x31DCA0", hsub_31DCA0, osub_31DCA0); // flag delay
 
+    PATCH_LIB("libanogs.so", "0x49AA3C", "C0 03 5F D6"); // 1 day
+    PATCH_LIB("libanogs.so", "0x2CA678", "C0 03 5F D6"); // 7 day
+    PATCH_LIB("libanogs.so", "0x3DFA14", "C0 03 5F D6"); // 7 day
+    PATCH_LIB("libanogs.so", "0x3E4650", "C0 03 5F D6"); // 7 day
+    PATCH_LIB("libanogs.so", "0x3F9928", "C0 03 5F D6"); // 7 day
+    PATCH_LIB("libanogs.so", "0x2AF2B4", "C0 03 5F D6"); // 30 min termination
+    PATCH_LIB("libanogs.so", "0x2AF350", "C0 03 5F D6"); // 30 min termination
+    PATCH_LIB("libanogs.so", "0x2AF3F0", "C0 03 5F D6"); // 30 min termination
+    PATCH_LIB("libanogs.so", "0x2AF41C", "C0 03 5F D6"); // 30 min termination
+    PATCH_LIB("libanogs.so", "0x2AF448", "C0 03 5F D6"); // 30 min termination
+    PATCH_LIB("libanogs.so", "0x2AF4D8", "C0 03 5F D6"); // 30 min termination
+    PATCH_LIB("libanogs.so", "0x2AF958", "C0 03 5F D6"); // 1 month
+    PATCH_LIB("libanogs.so", "0x2AF984", "C0 03 5F D6"); // 1 month
+    PATCH_LIB("libanogs.so", "0x2AF9B0", "C0 03 5F D6"); // 1 month
+    PATCH_LIB("libanogs.so", "0x2AFA40", "C0 03 5F D6"); // 1 month
     PATCH_LIB("libanogs.so", "0x228360", "C0 03 5F D6"); // 10 years
-    PATCH_LIB("libanogs.so", "0x2AF2B4", "C0 03 5F D6"); // violation termination
-    PATCH_LIB("libanogs.so", "0x2AF350", "C0 03 5F D6"); // violation termination
-    PATCH_LIB("libanogs.so", "0x2AF3F0", "C0 03 5F D6"); // violation termination
-    PATCH_LIB("libanogs.so", "0x2AF41C", "C0 03 5F D6"); // violation termination
-    PATCH_LIB("libanogs.so", "0x2AF448", "C0 03 5F D6"); // violation termination
-    PATCH_LIB("libanogs.so", "0x2AF4D8", "C0 03 5F D6"); // violation termination
-    PATCH_LIB("libanogs.so", "0x2AF568", "C0 03 5F D6"); // high inspection
-    PATCH_LIB("libanogs.so", "0x2AF594", "C0 03 5F D6"); // high inspection
-    PATCH_LIB("libanogs.so", "0x2AF5C0", "C0 03 5F D6"); // high inspection
-    PATCH_LIB("libanogs.so", "0x2AF640", "C0 03 5F D6"); // high inspection
-    PATCH_LIB("libanogs.so", "0x2AF6C0", "C0 03 5F D6"); // high inspection
+    PATCH_LIB("libanogs.so", "0x2AF568", "C0 03 5F D6"); // flag ban
+    PATCH_LIB("libanogs.so", "0x2AF594", "C0 03 5F D6"); // flag ban
+    PATCH_LIB("libanogs.so", "0x2AF5C0", "C0 03 5F D6"); // flag ban
+    PATCH_LIB("libanogs.so", "0x2AF640", "C0 03 5F D6"); // flag ban
+    PATCH_LIB("libanogs.so", "0x2AF6C0", "C0 03 5F D6"); // flag ban
     PATCH_LIB("libanogs.so", "0x2AF740", "C0 03 5F D6"); // flag delay
     PATCH_LIB("libanogs.so", "0x2AF7E0", "C0 03 5F D6"); // flag delay
     PATCH_LIB("libanogs.so", "0x2AF80C", "C0 03 5F D6"); // flag delay
     PATCH_LIB("libanogs.so", "0x2AF838", "C0 03 5F D6"); // flag delay
     PATCH_LIB("libanogs.so", "0x2AF8C8", "C0 03 5F D6"); // flag delay
-    PATCH_LIB("libanogs.so", "0x2AF958", "C0 03 5F D6"); // 1 month
-    PATCH_LIB("libanogs.so", "0x2AF984", "C0 03 5F D6"); // 1 month
-    PATCH_LIB("libanogs.so", "0x2AF9B0", "C0 03 5F D6"); // 1 month
-    PATCH_LIB("libanogs.so", "0x2AFA40", "C0 03 5F D6"); // 1 month
-    PATCH_LIB("libanogs.so", "0x2CA678", "C0 03 5F D6"); // 7 day
-    PATCH_LIB("libanogs.so", "0x3DFA14", "C0 03 5F D6"); // 7 day
-    PATCH_LIB("libanogs.so", "0x3E4650", "C0 03 5F D6"); // 7 day
-    PATCH_LIB("libanogs.so", "0x3F9928", "C0 03 5F D6"); // 7 day
-    PATCH_LIB("libanogs.so", "0x49AA3C", "C0 03 5F D6"); // 1 day
 
     return NULL;
 }
