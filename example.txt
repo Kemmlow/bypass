@@ -1,0 +1,19 @@
+unsigned int __fastcall (*osub_749F534)(__int64 a1, __int64 a2, __int64 a3, __int64 a4,
+                                        __int64 a5, __int64 a6, __int64 a7, __int64 a8);
+
+unsigned int __fastcall hsub_749F534(__int64 a1, __int64 a2, __int64 a3, __int64 a4,
+                                     __int64 a5, __int64 a6, __int64 a7, __int64 a8)
+{
+    if (a1 != 0)
+    {
+        *(__int64 *)(a1 + 56) = 0;
+        *(__int64 *)(a1 + 64) = 0;
+        *(__int64 *)(a1 + 72) = 0;
+        *(__int64 *)(a1 + 80) = 0;
+        *(__int32 *)(a1 + 88) = 0;
+    }
+    osub_749F534(a1, a2, a3, a4, a5, a6, a7, a8);
+    return 0;
+}
+
+HOOK_LIB("libUE4.so", "0x749F534", hsub_749F534, osub_749F534); // (the ban type/anticheat/integrity/security it fixes/bypasses)
