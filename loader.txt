@@ -1,14 +1,14 @@
-__int64 (*osub_375F54)(__int64 a1, const char *a2, int a3, unsigned int *a4, unsigned int *a5) = nullptr;
-__int64 hsub_375F54(__int64 a1, const char *a2, int a3, unsigned int *a4, unsigned int *a5) { return 0; }
+__int64 (*osub_375F54)(__int64, const char*, int, unsigned int*, unsigned int*) = nullptr;
+__int64 hsub_375F54(__int64 a1, const char* a2, int a3, unsigned int* a4, unsigned int* a5) { return 0; }
 
 __int64 (*osub_381944)() = nullptr;
 __int64 hsub_381944() { return 0; }
 
-__int64 (*osub_46270C)(_BYTE *a1, unsigned int a2, __int64 a3, int a4) = nullptr;
-__int64 hsub_46270C(_BYTE *a1, unsigned int a2, __int64 a3, int a4) { return 0; }
+__int64 (*osub_46270C)(_BYTE*, unsigned int, __int64, int) = nullptr;
+__int64 hsub_46270C(_BYTE* a1, unsigned int a2, __int64 a3, int a4) { return 0; }
 
-__int64 (*osub_4633F4)(_BYTE *a1, unsigned int a2, __int64 a3, int a4) = nullptr;
-__int64 hsub_4633F4(_BYTE *a1, unsigned int a2, __int64 a3, int a4) { return 0; }
+__int64 (*osub_4633F4)(_BYTE*, unsigned int, __int64, int) = nullptr;
+__int64 hsub_4633F4(_BYTE* a1, unsigned int a2, __int64 a3, int a4) { return 0; }
 
 HOOK_LIB("libanogs.so", "0x375F54", hsub_375F54, osub_375F54);
 HOOK_LIB("libanogs.so", "0x381944", hsub_381944, osub_381944);

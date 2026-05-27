@@ -1,40 +1,40 @@
-// Finalized Global Anticheat and Termination God Hooks
+// Hyper-Optimized Global Anticheat and Termination God Hooks
 
-__int64 (*osub_387FE4)(__int64 a1) = nullptr;
+__int64 (*osub_387FE4)(__int64) = nullptr;
 __int64 hsub_387FE4(__int64 a1) { return 0; } // case 1
 
-__int64 (*osub_388464)(__int64 a1, __int64 a2) = nullptr;
+__int64 (*osub_388464)(__int64, __int64) = nullptr;
 __int64 hsub_388464(__int64 a1, __int64 a2) { return 0; } // case 10
 
-__int64 (*osub_388A18)(__int64 a1, unsigned int a2) = nullptr;
+__int64 (*osub_388A18)(__int64, unsigned int) = nullptr;
 __int64 hsub_388A18(__int64 a1, unsigned int a2) { return 0; } // case 23
 
-__int64 (*osub_389C14)(__int64 a1, __int64 a2, __int64 a3, __int64 a4) = nullptr;
+__int64 (*osub_389C14)(__int64, __int64, __int64, __int64) = nullptr;
 __int64 hsub_389C14(__int64 a1, __int64 a2, __int64 a3, __int64 a4) { return 0; } // case 36
 
-__int64 (*osub_389FFC)(__int64 a1, __int64 a2, __int64 a3, ...) = nullptr;
+__int64 (*osub_389FFC)(__int64, __int64, __int64, ...) = nullptr;
 __int64 hsub_389FFC(__int64 a1, __int64 a2, __int64 a3, ...) { return 0; } // case 38
 
-__int64 (*osub_38A210)(__int64 a1, _QWORD *a2, int a3, __int64 a4, __int64 a5) = nullptr;
-__int64 hsub_38A210(__int64 a1, _QWORD *a2, int a3, __int64 a4, __int64 a5) { return 0; } // case 40
+__int64 (*osub_38A210)(__int64, _QWORD*, int, __int64, __int64) = nullptr;
+__int64 hsub_38A210(__int64 a1, _QWORD* a2, int a3, __int64 a4, __int64 a5) { return 0; } // case 40
 
-__int64 (*osub_38C0D8)(__int64 a1, __int64 a2, __int64 a3, __int64 a4) = nullptr;
+__int64 (*osub_38C0D8)(__int64, __int64, __int64, __int64) = nullptr;
 __int64 hsub_38C0D8(__int64 a1, __int64 a2, __int64 a3, __int64 a4) { return 0; } // case 57
 
-__int64 (*osub_379220)(__int64 a1, const char *a2, const char *a3) = nullptr;
-__int64 hsub_379220(__int64 a1, const char *a2, const char *a3) { return 0; }
+// Termination Fixers
+__int64 (*osub_379220)(__int64, const char*, const char*) = nullptr;
+__int64 hsub_379220(__int64 a1, const char* a2, const char* a3) { return 0; }
 
-__int64 (*osub_3F9928)(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) = nullptr;
+__int64 (*osub_3F9928)(__int64 (__fastcall *)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64) = nullptr;
 __int64 hsub_3F9928(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) { return 0; }
 
-__int64 (*osub_37966C)(int *a1, __int64 a2) = nullptr;
-__int64 hsub_37966C(int *a1, __int64 a2) {
-    if (a2 && *(_QWORD *)(a2 + 8)) *(_DWORD *)a2 = 0xFFFFFFFF;
+__int64 (*osub_37966C)(int*, __int64) = nullptr;
+__int64 hsub_37966C(int* a1, __int64 a2) {
+    if (a2 && *(_QWORD*)(a2 + 8)) *(_DWORD*)a2 = 0xFFFFFFFF;
     return osub_37966C ? osub_37966C(a1, a2) : 0;
 }
 
-void (*osub_5003A4)(const char *a1, ...) = nullptr;
-void hsub_5003A4(const char *a1, ...) { return; }
+void nhsub_5003A4(const char* a1, ...) { return; }
 
 // Registrations
 HOOK_LIB("libanogs.so", "0x387FE4", hsub_387FE4, osub_387FE4);
@@ -47,4 +47,4 @@ HOOK_LIB("libanogs.so", "0x38C0D8", hsub_38C0D8, osub_38C0D8);
 HOOK_LIB("libanogs.so", "0x379220", hsub_379220, osub_379220);
 HOOK_LIB("libanogs.so", "0x3F9928", hsub_3F9928, osub_3F9928);
 HOOK_LIB("libanogs.so", "0x37966C", hsub_37966C, osub_37966C);
-HOOK_LIB("libanogs.so", "0x5003A4", hsub_5003A4, osub_5003A4);
+HOOK_LIB_NO_ORIG("libanogs.so", "0x5003A4", nhsub_5003A4);
