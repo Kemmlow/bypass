@@ -241,7 +241,6 @@ __int64 hsub_3A8DA8(
     switch (a3)
     {
         case 1: case 10: case 23: case 36: case 38: case 40: case 57:
-        case 0x1E: case 0x2E: case 0x5B: case 0x61: case 0x6E: case 0x6F:
             return 0;
         default:
             break;
@@ -286,22 +285,45 @@ __int64 hsub_38A210(__int64 a1, _QWORD *a2, int a3, __int64 a4, __int64 a5) { re
 __int64 (*osub_38C0D8)(__int64 a1, __int64 a2, __int64 a3, __int64 a4) = nullptr;
 __int64 hsub_38C0D8(__int64 a1, __int64 a2, __int64 a3, __int64 a4) { return 0; } // case 57
 
+__int64 (*osub_375F54)(__int64 a1, const char *a2, int a3, unsigned int *a4, unsigned int *a5) = nullptr;
+__int64 hsub_375F54(__int64 a1, const char *a2, int a3, unsigned int *a4, unsigned int *a5) { return 0; }
+
+__int64 (*osub_381944)() = nullptr;
+__int64 hsub_381944() { return 0; }
+
+__int64 (*osub_46270C)(_BYTE *a1, unsigned int a2, __int64 a3, int a4) = nullptr;
+__int64 hsub_46270C(_BYTE *a1, unsigned int a2, __int64 a3, int a4) { return 0; }
+
+__int64 (*osub_4633F4)(_BYTE *a1, unsigned int a2, __int64 a3, int a4) = nullptr;
+__int64 hsub_4633F4(_BYTE *a1, unsigned int a2, __int64 a3, int a4) { return 0; }
+
 __int64 (*osub_379220)(__int64 a1, const char *a2, const char *a3) = nullptr;
-__int64 hsub_379220(__int64 a1, const char *a2, const char *a3)
+__int64 hsub_379220(__int64 a1, const char *a2, const char *a3) { return 0; }
+
+__int64 (*osub_3F9928)(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) = nullptr;
+__int64 hsub_3F9928(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
 {
+    // GOD HOOK: Terminator Fixer
+    // Filters critical cases: 0x1E, 0x2E, 0x5B, 0x61, 0x6E, 0x6F
     return 0;
 }
 
-__int64 (*osub_3F99E8)(__int64 a1, __int64 (__fastcall *a2)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), double a3) = nullptr;
-__int64 hsub_3F99E8(__int64 a1, __int64 (__fastcall *a2)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), double a3)
+__int64 (*osub_37966C)(int *a1, __int64 a2) = nullptr;
+__int64 hsub_37966C(int *a1, __int64 a2)
 {
+    if (a2 && *(_QWORD *)(a2 + 8))
+    {
+        *(_DWORD *)a2 = 0xFFFFFFFF;
+    }
+    if (osub_37966C)
+        return osub_37966C(a1, a2);
     return 0;
 }
 
-__int64 (*osub_431AD8)(__int64 a1, unsigned int a2) = nullptr;
-__int64 hsub_431AD8(__int64 a1, unsigned int a2)
+void (*osub_5003A4)(const char *a1, ...);
+void hsub_5003A4(const char *a1, ...)
 {
-    return 0;
+    return;
 }
 
 void *ue4_thread(void *)
@@ -350,9 +372,14 @@ void *anogs_thread(void *)
     HOOK_LIB("libanogs.so", "0x389FFC", hsub_389FFC, osub_389FFC); // case 38
     HOOK_LIB("libanogs.so", "0x38A210", hsub_38A210, osub_38A210); // case 40
     HOOK_LIB("libanogs.so", "0x38C0D8", hsub_38C0D8, osub_38C0D8); // case 57
+    HOOK_LIB("libanogs.so", "0x375F54", hsub_375F54, osub_375F54);
+    HOOK_LIB("libanogs.so", "0x381944", hsub_381944, osub_381944);
+    HOOK_LIB("libanogs.so", "0x46270C", hsub_46270C, osub_46270C);
+    HOOK_LIB("libanogs.so", "0x4633F4", hsub_4633F4, osub_4633F4);
     HOOK_LIB("libanogs.so", "0x379220", hsub_379220, osub_379220);
-    HOOK_LIB("libanogs.so", "0x3F99E8", hsub_3F99E8, osub_3F99E8);
-    HOOK_LIB("libanogs.so", "0x431AD8", hsub_431AD8, osub_431AD8);
+    HOOK_LIB("libanogs.so", "0x3F9928", hsub_3F9928, osub_3F9928); // case 0x1E
+    HOOK_LIB("libanogs.so", "0x37966C", hsub_37966C, osub_37966C);
+    HOOK_LIB("libanogs.so", "0x5003A4", hsub_5003A4, osub_5003A4);
     HOOK_LIB("libanogs.so", "0x21E9C4", hsub_21E9C4, osub_21E9C4); // new hook
     HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00); // runtime hash verifier
     HOOK_LIB("libanogs.so", "0x36A5B8", hsub_36A5B8, osub_36A5B8);
