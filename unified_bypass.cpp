@@ -153,7 +153,9 @@ void *hsub_46ED30(__int64 a1, FILE *a2, uint32_t *a3)
 __int64 (*osub_2328F0)(__int64 a1, const char *a2, __int64 a3);
 __int64 hsub_2328F0(__int64 a1, const char *a2, __int64 a3)
 {
-    if (a2 && (strstr(a2, oxorany("crash")) || strstr(a2, oxorany("opcode"))))
+    if (a2 && (strstr(a2, oxorany("crash")) || strstr(a2, oxorany("opcode")) ||
+               strstr(a2, oxorany("kick")) || strstr(a2, oxorany("terminate")) ||
+               strstr(a2, oxorany("ban"))))
         return 0;
     return osub_2328F0(a1, a2, a3);
 }
@@ -236,11 +238,21 @@ __int64 hsub_3A8DA8(
     __int64 a10,
     __int64 a11)
 {
+    switch (a3)
+    {
+        case 1: case 10: case 23: case 36: case 38: case 40: case 57:
+        case 0x1E: case 0x2E: case 0x5B: case 0x61: case 0x6E: case 0x6F:
+            return 0;
+        default:
+            break;
+    }
+    if (osub_3A8DA8)
+        return osub_3A8DA8(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
     return 0;
 }
 
-__int64 (*osub_3FC5C8)(__int64 a1, __int64 a2, double a3) = nullptr;
-__int64 hsub_3FC5C8(__int64 a1, __int64 a2, double a3)
+__int64 (*osub_3FC5C8)(__int64 a1, __int64 a2, double a3);
+__int64 __fastcall hsub_3FC5C8(__int64 a1, __int64 a2, double a3)
 {
     if (!a1)
         return 0;
@@ -273,6 +285,24 @@ __int64 hsub_38A210(__int64 a1, _QWORD *a2, int a3, __int64 a4, __int64 a5) { re
 
 __int64 (*osub_38C0D8)(__int64 a1, __int64 a2, __int64 a3, __int64 a4) = nullptr;
 __int64 hsub_38C0D8(__int64 a1, __int64 a2, __int64 a3, __int64 a4) { return 0; } // case 57
+
+__int64 (*osub_379220)(__int64 a1, const char *a2, const char *a3) = nullptr;
+__int64 hsub_379220(__int64 a1, const char *a2, const char *a3)
+{
+    return 0;
+}
+
+__int64 (*osub_3F99E8)(__int64 a1, __int64 (__fastcall *a2)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), double a3) = nullptr;
+__int64 hsub_3F99E8(__int64 a1, __int64 (__fastcall *a2)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), double a3)
+{
+    return 0;
+}
+
+__int64 (*osub_431AD8)(__int64 a1, unsigned int a2) = nullptr;
+__int64 hsub_431AD8(__int64 a1, unsigned int a2)
+{
+    return 0;
+}
 
 void *ue4_thread(void *)
 {
@@ -320,6 +350,9 @@ void *anogs_thread(void *)
     HOOK_LIB("libanogs.so", "0x389FFC", hsub_389FFC, osub_389FFC); // case 38
     HOOK_LIB("libanogs.so", "0x38A210", hsub_38A210, osub_38A210); // case 40
     HOOK_LIB("libanogs.so", "0x38C0D8", hsub_38C0D8, osub_38C0D8); // case 57
+    HOOK_LIB("libanogs.so", "0x379220", hsub_379220, osub_379220);
+    HOOK_LIB("libanogs.so", "0x3F99E8", hsub_3F99E8, osub_3F99E8);
+    HOOK_LIB("libanogs.so", "0x431AD8", hsub_431AD8, osub_431AD8);
     HOOK_LIB("libanogs.so", "0x21E9C4", hsub_21E9C4, osub_21E9C4); // new hook
     HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00); // runtime hash verifier
     HOOK_LIB("libanogs.so", "0x36A5B8", hsub_36A5B8, osub_36A5B8);
