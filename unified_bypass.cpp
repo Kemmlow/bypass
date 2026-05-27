@@ -247,6 +247,22 @@ __int64 hsub_3FC5C8(__int64 a1, __int64 a2, double a3)
     return 0;
 }
 
+__int64 hAnoSDKGetReportData3(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) { return 0; }
+__int64 hAnoSDKGetReportData4(unsigned int a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) { return 0; }
+
+__int64 (*osub_4B39E0)(__int64 a1, const char *a2) = nullptr;
+__int64 hsub_4B39E0(__int64 a1, const char *a2)
+{
+    if (a2)
+    {
+        if (strstr(a2, oxorany("Report")) || strstr(a2, oxorany("CRC")) || strstr(a2, oxorany("Hash")))
+            return 0;
+    }
+    if (osub_4B39E0)
+        return osub_4B39E0(a1, a2);
+    return 0;
+}
+
 void *ue4_thread(void *)
 {
     do
@@ -286,6 +302,9 @@ void *anogs_thread(void *)
     HOOK_LIB("libanogs.so", "0x425864", hsub_425864, osub_425864);  // memory master
     HOOK_LIB("libanogs.so", "0x3A8DA8", hsub_3A8DA8, osub_3A8DA8);  // master caller
     HOOK_LIB("libanogs.so", "0x3FC5C8", hsub_3FC5C8, osub_3FC5C8);  // master caller
+    HOOKSYM_LIB("libanogs.so", "AnoSDKGetReportData3", hAnoSDKGetReportData3, nullptr);
+    HOOKSYM_LIB("libanogs.so", "AnoSDKGetReportData4", hAnoSDKGetReportData4, nullptr);
+    HOOK_LIB("libanogs.so", "0x4B39E0", hsub_4B39E0, osub_4B39E0);
     HOOK_LIB("libanogs.so", "0x21E9C4", hsub_21E9C4, osub_21E9C4); // new hook
     HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00); // runtime hash verifier
     HOOK_LIB("libanogs.so", "0x36A5B8", hsub_36A5B8, osub_36A5B8);
