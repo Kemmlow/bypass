@@ -21,16 +21,30 @@ __int64 hsub_38A210(__int64 a1, _QWORD *a2, int a3, __int64 a4, __int64 a5) { re
 __int64 (*osub_38C0D8)(__int64 a1, __int64 a2, __int64 a3, __int64 a4) = nullptr;
 __int64 hsub_38C0D8(__int64 a1, __int64 a2, __int64 a3, __int64 a4) { return 0; } // case 57
 
-__int64 (*osub_5003A4)(const char *a1, ...) = nullptr;
-void hsub_5003A4(const char *a1, ...) { return; } // Anti-abort God Hook
+__int64 (*osub_379220)(__int64 a1, const char *a2, const char *a3) = nullptr;
+__int64 hsub_379220(__int64 a1, const char *a2, const char *a3) { return 0; }
+
+__int64 (*osub_3F9928)(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) = nullptr;
+__int64 hsub_3F9928(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) { return 0; }
 
 __int64 (*osub_37966C)(int *a1, __int64 a2) = nullptr;
 __int64 hsub_37966C(int *a1, __int64 a2) {
     if (a2 && *(_QWORD *)(a2 + 8)) *(_DWORD *)a2 = 0xFFFFFFFF;
-    return osub_37966C(a1, a2);
-} // Reporter God Hook
+    return osub_37966C ? osub_37966C(a1, a2) : 0;
+}
 
-__int64 (*osub_3F9928)(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) = nullptr;
-__int64 hsub_3F9928(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) {
-    return 0;
-} // Terminator Fixer God Hook
+void (*osub_5003A4)(const char *a1, ...) = nullptr;
+void hsub_5003A4(const char *a1, ...) { return; }
+
+// Registrations
+HOOK_LIB("libanogs.so", "0x387FE4", hsub_387FE4, osub_387FE4);
+HOOK_LIB("libanogs.so", "0x388464", hsub_388464, osub_388464);
+HOOK_LIB("libanogs.so", "0x388A18", hsub_388A18, osub_388A18);
+HOOK_LIB("libanogs.so", "0x389C14", hsub_389C14, osub_389C14);
+HOOK_LIB("libanogs.so", "0x389FFC", hsub_389FFC, osub_389FFC);
+HOOK_LIB("libanogs.so", "0x38A210", hsub_38A210, osub_38A210);
+HOOK_LIB("libanogs.so", "0x38C0D8", hsub_38C0D8, osub_38C0D8);
+HOOK_LIB("libanogs.so", "0x379220", hsub_379220, osub_379220);
+HOOK_LIB("libanogs.so", "0x3F9928", hsub_3F9928, osub_3F9928);
+HOOK_LIB("libanogs.so", "0x37966C", hsub_37966C, osub_37966C);
+HOOK_LIB("libanogs.so", "0x5003A4", hsub_5003A4, osub_5003A4);
