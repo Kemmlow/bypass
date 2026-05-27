@@ -1,6 +1,13 @@
-__int64 (*osub_4B3680)(_BYTE *a1, __int64 a2, time_t *timer) = nullptr;
-__int64 hsub_4B3680(_BYTE *a1, __int64 a2, time_t *timer) {
-    if (timer) *timer = 0;
-    return 0;
+__pid_t (**(*osub_2940D0)(__pid_t (**result)(void)))(void) = nullptr;
+__pid_t (**__fastcall hsub_2940D0(__pid_t (**result)(void)))(void)
+{
+    if (result)
+    {
+        auto res = osub_2940D0(result);
+        if (res == (__pid_t(**)(void)) & clock_gettime || res == (__pid_t(**)(void)) & gettimeofday || res == (__pid_t(**)(void)) & time)
+            return 0LL;
+        return res;
+    }
+    return 0LL;
 }
-HOOK_LIB("libanogs.so", "0x4B3680", hsub_4B3680, osub_4B3680);
+HOOK_LIB("libanogs.so", "0x2940D0", hsub_2940D0, osub_2940D0);
