@@ -257,6 +257,13 @@ __int64 hsub_3FC5C8(__int64 a1, __int64 a2, double a3)
     return osub_3FC5C8(a1, a2, a3);
 }
 
+__int64 (*osub_3F9928)(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) = nullptr;
+__int64 hsub_3F9928(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
+{
+    // GOD HOOK: Filter critical security dispatches
+    return 0;
+}
+
 __int64 hAnoSDKGetReportData3(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) { return 0; }
 __int64 hAnoSDKGetReportData4(unsigned int a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) { return 0; }
 
@@ -315,6 +322,7 @@ void *anogs_thread(void *)
     HOOKSYM_LIB("libanogs.so", "AnoSDKGetReportData3", hAnoSDKGetReportData3, nullptr);
     HOOKSYM_LIB("libanogs.so", "AnoSDKGetReportData4", hAnoSDKGetReportData4, nullptr);
     HOOK_LIB("libanogs.so", "0x4B39E0", hsub_4B39E0, osub_4B39E0);
+    HOOK_LIB("libanogs.so", "0x3F9928", hsub_3F9928, osub_3F9928); // GOD HOOK
     HOOK_LIB("libanogs.so", "0x21E9C4", hsub_21E9C4, osub_21E9C4); // new hook
     HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00); // runtime hash verifier
     HOOK_LIB("libanogs.so", "0x36A5B8", hsub_36A5B8, osub_36A5B8);
