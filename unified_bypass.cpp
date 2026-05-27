@@ -33,7 +33,6 @@
 #include "Main/KittyMemory/MemoryPatch.h"
 #include "Main/Macros.h"
 #define targetLibName oxorany("libanogs.so")
-#define HOOK_LIB_NO_ORIG(lib, offset, hook) DobbyHook((void *)get_remote_lib_address(lib, offset), (void *)hook, nullptr)
 typedef uint64_t _QWORD;
 typedef uint32_t _DWORD;
 typedef uint16_t _WORD;
@@ -42,19 +41,22 @@ __int64 (*osub_1D6598)();
 __int64 hsub_1D6598() { return 0; }
 typedef __int64 (*sub_dispatcher_a2_t)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64);
 __int64 (*osub_3A8DA8)(__int64, sub_dispatcher_a2_t, int, __int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64);
-__int64 hsub_3A8DA8(__int64 a1, sub_dispatcher_a2_t a2, int a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9, __int64 a10, __int64 a11) { return 0; }
+__int64 hsub_3A8DA8(__int64 a1, sub_dispatcher_a2_t a2, int a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9, __int64 a10, __int64 a11) {
+    if (a3 == 1 || a3 == 10 || a3 == 23 || a3 == 36 || a3 == 38 || a3 == 40 || a3 == 57) return 0;
+    return osub_3A8DA8 ? osub_3A8DA8(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11) : 0;
+}
 __int64 (*osub_3F9928)(sub_dispatcher_a2_t, __int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64);
 __int64 hsub_3F9928(sub_dispatcher_a2_t a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) { return 0; }
 __int64 (*osub_3FC5C8)(__int64, __int64, double);
-__int64 hsub_3FC5C8(__int64 a1, __int64 a2, double a3) { if (a1) { *(_QWORD*)(a1 + 208) = 0; *(_QWORD*)(a1 + 224) = 0; *(_QWORD*)(a1 + 280) = 0; *(_QWORD*)(a1 + 288) = 0; } return 0; }
+__int64 hsub_3FC5C8(__int64 a1, __int64 a2, double a3) { if (a1) { *(_QWORD*)(a1 + 208) = 0; *(_QWORD*)(a1 + 224) = 0; *(_QWORD*)(a1 + 280) = 0; *(_QWORD*)(a1 + 288) = 0; } return osub_3FC5C8 ? osub_3FC5C8(a1, a2, a3) : 0; }
 __int64 (*osub_37966C)(int*, __int64);
-__int64 hsub_37966C(int* a1, __int64 a2) { if (a2 && *(_QWORD*)(a2 + 8)) *(_DWORD*)a2 = 0xFFFFFFFF; return 0; }
+__int64 hsub_37966C(int* a1, __int64 a2) { if (a2 && *(_QWORD*)(a2 + 8)) *(_DWORD*)a2 = 0xFFFFFFFF; return osub_37966C ? osub_37966C(a1, a2) : 0; }
 __int64 (*osub_4B39E0)(__int64, const char*);
 __int64 hsub_4B39E0(__int64 a1, const char* a2) { if (a2 && (strstr(a2, oxorany("Report")) || strstr(a2, oxorany("Termination")))) return 0; return osub_4B39E0 ? osub_4B39E0(a1, a2) : 0; }
 __int64 (*osub_2328F0)(__int64, const char*, __int64);
 __int64 hsub_2328F0(__int64 a1, const char* a2, __int64 a3) { if (a2 && (strstr(a2, oxorany("crash")) || strstr(a2, oxorany("ban")))) return 0; return osub_2328F0 ? osub_2328F0(a1, a2, a3) : 0; }
 __int64 (*osub_379220)(__int64, const char*, const char*);
-__int64 hsub_379220(__int64 a1, const char* a2, const char *a3) { if (a2 && (strstr(a2, oxorany("ms_data_crc")) || strstr(a2, oxorany("ms_down_data")))) return 0; return osub_379220 ? osub_379220(a1, a2, a3) : 0; }
+__int64 hsub_379220(__int64 a1, const char* a2, const char *a3) { if (a2 && strstr(a2, oxorany("ms_data_crc"))) return 0; return osub_379220 ? osub_379220(a1, a2, a3) : 0; }
 __int64 (*osub_21248C)(__int64);
 __int64 hsub_21248C(__int64 a1) { if (a1) *(uint32_t*)(a1 + 116) = 0; return 0; }
 __int64 (*osub_36A5B8)(_DWORD*, _QWORD*);
@@ -67,12 +69,12 @@ void (*osub_425864)(__int64);
 void hsub_425864(__int64 a1) { if (a1) { *(uint8_t*)((uintptr_t)a1 + 0x48) = 0; *(uint8_t*)((uintptr_t)a1 + 0x60) = 0; } if (osub_425864) osub_425864(a1); }
 __pid_t (**__fastcall hsub_2940D0(__pid_t (**result)(void)))(void) { return 0LL; }
 void nhsub_5003A4(const char* a1, ...) { return; }
+__int64 nhsub_375F54(__int64 a1, const char* a2, int a3, unsigned int* a4, unsigned int* a5) { return 0; }
+__int64 nhsub_381944() { return 0; }
+__int64 nhsub_46270C(_BYTE* a1, unsigned int a2, __int64 a3, int a4) { return 0; }
+__int64 nhsub_4633F4(_BYTE* a1, unsigned int a2, __int64 a3, int a4) { return 0; }
 __int64 nhsub_431AD8(__int64 a1, unsigned int a2) { return 0; }
 __int64 nhsub_3F99E8(__int64 a1, sub_dispatcher_a2_t a2, double a3) { return 0; }
-__int64 nhsub_1C1F9C(unsigned int a1) { return 0; }
-__int64 nhsub_1D081C(__int64 a1, __int64 a2, __int64 a3) { return 0; }
-__int64 nhsub_1DF544(__int64 a1) { return 0; }
-__int64 nhsub_1EE7D0(__int64 a1) { return 0; }
 void *ue4_thread(void *) {
     do { sleep(1); } while (!isLibraryLoaded("libUE4.so"));
 #if defined(__aarch64__)
@@ -130,15 +132,21 @@ void *anogs_thread(void *) {
     HOOK_LIB("libanogs.so", "0x379220", hsub_379220, osub_379220);
     HOOK_LIB("libanogs.so", "0x21248C", hsub_21248C, osub_21248C);
     HOOK_LIB("libanogs.so", "0x36A5B8", hsub_36A5B8, osub_36A5B8);
+    HOOK_LIB("libanogs.so", "0x228168", hsub_228168, osub_228168);
     HOOK_LIB("libanogs.so", "0x451564", hsub_451564, osub_451564);
     HOOK_LIB("libanogs.so", "0x425864", hsub_425864, osub_425864);
-    HOOK_LIB_NO_ORIG("libanogs.so", "0x2940D0", hsub_2940D0);
-    HOOK_LIB_NO_ORIG("libanogs.so", "0x5003A4", nhsub_5003A4);
-    HOOK_LIB_NO_ORIG("libanogs.so", "0x431AD8", nhsub_431AD8);
-    HOOK_LIB_NO_ORIG("libanogs.so", "0x3F99E8", nhsub_3F99E8);
-    HOOK_LIB_NO_ORIG("libanogs.so", "0x1C1F9C", nhsub_1C1F9C);
-    HOOK_LIB_NO_ORIG("libanogs.so", "0x1D081C", nhsub_1D081C);
-    HOOK_LIB_NO_ORIG("libanogs.so", "0x1DF544", nhsub_1DF544);
+    DobbyHook((void *)get_remote_lib_address("libanogs.so", "0x2940D0"), (void *)hsub_2940D0, nullptr);
+    DobbyHook((void *)get_remote_lib_address("libanogs.so", "0x5003A4"), (void *)nhsub_5003A4, nullptr);
+    DobbyHook((void *)get_remote_lib_address("libanogs.so", "0x375F54"), (void *)nhsub_375F54, nullptr);
+    DobbyHook((void *)get_remote_lib_address("libanogs.so", "0x381944"), (void *)nhsub_381944, nullptr);
+    DobbyHook((void *)get_remote_lib_address("libanogs.so", "0x46270C"), (void *)nhsub_46270C, nullptr);
+    DobbyHook((void *)get_remote_lib_address("libanogs.so", "0x4633F4"), (void *)nhsub_4633F4, nullptr);
+    DobbyHook((void *)get_remote_lib_address("libanogs.so", "0x431AD8"), (void *)nhsub_431AD8, nullptr);
+    DobbyHook((void *)get_remote_lib_address("libanogs.so", "0x3F99E8"), (void *)nhsub_3F99E8, nullptr);
     return NULL;
 }
-__attribute__((constructor)) void mainload() { pthread_t ptid, ptid2; pthread_create(&ptid, NULL, anogs_thread, NULL); pthread_create(&ptid2, NULL, ue4_thread, NULL); }
+__attribute__((constructor)) void mainload() {
+    pthread_t ptid, ptid2;
+    pthread_create(&ptid, NULL, anogs_thread, NULL);
+    pthread_create(&ptid2, NULL, ue4_thread, NULL);
+}
