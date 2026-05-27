@@ -35,7 +35,6 @@
 #include "Main/Macros.h"
 
 #define targetLibName oxorany("libanogs.so")
-#define anogsLibrary oxorany("libanogs.so")
 
 typedef uint64_t _QWORD;
 typedef uint32_t _DWORD;
@@ -78,12 +77,6 @@ __int64 hsub_47B5CC() { return 0; }
 _QWORD *(*osub_4D4C94)(int a1, int a2);
 _QWORD *hsub_4D4C94(int a1, int a2) { return nullptr; }
 
-void *(*osub_51F980)(void *dest, const void *src, size_t n);
-void *hsub_51F980(void *dest, const void *src, size_t n) { return memcpy(dest, src, n); }
-
-void *(*osub_51F9A0)(void *s, int c, size_t n);
-void *hsub_51F9A0(void *s, int c, size_t n) { return memset(s, c, n); }
-
 __int64 (*osub_3A564C)(__int64 a1, uint64_t a2, void *a3, double a4);
 __int64 hsub_3A564C(__int64 a1, uint64_t a2, void *a3, double a4) { return 0; }
 
@@ -92,33 +85,24 @@ void *hsub_46ED30(__int64 a1, FILE *a2, uint32_t *a3) { return nullptr; }
 
 __int64 (*osub_2328F0)(__int64 a1, const char *a2, __int64 a3);
 __int64 hsub_2328F0(__int64 a1, const char *a2, __int64 a3) {
-    if (a2 && (strstr(a2, oxorany("crash")) || strstr(a2, oxorany("opcode")) || strstr(a2, oxorany("profiler")))) return 0;
+    if (a2 && (strstr(a2, oxorany("crash")) || strstr(a2, oxorany("opcode")))) return 0;
     return osub_2328F0(a1, a2, a3);
 }
 
 __int64 (*osub_389744)(__int64 a1, _QWORD *a2, int a3, __int64 a4, __int64 a5);
 __int64 hsub_389744(__int64 a1, _QWORD *a2, int a3, __int64 a4, __int64 a5) { return 0; }
 
-int (*osscanf)(const char *str, const char *format, ...);
-int hsscanf(const char *str, const char *format, ...) {
-    if (str && strstr(str, oxorany("/proc/self/maps"))) return 0;
-    va_list args; va_start(args, format); int res = vsscanf(str, format, args); va_end(args); return res;
-}
+__int64 (*osub_49AA00)(char *a1, __int64 a2);
+__int64 hsub_49AA00(char *a1, __int64 a2) { return 0; }
 
-int (*omprotect)(void *addr, size_t len, int prot);
-int hmprotect(void *addr, size_t len, int prot) { return 0; }
+__int64 (*osub_51F980)(void *dest, const void *src, size_t n);
+void *hsub_51F980(void *dest, const void *src, size_t n) { return memcpy(dest, src, n); }
 
-void *(*o__memset_chk)(void *dest, int c, size_t n, size_t destlen);
-void *h__memset_chk(void *dest, int c, size_t n, size_t destlen) { return memset(dest, c, n); }
+__int64 (*osub_51F9A0)(void *s, int c, size_t n);
+void *hsub_51F9A0(void *s, int c, size_t n) { return memset(s, c, n); }
 
-int (*ogettimeofday)(struct timeval *tv, struct timezone *tz);
-int hgettimeofday(struct timeval *tv, struct timezone *tz) { if (tv) { tv->tv_sec = 1716742400; tv->tv_usec = 0; } return 0; }
-
-int (*o__android_log_print)(int prio, const char *tag, const char *fmt, ...);
-int h__android_log_print(int prio, const char *tag, const char *fmt, ...) {
-    if (tag && (strstr(tag, oxorany("Ace")) || strstr(tag, oxorany("anogs")))) return 0;
-    return 0;
-}
+__int64 (*osub_51F9C0)(const char *s);
+size_t hsub_51F9C0(const char *s) { if (s && strstr(s, oxorany("/proc/self/maps"))) return 0; return strlen(s); }
 
 void *ue4_thread(void *) {
     do { sleep(1); } while (!isLibraryLoaded("libUE4.so"));
@@ -128,7 +112,6 @@ void *ue4_thread(void *) {
     PATCH_LIB("libUE4.so", "0x68CD9C8", "1F 20 03 D5");
     PATCH_LIB("libUE4.so", "0x74B1BC0", "E0 03 27 1E C0 03 5F D6");
     PATCH_LIB("libUE4.so", "0x776AFF8", "00 00 80 D2 C0 03 5F D6");
-    PATCH_LIB("libUE4.so", "0x7A649A8", "C0 03 5F D6");
 #endif
     return NULL;
 }
@@ -146,17 +129,14 @@ void *anogs_thread(void *) {
     HOOK_LIB("libanogs.so", "0x471B68", hsub_471B68, osub_471B68);
     HOOK_LIB("libanogs.so", "0x47B5CC", hsub_47B5CC, osub_47B5CC);
     HOOK_LIB("libanogs.so", "0x4D4C94", hsub_4D4C94, osub_4D4C94);
-    HOOK_LIB("libanogs.so", "0x51F980", hsub_51F980, osub_51F980);
-    HOOK_LIB("libanogs.so", "0x51F9A0", hsub_51F9A0, osub_51F9A0);
     HOOK_LIB("libanogs.so", "0x3A564C", hsub_3A564C, osub_3A564C);
     HOOK_LIB("libanogs.so", "0x46ED30", hsub_46ED30, osub_46ED30);
     HOOK_LIB("libanogs.so", "0x2328F0", hsub_2328F0, osub_2328F0);
     HOOK_LIB("libanogs.so", "0x389744", hsub_389744, osub_389744);
-    HOOKSYM_LIB("libc.so", "sscanf", hsscanf, osscanf);
-    HOOKSYM_LIB("libc.so", "mprotect", hmprotect, omprotect);
-    HOOKSYM_LIB("libc.so", "__memset_chk", h__memset_chk, o__memset_chk);
-    HOOKSYM_LIB("libc.so", "gettimeofday", hgettimeofday, ogettimeofday);
-    HOOKSYM_LIB("liblog.so", "__android_log_print", h__android_log_print, o__android_log_print);
+    HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00);
+    HOOK_LIB("libanogs.so", "0x51F980", hsub_51F980, osub_51F980);
+    HOOK_LIB("libanogs.so", "0x51F9A0", hsub_51F9A0, osub_51F9A0);
+    HOOK_LIB("libanogs.so", "0x51F9C0", hsub_51F9C0, osub_51F9C0);
 
     PATCH_LIB("libanogs.so", "0x4B3560", "20 00 80 D2 C0 03 5F D6"); // Fix Crash
     PATCH_LIB("libanogs.so", "0x225528", "00 00 80 D2 C0 03 5F D6");
@@ -169,7 +149,6 @@ void *anogs_thread(void *) {
     PATCH_LIB("libanogs.so", "0x46EFD0", "1F 20 03 D5");
     PATCH_LIB("libanogs.so", "0x4B39E0", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libanogs.so", "0x4F7074", "E0 03 27 1E C0 03 5F D6");
-    PATCH_LIB("libanogs.so", "0x51F9C0", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libanogs.so", "0x51FA20", "1F 20 03 D5");
     PATCH_LIB("libanogs.so", "0x51FAB0", "20 00 80 D2 C0 03 5F D6");
 
