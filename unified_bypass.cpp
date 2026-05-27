@@ -153,7 +153,9 @@ void *hsub_46ED30(__int64 a1, FILE *a2, uint32_t *a3)
 __int64 (*osub_2328F0)(__int64 a1, const char *a2, __int64 a3);
 __int64 hsub_2328F0(__int64 a1, const char *a2, __int64 a3)
 {
-    if (a2 && (strstr(a2, oxorany("crash")) || strstr(a2, oxorany("opcode"))))
+    if (a2 && (strstr(a2, oxorany("crash")) || strstr(a2, oxorany("opcode")) ||
+               strstr(a2, oxorany("kick")) || strstr(a2, oxorany("terminate")) ||
+               strstr(a2, oxorany("ban"))))
         return 0;
     return osub_2328F0(a1, a2, a3);
 }
@@ -243,8 +245,16 @@ __int64 hsub_3A8DA8(
 __int64 (*osub_3FC5C8)(__int64 a1, __int64 a2, double a3) = nullptr;
 __int64 hsub_3FC5C8(__int64 a1, __int64 a2, double a3)
 {
-    // master caller
-    return 0;
+    if (a1)
+    {
+        // Precisely clear internal report and termination flags
+        // to fool the server-side integrity checks without a hard return
+        *(_QWORD *)(a1 + 208) = 0;
+        *(_QWORD *)(a1 + 224) = 0;
+        *(_QWORD *)(a1 + 280) = 0;
+        *(_QWORD *)(a1 + 288) = 0;
+    }
+    return osub_3FC5C8(a1, a2, a3);
 }
 
 __int64 hAnoSDKGetReportData3(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) { return 0; }
