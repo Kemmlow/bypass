@@ -238,6 +238,7 @@ __int64 hsub_3A8DA8(
     __int64 a10,
     __int64 a11)
 {
+    // GOD FILTER: Master Caller Dispatcher
     switch (a3)
     {
         case 1: case 10: case 23: case 36: case 38: case 40: case 57:
@@ -256,12 +257,41 @@ __int64 __fastcall hsub_3FC5C8(__int64 a1, __int64 a2, double a3)
     if (!a1)
         return 0;
 
+    // Surgical state clearing to prevent server-side termination signals
     *(_QWORD *)(a1 + 208) = 0;
     *(_QWORD *)(a1 + 224) = 0;
     *(_QWORD *)(a1 + 280) = 0;
     *(_QWORD *)(a1 + 288) = 0;
 
     return osub_3FC5C8(a1, a2, a3);
+}
+
+__int64 (*osub_37966C)(int *a1, __int64 a2);
+__int64 hsub_37966C(int *a1, __int64 a2)
+{
+    if (a2 && *(_QWORD *)(a2 + 8))
+    {
+        *(_DWORD *)a2 = 0xFFFFFFFF;
+        *(_DWORD *)(a2 + 4) = 0;
+    }
+    if (osub_37966C)
+        return osub_37966C(a1, a2);
+    return 0;
+}
+
+void (*osub_5003A4)(const char *a1, ...);
+void hsub_5003A4(const char *a1, ...)
+{
+    // Anti-abort: prevents game closure during detection
+    return;
+}
+
+__int64 __fastcall (*osub_3F9928)(__int64(__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9);
+
+__int64 __fastcall hsub_3F9928(__int64(__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
+{
+    // GOD FILTER: Terminator Fixer (case 0x1E, 0x2E, 0x5B, 0x61, 0x6E, 0x6F)
+    return 0;
 }
 
 __int64 (*osub_387FE4)(__int64 a1) = nullptr;
@@ -286,40 +316,58 @@ __int64 (*osub_38C0D8)(__int64 a1, __int64 a2, __int64 a3, __int64 a4) = nullptr
 __int64 hsub_38C0D8(__int64 a1, __int64 a2, __int64 a3, __int64 a4) { return 0; } // case 57
 
 __int64 (*osub_379220)(__int64 a1, const char *a2, const char *a3) = nullptr;
-__int64 hsub_379220(__int64 a1, const char *a2, const char *a3) { return 0; }
-
-__int64 (*osub_3F9928)(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) = nullptr;
-__int64 hsub_3F9928(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
+__int64 hsub_379220(__int64 a1, const char *a2, const char *a3)
 {
-    // GOD HOOK: Precise Terminator Fixer
-    switch ((uintptr_t)a1)
+    if (a2)
     {
-        case 0x1E: case 0x2E: case 0x5B: case 0x61: case 0x6E: case 0x6F:
+        // FILTER: reporting nerve center - catches BGMI patch monitoring
+        if (strstr(a2, oxorany("ms_data_crc")) ||
+            strstr(a2, oxorany("ms_down_data")) ||
+            strstr(a2, oxorany("ms_scan_start")))
             return 0;
-        default:
-            break;
     }
-    if (osub_3F9928)
-        return osub_3F9928(a1, a2, a3, a4, a5, a6, a7, a8, a9);
     return 0;
 }
 
-__int64 (*osub_37966C)(int *a1, __int64 a2) = nullptr;
-__int64 hsub_37966C(int *a1, __int64 a2)
+__int64 (*osub_3F99E8)(__int64 a1, __int64(__fastcall *a2)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), double a3) = nullptr;
+__int64 hsub_3F99E8(__int64 a1, __int64(__fastcall *a2)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), double a3)
 {
-    if (a2 && *(_QWORD *)(a2 + 8))
+    return 0;
+}
+
+__int64 (*osub_431AD8)(__int64 a1, unsigned int a2) = nullptr;
+__int64 hsub_431AD8(__int64 a1, unsigned int a2)
+{
+    return 0;
+}
+
+__int64 (*osub_375F54)(__int64 a1, const char *a2, int a3, unsigned int *a4, unsigned int *a5) = nullptr;
+__int64 hsub_375F54(__int64 a1, const char *a2, int a3, unsigned int *a4, unsigned int *a5) { return 0; }
+
+__int64 (*osub_381944)() = nullptr;
+__int64 hsub_381944() { return 0; }
+
+__int64 (*osub_46270C)(_BYTE *a1, unsigned int a2, __int64 a3, int a4) = nullptr;
+__int64 hsub_46270C(_BYTE *a1, unsigned int a2, __int64 a3, int a4) { return 0; }
+
+__int64 (*osub_4633F4)(_BYTE *a1, unsigned int a2, __int64 a3, int a4) = nullptr;
+__int64 hsub_4633F4(_BYTE *a1, unsigned int a2, __int64 a3, int a4) { return 0; }
+
+__int64 (*osub_4B39E0)(__int64 a1, const char *a2) = nullptr;
+__int64 hsub_4B39E0(__int64 a1, const char *a2)
+{
+    if (a2)
     {
-        *(_DWORD *)a2 = 0xFFFFFFFF;
+        // FILTER: string-based ban dispatcher - intercepts "TERMINATION PEL RHA HAI"
+        if (strstr(a2, oxorany("Report")) ||
+            strstr(a2, oxorany("Termination")) ||
+            strstr(a2, oxorany("Kick")) ||
+            strstr(a2, oxorany("Complaint")))
+            return 0;
     }
-    if (osub_37966C)
-        return osub_37966C(a1, a2);
+    if (osub_4B39E0)
+        return osub_4B39E0(a1, a2);
     return 0;
-}
-
-void (*osub_5003A4)(const char *a1, ...);
-void hsub_5003A4(const char *a1, ...)
-{
-    return;
 }
 
 void *ue4_thread(void *)
@@ -329,13 +377,6 @@ void *ue4_thread(void *)
         sleep(1);
     } while (!isLibraryLoaded("libUE4.so"));
 #if defined(__aarch64__)
-
-    PATCH_LIB("libUE4.so", "0x5ACC184", "00 00 80 D2 C0 03 5F D6"); // termination
-    PATCH_LIB("libUE4.so", "0x62E286C", "20 00 80 D2 C0 03 5F D6"); // termination
-    PATCH_LIB("libUE4.so", "0x68CD9C8", "1F 20 03 D5");             // termination
-    PATCH_LIB("libUE4.so", "0x7435D90", "00 00 80 D2 C0 03 5F D6"); // termination new
-    PATCH_LIB("libUE4.so", "0x74B1BC0", "E0 03 27 1E C0 03 5F D6"); // server kick
-    PATCH_LIB("libUE4.so", "0x776AFF8", "00 00 80 D2 C0 03 5F D6"); // server kick
     PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6"); // fake damage fixer
 #endif
     return NULL;
@@ -357,10 +398,6 @@ void *anogs_thread(void *)
     HOOK_LIB("libanogs.so", "0x228168", hsub_228168, osub_228168); // case 35
     HOOK_LIB("libanogs.so", "0x228560", hsub_228560, osub_228560); // case 37
     HOOK_LIB("libanogs.so", "0x389744", hsub_389744, osub_389744); // case 34
-    HOOK_LIB("libanogs.so", "0x2940D0", hsub_2940D0, osub_2940D0);
-    HOOK_LIB("libanogs.so", "0x425864", hsub_425864, osub_425864); // memory master
-    HOOK_LIB("libanogs.so", "0x3A8DA8", hsub_3A8DA8, osub_3A8DA8);
-    HOOK_LIB("libanogs.so", "0x3FC5C8", hsub_3FC5C8, osub_3FC5C8);
     HOOK_LIB("libanogs.so", "0x387FE4", hsub_387FE4, osub_387FE4); // case 1
     HOOK_LIB("libanogs.so", "0x388464", hsub_388464, osub_388464); // case 10
     HOOK_LIB("libanogs.so", "0x388A18", hsub_388A18, osub_388A18); // case 23
@@ -368,10 +405,21 @@ void *anogs_thread(void *)
     HOOK_LIB("libanogs.so", "0x389FFC", hsub_389FFC, osub_389FFC); // case 38
     HOOK_LIB("libanogs.so", "0x38A210", hsub_38A210, osub_38A210); // case 40
     HOOK_LIB("libanogs.so", "0x38C0D8", hsub_38C0D8, osub_38C0D8); // case 57
-    HOOK_LIB("libanogs.so", "0x379220", hsub_379220, osub_379220);
-    HOOK_LIB("libanogs.so", "0x3F9928", hsub_3F9928, osub_3F9928);
-    HOOK_LIB("libanogs.so", "0x37966C", hsub_37966C, osub_37966C);
-    HOOK_LIB("libanogs.so", "0x5003A4", hsub_5003A4, osub_5003A4);
+    HOOK_LIB("libanogs.so", "0x37966C", hsub_37966C, osub_37966C); // reporter
+    HOOK_LIB("libanogs.so", "0x375F54", hsub_375F54, osub_375F54); // suspicion
+    HOOK_LIB("libanogs.so", "0x381944", hsub_381944, osub_381944); // suspicion
+    HOOK_LIB("libanogs.so", "0x46270C", hsub_46270C, osub_46270C); // suspicion
+    HOOK_LIB("libanogs.so", "0x4633F4", hsub_4633F4, osub_4633F4); // suspicion
+    HOOK_LIB("libanogs.so", "0x379220", hsub_379220, osub_379220); // GOD FILTER: reporting
+    HOOK_LIB("libanogs.so", "0x4B39E0", hsub_4B39E0, osub_4B39E0); // GOD FILTER: dispatcher
+    HOOK_LIB("libanogs.so", "0x3F9928", hsub_3F9928, osub_3F9928); // terminator fixer
+    HOOK_LIB("libanogs.so", "0x5003A4", hsub_5003A4, osub_5003A4); // Anti-abort
+    HOOK_LIB("libanogs.so", "0x2940D0", hsub_2940D0, osub_2940D0);
+    HOOK_LIB("libanogs.so", "0x425864", hsub_425864, osub_425864); // memory master
+    HOOK_LIB("libanogs.so", "0x3A8DA8", hsub_3A8DA8, osub_3A8DA8); // master caller
+    HOOK_LIB("libanogs.so", "0x3FC5C8", hsub_3FC5C8, osub_3FC5C8); // master caller
+    HOOK_LIB("libanogs.so", "0x3F99E8", hsub_3F99E8, osub_3F99E8);
+    HOOK_LIB("libanogs.so", "0x431AD8", hsub_431AD8, osub_431AD8);
     HOOK_LIB("libanogs.so", "0x21E9C4", hsub_21E9C4, osub_21E9C4); // new hook
     HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00); // runtime hash verifier
     HOOK_LIB("libanogs.so", "0x36A5B8", hsub_36A5B8, osub_36A5B8);
@@ -395,11 +443,10 @@ void *anogs_thread(void *)
     PATCH_LIB("libanogs.so", "0x37C904", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libanogs.so", "0x431800", "20 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libanogs.so", "0x46EFD0", "1F 20 03 D5");
-    PATCH_LIB("libanogs.so", "0x4B39E0", "00 00 80 D2 C0 03 5F D6");
+    // PATCH_LIB("libanogs.so", "0x4B39E0", "00 00 80 D2 C0 03 5F D6"); // Hooked instead to avoid detection
     PATCH_LIB("libanogs.so", "0x4F7074", "E0 03 27 1E C0 03 5F D6");
-    PATCH_LIB("libanogs.so", "0x51F9C0", "00 00 80 D2 C0 03 5F D6");
-    // crash : PATCH_LIB("libanogs.so", "0x51FA20", "1F 20 03 D5");
-    PATCH_LIB("libanogs.so", "0x51FAB0", "20 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libanogs.so", "0x232B28", "C0 03 5F D6"); // zeue4
+    PATCH_LIB("libanogs.so", "0x213DC8", "C0 03 5F D6"); // zeue4
     return NULL;
 }
 
