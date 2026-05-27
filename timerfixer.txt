@@ -1,0 +1,6 @@
+__int64 (*osub_4B3680)(_BYTE *a1, __int64 a2, time_t *timer) = nullptr;
+__int64 hsub_4B3680(_BYTE *a1, __int64 a2, time_t *timer) {
+    if (timer) *timer = 0;
+    return 0;
+}
+HOOK_LIB("libanogs.so", "0x4B3680", hsub_4B3680, osub_4B3680);
