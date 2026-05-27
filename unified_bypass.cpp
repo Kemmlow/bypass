@@ -195,6 +195,58 @@ __int64 __fastcall hsub_451564(__int64 a1, __int64 a2)
 __int64 (*osub_21E9C4)(__int64 a1, __int64 a2, __int64 a3, int a4, int a5) = nullptr;
 void hsub_21E9C4(__int64 a1, __int64 a2, __int64 a3, int a4, int a5) { return; }
 
+void (*osub_425864)(__int64 a1) = nullptr;
+void hsub_425864(__int64 a1)
+{
+    if (a1)
+    {
+        *(uint8_t *)((uintptr_t)a1 + 0x48) = 0;
+        *(uint8_t *)((uintptr_t)a1 + 0x60) = 0;
+    }
+
+    if (osub_425864)
+        osub_425864(a1);
+}
+
+typedef __int64 (*sub_3A8DA8_a2_t)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64);
+
+__int64 (*osub_3A8DA8)(
+    __int64 a1,
+    sub_3A8DA8_a2_t a2,
+    int a3,
+    __int64 a4,
+    __int64 a5,
+    __int64 a6,
+    __int64 a7,
+    __int64 a8,
+    __int64 a9,
+    __int64 a10,
+    __int64 a11) = nullptr;
+
+__int64 hsub_3A8DA8(
+    __int64 a1,
+    sub_3A8DA8_a2_t a2,
+    int a3,
+    __int64 a4,
+    __int64 a5,
+    __int64 a6,
+    __int64 a7,
+    __int64 a8,
+    __int64 a9,
+    __int64 a10,
+    __int64 a11)
+{
+    // master caller
+    return 0;
+}
+
+__int64 (*osub_3FC5C8)(__int64 a1, __int64 a2, double a3) = nullptr;
+__int64 hsub_3FC5C8(__int64 a1, __int64 a2, double a3)
+{
+    // master caller
+    return 0;
+}
+
 void *ue4_thread(void *)
 {
     do
@@ -231,7 +283,9 @@ void *anogs_thread(void *)
     HOOK_LIB("libanogs.so", "0x228560", hsub_228560, osub_228560); // case 37
     HOOK_LIB("libanogs.so", "0x389744", hsub_389744, osub_389744); // case 34
     HOOK_LIB("libanogs.so", "0x2940D0", hsub_2940D0, osub_2940D0);
-    HOOK_LIB("libanogs.so", "0x425864", sub_425864, osub_425864);  // memory master
+    HOOK_LIB("libanogs.so", "0x425864", hsub_425864, osub_425864);  // memory master
+    HOOK_LIB("libanogs.so", "0x3A8DA8", hsub_3A8DA8, osub_3A8DA8);  // master caller
+    HOOK_LIB("libanogs.so", "0x3FC5C8", hsub_3FC5C8, osub_3FC5C8);  // master caller
     HOOK_LIB("libanogs.so", "0x21E9C4", hsub_21E9C4, osub_21E9C4); // new hook
     HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00); // runtime hash verifier
     HOOK_LIB("libanogs.so", "0x36A5B8", hsub_36A5B8, osub_36A5B8);
