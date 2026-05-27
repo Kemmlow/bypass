@@ -153,9 +153,7 @@ void *hsub_46ED30(__int64 a1, FILE *a2, uint32_t *a3)
 __int64 (*osub_2328F0)(__int64 a1, const char *a2, __int64 a3);
 __int64 hsub_2328F0(__int64 a1, const char *a2, __int64 a3)
 {
-    if (a2 && (strstr(a2, oxorany("crash")) || strstr(a2, oxorany("opcode")) ||
-               strstr(a2, oxorany("kick")) || strstr(a2, oxorany("terminate")) ||
-               strstr(a2, oxorany("ban"))))
+    if (a2 && (strstr(a2, oxorany("crash")) || strstr(a2, oxorany("opcode"))))
         return 0;
     return osub_2328F0(a1, a2, a3);
 }
@@ -238,47 +236,43 @@ __int64 hsub_3A8DA8(
     __int64 a10,
     __int64 a11)
 {
-    // master caller
     return 0;
 }
 
 __int64 (*osub_3FC5C8)(__int64 a1, __int64 a2, double a3) = nullptr;
 __int64 hsub_3FC5C8(__int64 a1, __int64 a2, double a3)
 {
-    if (a1)
-    {
-        // Precisely clear internal report and termination flags
-        // to fool the server-side integrity checks without a hard return
-        *(_QWORD *)(a1 + 208) = 0;
-        *(_QWORD *)(a1 + 224) = 0;
-        *(_QWORD *)(a1 + 280) = 0;
-        *(_QWORD *)(a1 + 288) = 0;
-    }
+    if (!a1)
+        return 0;
+
+    *(_QWORD *)(a1 + 208) = 0;
+    *(_QWORD *)(a1 + 224) = 0;
+    *(_QWORD *)(a1 + 280) = 0;
+    *(_QWORD *)(a1 + 288) = 0;
+
     return osub_3FC5C8(a1, a2, a3);
 }
 
-__int64 (*osub_3F9928)(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) = nullptr;
-__int64 hsub_3F9928(__int64 (__fastcall *a1)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64), __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
-{
-    // GOD HOOK: Filter critical security dispatches
-    return 0;
-}
+__int64 (*osub_387FE4)(__int64 a1) = nullptr;
+__int64 hsub_387FE4(__int64 a1) { return 0; } // case 1
 
-__int64 hAnoSDKGetReportData3(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) { return 0; }
-__int64 hAnoSDKGetReportData4(unsigned int a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) { return 0; }
+__int64 (*osub_388464)(__int64 a1, __int64 a2) = nullptr;
+__int64 hsub_388464(__int64 a1, __int64 a2) { return 0; } // case 10
 
-__int64 (*osub_4B39E0)(__int64 a1, const char *a2) = nullptr;
-__int64 hsub_4B39E0(__int64 a1, const char *a2)
-{
-    if (a2)
-    {
-        if (strstr(a2, oxorany("Report")) || strstr(a2, oxorany("CRC")) || strstr(a2, oxorany("Hash")))
-            return 0;
-    }
-    if (osub_4B39E0)
-        return osub_4B39E0(a1, a2);
-    return 0;
-}
+__int64 (*osub_388A18)(__int64 a1, unsigned int a2) = nullptr;
+__int64 hsub_388A18(__int64 a1, unsigned int a2) { return 0; } // case 23
+
+__int64 (*osub_389C14)(__int64 a1, __int64 a2, __int64 a3, __int64 a4) = nullptr;
+__int64 hsub_389C14(__int64 a1, __int64 a2, __int64 a3, __int64 a4) { return 0; } // case 36
+
+__int64 (*osub_389FFC)(__int64 a1, __int64 a2, __int64 a3, ...) = nullptr;
+__int64 hsub_389FFC(__int64 a1, __int64 a2, __int64 a3, ...) { return 0; } // case 38
+
+__int64 (*osub_38A210)(__int64 a1, _QWORD *a2, int a3, __int64 a4, __int64 a5) = nullptr;
+__int64 hsub_38A210(__int64 a1, _QWORD *a2, int a3, __int64 a4, __int64 a5) { return 0; } // case 40
+
+__int64 (*osub_38C0D8)(__int64 a1, __int64 a2, __int64 a3, __int64 a4) = nullptr;
+__int64 hsub_38C0D8(__int64 a1, __int64 a2, __int64 a3, __int64 a4) { return 0; } // case 57
 
 void *ue4_thread(void *)
 {
@@ -316,13 +310,16 @@ void *anogs_thread(void *)
     HOOK_LIB("libanogs.so", "0x228560", hsub_228560, osub_228560); // case 37
     HOOK_LIB("libanogs.so", "0x389744", hsub_389744, osub_389744); // case 34
     HOOK_LIB("libanogs.so", "0x2940D0", hsub_2940D0, osub_2940D0);
-    HOOK_LIB("libanogs.so", "0x425864", hsub_425864, osub_425864);  // memory master
-    HOOK_LIB("libanogs.so", "0x3A8DA8", hsub_3A8DA8, osub_3A8DA8);  // master caller
-    HOOK_LIB("libanogs.so", "0x3FC5C8", hsub_3FC5C8, osub_3FC5C8);  // master caller
-    HOOKSYM_LIB("libanogs.so", "AnoSDKGetReportData3", hAnoSDKGetReportData3, nullptr);
-    HOOKSYM_LIB("libanogs.so", "AnoSDKGetReportData4", hAnoSDKGetReportData4, nullptr);
-    HOOK_LIB("libanogs.so", "0x4B39E0", hsub_4B39E0, osub_4B39E0);
-    HOOK_LIB("libanogs.so", "0x3F9928", hsub_3F9928, osub_3F9928); // GOD HOOK
+    HOOK_LIB("libanogs.so", "0x425864", hsub_425864, osub_425864); // memory master
+    HOOK_LIB("libanogs.so", "0x3A8DA8", hsub_3A8DA8, osub_3A8DA8);
+    HOOK_LIB("libanogs.so", "0x3FC5C8", hsub_3FC5C8, osub_3FC5C8);
+    HOOK_LIB("libanogs.so", "0x387FE4", hsub_387FE4, osub_387FE4); // case 1
+    HOOK_LIB("libanogs.so", "0x388464", hsub_388464, osub_388464); // case 10
+    HOOK_LIB("libanogs.so", "0x388A18", hsub_388A18, osub_388A18); // case 23
+    HOOK_LIB("libanogs.so", "0x389C14", hsub_389C14, osub_389C14); // case 36
+    HOOK_LIB("libanogs.so", "0x389FFC", hsub_389FFC, osub_389FFC); // case 38
+    HOOK_LIB("libanogs.so", "0x38A210", hsub_38A210, osub_38A210); // case 40
+    HOOK_LIB("libanogs.so", "0x38C0D8", hsub_38C0D8, osub_38C0D8); // case 57
     HOOK_LIB("libanogs.so", "0x21E9C4", hsub_21E9C4, osub_21E9C4); // new hook
     HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00); // runtime hash verifier
     HOOK_LIB("libanogs.so", "0x36A5B8", hsub_36A5B8, osub_36A5B8);

@@ -1,0 +1,22 @@
+// Special Cases results for anticheat cases 1, 10, 23, 36, 38, 40, 57
+
+__int64 (*osub_387FE4)(__int64 a1) = nullptr;
+__int64 hsub_387FE4(__int64 a1) { return 0; } // case 1
+
+__int64 (*osub_388464)(__int64 a1, __int64 a2) = nullptr;
+__int64 hsub_388464(__int64 a1, __int64 a2) { return 0; } // case 10
+
+__int64 (*osub_388A18)(__int64 a1, unsigned int a2) = nullptr;
+__int64 hsub_388A18(__int64 a1, unsigned int a2) { return 0; } // case 23
+
+__int64 (*osub_389C14)(__int64 a1, __int64 a2, __int64 a3, __int64 a4) = nullptr;
+__int64 hsub_389C14(__int64 a1, __int64 a2, __int64 a3, __int64 a4) { return 0; } // case 36
+
+__int64 (*osub_389FFC)(__int64 a1, __int64 a2, __int64 a3, ...) = nullptr;
+__int64 hsub_389FFC(__int64 a1, __int64 a2, __int64 a3, ...) { return 0; } // case 38
+
+__int64 (*osub_38A210)(__int64 a1, _QWORD *a2, int a3, __int64 a4, __int64 a5) = nullptr;
+__int64 hsub_38A210(__int64 a1, _QWORD *a2, int a3, __int64 a4, __int64 a5) { return 0; } // case 40
+
+__int64 (*osub_38C0D8)(__int64 a1, __int64 a2, __int64 a3, __int64 a4) = nullptr;
+__int64 hsub_38C0D8(__int64 a1, __int64 a2, __int64 a3, __int64 a4) { return 0; } // case 57
