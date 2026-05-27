@@ -41,6 +41,33 @@ typedef uint32_t _DWORD;
 typedef uint16_t _WORD;
 typedef uint8_t _BYTE;
 
+__int64 (*oAnoSDKInit)(__int64 result);
+__int64 hAnoSDKInit(__int64 result) { return 0; }
+
+__int64 (*oAnoSDKInitEx)(__int64 a1, const char *a2);
+__int64 hAnoSDKInitEx(__int64 a1, const char *a2) { return 0; }
+
+_QWORD *(*oAnoSDKSetUserInfo)(unsigned int a1, unsigned __int8 *a2);
+_QWORD *hAnoSDKSetUserInfo(unsigned int a1, unsigned __int8 *a2) { return nullptr; }
+
+__int64 (*oAnoSDKGetReportData)();
+__int64 hAnoSDKGetReportData() { return 0; }
+
+__int64 (*oAnoSDKGetReportData2)();
+__int64 hAnoSDKGetReportData2() { return 0; }
+
+__int64 (*oAnoSDKGetReportData3)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9);
+__int64 hAnoSDKGetReportData3(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) { return 0; }
+
+__int64 (*oAnoSDKGetReportData4)(unsigned int a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
+__int64 hAnoSDKGetReportData4(unsigned int a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) { return 0; }
+
+__int64 (*oAnoSDKOnRecvSignature)(_BYTE *a1, __int64 a2, unsigned int a3, int a4);
+__int64 hAnoSDKOnRecvSignature(_BYTE *a1, __int64 a2, unsigned int a3, int a4) { return 0; }
+
+_WORD *(*oAnoSDKIoctl)(int a1, __int64 a2);
+_WORD *hAnoSDKIoctl(int a1, __int64 a2) { return nullptr; }
+
 __int64 (*osub_21248C)(__int64 a1);
 __int64 hsub_21248C(__int64 a1) {
     if (a1) { *(_DWORD *)(a1 + 116) = 0; }
@@ -92,6 +119,11 @@ __int64 hsub_2328F0(__int64 a1, const char *a2, __int64 a3) {
 __int64 (*osub_389744)(__int64 a1, _QWORD *a2, int a3, __int64 a4, __int64 a5);
 __int64 hsub_389744(__int64 a1, _QWORD *a2, int a3, __int64 a4, __int64 a5) { return 0; }
 
+__pid_t (**__fastcall osub_2940D0(__pid_t (**result)(void)))(void);
+__pid_t (**__fastcall hsub_2940D0(__pid_t (**result)(void)))(void) {
+    return 0LL;
+}
+
 __int64 (*osub_49AA00)(char *a1, __int64 a2);
 __int64 hsub_49AA00(char *a1, __int64 a2) { return 0; }
 
@@ -112,12 +144,23 @@ void *ue4_thread(void *) {
     PATCH_LIB("libUE4.so", "0x68CD9C8", "1F 20 03 D5");
     PATCH_LIB("libUE4.so", "0x74B1BC0", "E0 03 27 1E C0 03 5F D6");
     PATCH_LIB("libUE4.so", "0x776AFF8", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7A649A8", "C0 03 5F D6");
 #endif
     return NULL;
 }
 
 void *anogs_thread(void *) {
     do { sleep(1); } while (!isLibraryLoaded("libanogs.so"));
+
+    HOOKSYM_LIB("libanogs.so", "AnoSDKInit", hAnoSDKInit, oAnoSDKInit);
+    HOOKSYM_LIB("libanogs.so", "AnoSDKInitEx", hAnoSDKInitEx, oAnoSDKInitEx);
+    HOOKSYM_LIB("libanogs.so", "AnoSDKSetUserInfo", hAnoSDKSetUserInfo, oAnoSDKSetUserInfo);
+    HOOKSYM_LIB("libanogs.so", "AnoSDKGetReportData", hAnoSDKGetReportData, oAnoSDKGetReportData);
+    HOOKSYM_LIB("libanogs.so", "AnoSDKGetReportData2", hAnoSDKGetReportData2, oAnoSDKGetReportData2);
+    HOOKSYM_LIB("libanogs.so", "AnoSDKGetReportData3", hAnoSDKGetReportData3, oAnoSDKGetReportData3);
+    HOOKSYM_LIB("libanogs.so", "AnoSDKGetReportData4", hAnoSDKGetReportData4, oAnoSDKGetReportData4);
+    HOOKSYM_LIB("libanogs.so", "AnoSDKOnRecvSignature", hAnoSDKOnRecvSignature, oAnoSDKOnRecvSignature);
+    HOOKSYM_LIB("libanogs.so", "AnoSDKIoctl", hAnoSDKIoctl, oAnoSDKIoctl);
 
     HOOK_LIB("libanogs.so", "0x21248C", hsub_21248C, osub_21248C); // Fix Crash
     HOOK_LIB("libanogs.so", "0x228168", hsub_228168, osub_228168);
@@ -133,6 +176,7 @@ void *anogs_thread(void *) {
     HOOK_LIB("libanogs.so", "0x46ED30", hsub_46ED30, osub_46ED30);
     HOOK_LIB("libanogs.so", "0x2328F0", hsub_2328F0, osub_2328F0);
     HOOK_LIB("libanogs.so", "0x389744", hsub_389744, osub_389744);
+    HOOK_LIB("libanogs.so", "0x2940D0", hsub_2940D0, osub_2940D0);
     HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00);
     HOOK_LIB("libanogs.so", "0x51F980", hsub_51F980, osub_51F980);
     HOOK_LIB("libanogs.so", "0x51F9A0", hsub_51F9A0, osub_51F9A0);
