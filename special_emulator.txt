@@ -1,0 +1,11 @@
+__int64 (*osub_1D6598)();
+__int64 hsub_1D6598() {
+    return 0;
+}
+HOOK_LIB("libanogs.so", "0x1D6598", hsub_1D6598, osub_1D6598);
+__int64 (*osub_213DC8)(__int64 result);
+__int64 hsub_213DC8(__int64 result) { return 0; }
+HOOK_LIB("libanogs.so", "0x213DC8", hsub_213DC8, osub_213DC8);
+__int64 (*osub_4B60D4)(__int64 result, __int64 a2);
+__int64 hsub_4B60D4(__int64 result, __int64 a2) { return 0; }
+HOOK_LIB("libanogs.so", "0x4B60D4", hsub_4B60D4, osub_4B60D4);
