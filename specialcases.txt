@@ -8,6 +8,6 @@ __int64 hsub_3F9928(sub_dispatcher_a2_t a1, __int64 a2, __int64 a3, __int64 a4, 
 __int64 (*osub_3FC5C8)(__int64, __int64, double) = nullptr;
 __int64 hsub_3FC5C8(__int64 a1, __int64 a2, double a3) { if (a1) { *(_QWORD*)(a1 + 208) = 0; *(_QWORD*)(a1 + 224) = 0; *(_QWORD*)(a1 + 280) = 0; *(_QWORD*)(a1 + 288) = 0; } return 0; }
 HOOK_LIB("libanogs.so", "0x1D6598", hsub_1D6598, osub_1D6598);
-HOOK_LIB("libanogs.so", "0x3A8DA8", hsub_3A8DA8, osub_3A8DA8);
+DobbyHook((void *)get_remote_lib_address("libanogs.so", "0x3A8DA8"), (void *)hsub_3A8DA8, (void **)&osub_3A8DA8);
 HOOK_LIB("libanogs.so", "0x3F9928", hsub_3F9928, osub_3F9928);
 HOOK_LIB("libanogs.so", "0x3FC5C8", hsub_3FC5C8, osub_3FC5C8);
