@@ -36,5 +36,5 @@ bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3) {
     return res;
 }
 
-HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, osub_81C2F70);
-HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, osub_C492610);
+HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, osub_81C2F70); // pvt record spoofer
+HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, osub_C492610); // login request spoofer
