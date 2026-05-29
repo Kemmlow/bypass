@@ -41,6 +41,20 @@ typedef uint32_t _DWORD;
 typedef uint16_t _WORD;
 typedef uint8_t _BYTE;
 
+// Helper for UTF-16 hex formatting (UE4 compatible)
+void format_hex_utf16(uint16_t* out, uint32_t* ids) {
+    const char* hex = "0123456789ABCDEF";
+    for (int i = 0; i < 4; i++) {
+        uint32_t val = ids[i];
+        for (int j = 7; j >= 0; j--) {
+            out[i * 8 + j] = (uint16_t)hex[val & 0xF];
+            val >>= 4;
+        }
+    }
+}
+
+// --- libanogs.so Hooks ---
+
 __pid_t (**(*osub_2940D0)(__pid_t (**result)(void)))(void) = nullptr;
 __pid_t (**__fastcall hsub_2940D0(__pid_t (**result)(void)))(void)
 {
@@ -195,6 +209,86 @@ __int64 __fastcall hsub_451564(__int64 a1, __int64 a2)
 __int64 (*osub_21E9C4)(__int64 a1, __int64 a2, __int64 a3, int a4, int a5) = nullptr;
 void hsub_21E9C4(__int64 a1, __int64 a2, __int64 a3, int a4, int a5) { return; }
 
+// --- libUE4.so Hooks ---
+
+__int16 *(*osub_81C2F70)(__int64 a1);
+__int16 *hsub_81C2F70(__int64 a1)
+{
+    struct sysinfo si;
+    sysinfo(&si);
+    srand(si.procs + si.totalram);
+    uint32_t id[4];
+    id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
+    id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
+    id[2] = (uint32_t)(si.loads[0] << 16) | (uint32_t)(si.procs & 0xFFFF);
+    id[3] = (uint32_t)si.sharedram ^ 0xDEADBEEF;
+
+    uint16_t buf[32];
+    format_hex_utf16(buf, id);
+
+    void (*alloc)(__int64, unsigned int, unsigned int) = (void (*)(__int64, unsigned int, unsigned int))(getLibraryBase("libUE4.so") + 0x5625AEC);
+    *(_QWORD *)a1 = 0;
+    *(_DWORD *)(a1 + 8) = 64;
+    alloc(a1, 64, 0);
+    memcpy(*(void **)a1, buf, 64);
+    return (__int16 *)*(void **)a1;
+}
+
+bool (*osub_C492610)(__int64 a1, unsigned int a2, __int64 a3);
+bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3)
+{
+    bool res = osub_C492610(a1, a2, a3);
+    struct sysinfo si;
+    sysinfo(&si);
+    uint32_t id[4];
+    id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
+    id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
+    id[2] = (uint32_t)(si.loads[0] << 16) | (uint32_t)(si.procs & 0xFFFF);
+    id[3] = (uint32_t)si.sharedram ^ 0xDEADBEEF;
+
+    uint16_t buf[32];
+    format_hex_utf16(buf, id);
+
+    __int16 *ptr = *(__int16 **)(a3 + 0x58);
+    if (ptr)
+        memcpy(ptr, buf, 64);
+    return res;
+}
+
+__int64 (*osub_C4E0330)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5);
+__int64 hsub_C4E0330(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5)
+{
+    return 0; // termination
+}
+
+void (*osub_82A8280)(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9);
+void hsub_82A8280(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
+{
+    return; // flag fix
+}
+
+__int64 (*osub_7ADAE8C)();
+__int64 hsub_7ADAE8C()
+{
+    return 0; // 10 years
+}
+
+int *(*osub_81FF6F4)(int *result, uint16_t *src, int a3);
+int *hsub_81FF6F4(int *result, uint16_t *src, int a3)
+{
+    if (src && a3 >= 20)
+    {
+        // Simple manual UTF-16 match for "login-identifier.txt"
+        const uint16_t target[] = {'l','o','g','i','n','-','i','d','e','n','t','i','f','i','e','r','.','t','x','t'};
+        bool match = true;
+        for(int i=0; i<20; i++) {
+            if(src[i] != target[i]) { match = false; break; }
+        }
+        if (match) return nullptr;
+    }
+    return osub_81FF6F4(result, src, a3);
+}
+
 void *ue4_thread(void *)
 {
     do
@@ -202,14 +296,42 @@ void *ue4_thread(void *)
         sleep(1);
     } while (!isLibraryLoaded("libUE4.so"));
 #if defined(__aarch64__)
+    // Clean Bypass Set - Bogeys (0x68CD2F4, 0xD573708, 0xCAB19B8) Removed for Bullet Hax registration
+    PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6"); // fake damage fix
+    PATCH_LIB("libUE4.so", "0x69913E0", "00 00 80 D2 C0 03 5F D6"); // accuracy fix
 
-    PATCH_LIB("libUE4.so", "0x5ACC184", "00 00 80 D2 C0 03 5F D6"); // termination
-    PATCH_LIB("libUE4.so", "0x62E286C", "20 00 80 D2 C0 03 5F D6"); // termination
-    PATCH_LIB("libUE4.so", "0x68CD9C8", "1F 20 03 D5");             // termination
-    PATCH_LIB("libUE4.so", "0x7435D90", "00 00 80 D2 C0 03 5F D6"); // termination new
-    PATCH_LIB("libUE4.so", "0x74B1BC0", "E0 03 27 1E C0 03 5F D6"); // server kick
-    PATCH_LIB("libUE4.so", "0x776AFF8", "00 00 80 D2 C0 03 5F D6"); // server kick
-    PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6"); // fake damage fixer
+    // HWID & Identity
+    HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, osub_81C2F70); // hwid spoofer (record spoofer)
+    HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, osub_C492610); // hwid spoofer (login request spoofer)
+    HOOK_LIB("libUE4.so", "0x81FF6F4", hsub_81FF6F4, osub_81FF6F4); // security file filter
+
+    // Global Anti-Cheat Dispatchers
+    HOOK_LIB("libUE4.so", "0xC4E0330", hsub_C4E0330, osub_C4E0330); // AnoSDKIoctlOld
+    HOOK_LIB("libUE4.so", "0x82A8280", hsub_82A8280, osub_82A8280); // God Dispatcher
+
+    // Security Orchestration
+    HOOK_LIB("libUE4.so", "0x7ADAE8C", hsub_7ADAE8C, osub_7ADAE8C); // Higgs Heartbeat
+    PATCH_LIB("libUE4.so", "0x5ACC184", "00 00 80 D2 C0 03 5F D6"); // Integrity Gate
+    PATCH_LIB("libUE4.so", "0x7ADADB4", "00 00 80 D2 C0 03 5F D6"); // Higgs Trinity 1
+    PATCH_LIB("libUE4.so", "0x7ADAE00", "00 00 80 D2 C0 03 5F D6"); // Higgs Trinity 2
+    PATCH_LIB("libUE4.so", "0x7ADAE4C", "00 00 80 D2 C0 03 5F D6"); // Higgs Trinity 3
+
+    // Movement & Environment
+    PATCH_LIB("libUE4.so", "0x77DFF68", "00 00 80 D2 C0 03 5F D6"); // AntiMoveCheatFlow
+    PATCH_LIB("libUE4.so", "0x59C0EB8", "00 00 80 D2 C0 03 5F D6"); // Move Anti-Cheat
+
+    // Security Collectors
+    PATCH_LIB("libUE4.so", "0x7820930", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7820A08", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7820B2C", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7820BB8", "00 00 80 D2 C0 03 5F D6");
+
+    // Server-Side Kick & Flag Bypasses
+    PATCH_LIB("libUE4.so", "0x640B598", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x62E286C", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x74B1BC0", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x776AFF8", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x761CD04", "00 00 80 D2 C0 03 5F D6");
 #endif
     return NULL;
 }
