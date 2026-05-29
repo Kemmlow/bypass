@@ -1,105 +1,47 @@
 // Target: qword_8327B48[0] (The Formatter)
-// Context: Called within the 'Old Ban Record' orchestrator sub_81C2F70 to format raw identifiers.
-// This function converts raw entropy (identifiers) into the string format used in login-identifier.txt.
+// Description: Converts raw 128-bit entropy (int[4]) into a hex string record.
+// Called by: sub_81C2F70 (Old Ban Record Orchestrator) and sub_C493030.
 
-// Orchestrator: sub_81C2F70 (Full Pseudocode)
+// Actual Function Call Context:
+// ((void (__fastcall *)(__int128 *return_fstring, int *input_4ints, _QWORD flags))qword_8327B48[0])(&fstring_out, guid_bits, 0LL);
+
+// Replicated Formatting Logic:
+// The function processes the 4 integers in sequence (A, B, C, D) and formats each as an 8-character
+// uppercase hexadecimal string, resulting in a 32-character identifier with no delimiters.
+
+void Replicated_Formatter_qword_8327B48_0(int* input_4ints, wchar_t* output_buffer)
+{
+    // Replicates the logic of the internal UE4 GUID to Digits formatting
+    // input_4ints[0] = 0xAAAAAAAA
+    // input_4ints[1] = 0xBBBBBBBB
+    // input_4ints[2] = 0xCCCCCCCC
+    // input_4ints[3] = 0xDDDDDDDD
+
+    // Output Format: "AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDD"
+    swprintf(output_buffer, 33, L"%08X%08X%08X%08X",
+             input_4ints[0],
+             input_4ints[1],
+             input_4ints[2],
+             input_4ints[3]);
+}
+
+// Full Pseudocode Context from Orchestrator sub_81C2F70:
 //----- (00000000081C2F70) ----------------------------------------------------
 __int16 *__usercall sub_81C2F70@<X0>(__int64 a1@<X8>)
 {
-  unsigned __int8 v1; // w9
-  __int64 v3; // x20
-  __int64 v4; // x21
-  const void *v5; // x20
-  int v6; // w8
-  __int16 *v7; // x1
-  __int64 v8; // x21
-  const void *v9; // x20
-  const void *v10; // x21
-  int v11; // w20
-  __int16 *v12; // x22
-  _QWORD *v13; // x0
-  __int16 *v14; // x1
-  __int16 *result; // x0
   __int128 v16; // [xsp+90h] [xbp-30h] BYREF
   _QWORD v17[2]; // [xsp+A0h] [xbp-20h] BYREF
-  __int16 *v18; // [xsp+B0h] [xbp-10h] BYREF
-  int v19; // [xsp+B8h] [xbp-8h]
 
-  v1 = atomic_load((unsigned __int8 *)&qword_E0DE668);
-  if ( (v1 & 1) == 0 && __cxa_guard_acquire(&qword_E0DE668) )
-  {
-    xmmword_E0DEAD0 = 0u;
-    __cxa_atexit((void (*)(void *))start, &xmmword_E0DEAD0, &unk_DF742F0);
-    __cxa_guard_release(&qword_E0DE668);
-  }
-  v3 = DWORD2(xmmword_E0DEAD0);
-  if ( SDWORD2(xmmword_E0DEAD0) >= 2 )
-  {
-    v10 = (const void *)xmmword_E0DEAD0;
-    *(_QWORD *)a1 = 0LL;
-    *(_DWORD *)(a1 + 8) = v3;
-    ((void (__fastcall *)(__int64, _QWORD, _QWORD))dword_5625AEC)(a1, (unsigned int)v3, 0LL);
-    return (__int16 *)memcpy(*(void **)a1, v10, 2 * v3);
-  }
-  v4 = (int)qword_E0DD4E0;
-  v5 = (const void *)qword_E0DD4D8;
-  v18 = 0LL;
-  if ( (_DWORD)qword_E0DD4E0 )
-    v6 = 21;
-  else
-    v6 = 22;
-  v19 = qword_E0DD4E0;
-  ((void (__fastcall *)(__int16 **, _QWORD, _QWORD))dword_5625AEC)(&v18, (unsigned int)(v6 + qword_E0DD4E0), 0LL);
-  memcpy(v18, v5, 2 * v4);
-  sub_81FF6F4((int *)&v18, L"login-identifier.txt", 20);
-  if ( (((__int64 (__fastcall *)(__int16 **))loc_8342350)(&v18) & 1) != 0 )
-  {
-    v7 = v19 ? v18 : word_3BBA1A8;
-    if ( (((__int64 (__fastcall *)(__int128 *, __int16 *, _QWORD))loc_8315134)(&xmmword_E0DEAD0, v7, 0LL) & 1) != 0 )
-    {
-      v8 = SDWORD2(xmmword_E0DEAD0);
-      v9 = (const void *)xmmword_E0DEAD0;
-      *(_QWORD *)a1 = 0LL;
-      *(_DWORD *)(a1 + 8) = v8;
-      if ( (_DWORD)v8 )
-      {
-        ((void (__fastcall *)(__int64, _QWORD, _QWORD))dword_5625AEC)(a1, (unsigned int)v8, 0LL);
-LABEL_21:
-        memcpy(*(void **)a1, v9, 2LL * *(unsigned int *)(a1 + 8));
-        goto LABEL_23;
-      }
-LABEL_23:
-      *(_DWORD *)(a1 + 12) = 0;
-      result = v18;
-      if ( !v18 )
-        return result;
-      return (__int16 *)sub_8241084((__int64)result);
-    }
-  }
+  // ... (record loading logic)
 
-  // Call to the Formatter Function Pointer
+  // Critical call to the Formatter using the pointer array
+  // v17 contains the 128-bit raw identification entropy (int[4])
   ((void (__fastcall *)(__int128 *__return_ptr, _QWORD *, _QWORD))qword_8327B48[0])(&v16, v17, 0LL);
 
+  // v16 now contains the FString pointing to the 32-character hex string
   v11 = SDWORD2(v16);
   v12 = (__int16 *)v16;
-  *(_QWORD *)a1 = 0LL;
-  *(_DWORD *)(a1 + 8) = SDWORD2(v16);
-  if ( SDWORD2(v16) )
-  {
-    ((void (__fastcall *)(__int64, _QWORD, _QWORD))dword_5625AEC)(a1, (unsigned int)SDWORD2(v16), 0LL);
-    v13 = *(_QWORD **)a1;
-    v14 = v12;
-  }
-  else
-  {
-    v13 = 0LL;
-    v14 = word_3BBA1A8;
-  }
-  result = (__int16 *)memcpy(v13, v14, 2LL * (unsigned int)v11);
-  *(_DWORD *)(a1 + 12) = 0;
-  if ( (_QWORD)v16 )
-    result = (__int16 *)sub_8241084((__int64)v12);
-  if ( v18 )
-    result = (__int16 *)sub_8241084((__int64)v18);
+
+  // ... (logic to return or save the formatted record)
   return result;
 }
