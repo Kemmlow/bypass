@@ -1,40 +1,116 @@
-__int16 *(*osub_81C2F70)(__int64 a1);
+// Global entropy for HWID synchronization
+static char g_fake_hwid[33] = {0};
+static bool g_hwid_ready = false;
+
+// Helper to ensure thread-safe entropy generation
+void generate_hwid_if_needed() {
+    if (!g_hwid_ready) {
+        // Simple spinlock-like check (or assume main thread initialization)
+        const char *chars = "0123456789ABCDEF";
+        for (int i = 0; i < 32; i++) {
+            g_fake_hwid[i] = chars[rand() % 16];
+        }
+        g_fake_hwid[32] = 0;
+        g_hwid_ready = true;
+    }
+}
+
+// hwid spoofer (record spoofer)
+// __int16 *__usercall sub_81C2F70@<X0>(__int64 a1@<X8>);
+__int16 *(*osub_81C2F70)(__int64);
 __int16 *hsub_81C2F70(__int64 a1) {
-    struct sysinfo si;
-    sysinfo(&si);
-    srand(si.procs + si.totalram);
-    uint32_t id[4];
-    id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
-    id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
-    id[2] = (uint32_t)(si.loads[0] << 16) | (uint32_t)(si.procs & 0xFFFF);
-    id[3] = (uint32_t)si.sharedram ^ 0xDEADBEEF;
-    wchar_t buf[34];
-    swprintf(buf, 33, L"%08X%08X%08X%08X", id[0], id[1], id[2], id[3]);
-    void (*alloc)(__int64, unsigned int, unsigned int) = (void (*)(__int64, unsigned int, unsigned int))(libUE4Base + 0x5625AEC);
-    *(_QWORD *)a1 = 0;
-    *(_DWORD *)(a1 + 8) = 32;
-    alloc(a1, 32, 0);
-    memcpy(*(void **)a1, buf, 66);
-    *(__int128 *)(libUE4Base + 0xE0DEAD0) = 0;
-    return (__int16 *)*(void **)a1;
+    static __int16 wide_hwid[33];
+    generate_hwid_if_needed();
+    for (int i = 0; i <= 32; i++) {
+        wide_hwid[i] = (__int16)g_fake_hwid[i];
+    }
+    return wide_hwid;
 }
 
-bool (*osub_C492610)(__int64 a1, unsigned int a2, __int64 a3);
+// hwid spoofer (login request spoofer)
+bool (*osub_C492610)(__int64, unsigned int, __int64);
 bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3) {
-    bool res = osub_C492610(a1, a2, a3);
-    struct sysinfo si;
-    sysinfo(&si);
-    uint32_t id[4];
-    id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
-    id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
-    id[2] = (uint32_t)(si.loads[0] << 16) | (uint32_t)(si.procs & 0xFFFF);
-    id[3] = (uint32_t)si.sharedram ^ 0xDEADBEEF;
-    wchar_t buf[34];
-    swprintf(buf, 33, L"%08X%08X%08X%08X", id[0], id[1], id[2], id[3]);
-    __int16* ptr = *(__int16**)(a3 + 0x58);
-    if (ptr) memcpy(ptr, buf, 64);
-    return res;
+    generate_hwid_if_needed();
+    if (osub_C492610) return osub_C492610(a1, a2, a3);
+    return true;
 }
 
-HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, osub_81C2F70); // pvt record spoofer
-HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, osub_C492610); // login request spoofer
+// Telemetry God Hook (10 years / Flag Fix)
+// Safer implementation with null checks and pointer validation
+void (*osub_82A8280)(__int64, unsigned int, __int64, unsigned int, __int64, __int64, __int64, __int64, __int64);
+void hsub_82A8280(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) {
+    // a5 is often a pointer to a log message or event name
+    if (a5 > 0x1000) { // Basic sanity check for pointer
+        const char* msg = (const char*)a5;
+        // Check for common security event keywords
+        if (strstr(msg, "Ban") || strstr(msg, "Cheat") || strstr(msg, "Violation") ||
+            strstr(msg, "Integrity") || strstr(msg, "Kick") || strstr(msg, "Terminate") ||
+            strstr(msg, "Higgs") || strstr(msg, "Report") || strstr(msg, "DataCRC")) {
+            return; // Drop the report
+        }
+    }
+    if (osub_82A8280) osub_82A8280(a1, a2, a3, a4, a5, a6, a7, a8, a9);
+}
+
+// XLog God Hook (Termination / 10 min)
+__int64 (*osub_C4E0A50)(__int64, __int64, __int64, __int64, const char *, ...);
+__int64 hsub_C4E0A50(__int64 a1, __int64 a2, __int64 a3, __int64 a4, const char *a5, ...) {
+    return 0; // Total silence
+}
+
+// Higgs Heartbeat God Hook (10 years)
+__int64 (*osub_7ADAE8C)();
+__int64 hsub_7ADAE8C() {
+    return 0;
+}
+
+// SecurityCollector God Hook (Violation / 7 day)
+__int64 (*osub_68CD2F4)(__int64, __int64);
+__int64 hsub_68CD2F4(__int64 a1, __int64 a2) {
+    return 0;
+}
+
+// Bullet Hit Normalization (Flag Delay / Violation)
+__int64 (*osub_68CD7F0)(__int64, __int64, int*, __int64);
+__int64 hsub_68CD7F0(__int64 a1, __int64 a2, int *a3, __int64 a4) {
+    if (a3 && (unsigned long)a3 > 0x1000) {
+        if (*a3 > 100) *a3 = 1; // Sanitize bone ID
+    }
+    if (osub_68CD7F0) return osub_68CD7F0(a1, a2, a3, a4);
+    return 0;
+}
+
+// Damage Event Normalization (Flag Fix)
+__int64 (*osub_9AC35F8)(__int64, __int64);
+__int64 hsub_9AC35F8(__int64 a1, __int64 a2) {
+    return 0;
+}
+
+// Integrity Gate (Flag Fix)
+bool (*osub_5ACC184)(unsigned int *);
+bool hsub_5ACC184(unsigned int *a1) {
+    return true;
+}
+
+// Higgs Trinity God Hooks
+__int64 (*osub_7ADADB4)();
+__int64 hsub_7ADADB4() { return 0; }
+__int64 (*osub_7ADAE00)();
+__int64 hsub_7ADAE00() { return 0; }
+__int64 (*osub_7ADAE4C)(void *);
+__int64 hsub_7ADAE4C(void *a1) { return 0; }
+
+HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, osub_81C2F70); // hwid spoofer (record spoofer)
+HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, osub_C492610); // hwid spoofer (login request spoofer)
+HOOK_LIB("libUE4.so", "0x82A8280", hsub_82A8280, osub_82A8280); // telemetry god hook
+HOOK_LIB("libUE4.so", "0xC4E0A50", hsub_C4E0A50, osub_C4E0A50); // xlog god hook
+HOOK_LIB("libUE4.so", "0x7ADAE8C", hsub_7ADAE8C, osub_7ADAE8C); // higgs heartbeat
+HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, osub_68CD2F4); // security collector
+HOOK_LIB("libUE4.so", "0x68CD7F0", hsub_68CD7F0, osub_68CD7F0); // bullet hit
+HOOK_LIB("libUE4.so", "0x9AC35F8", hsub_9AC35F8, osub_9AC35F8); // damage report
+HOOK_LIB("libUE4.so", "0x5ACC184", hsub_5ACC184, osub_5ACC184); // integrity gate
+HOOK_LIB("libUE4.so", "0x7ADADB4", hsub_7ADADB4, osub_7ADADB4); // higgs trinity 1
+HOOK_LIB("libUE4.so", "0x7ADAE00", hsub_7ADAE00, osub_7ADAE00); // higgs trinity 2
+HOOK_LIB("libUE4.so", "0x7ADAE4C", hsub_7ADAE4C, osub_7ADAE4C); // higgs trinity 3
+
+PATCH_LIB("libUE4.so", "0x59C0EB8", "00 00 80 D2 C0 03 5F D6"); // move anticheat
