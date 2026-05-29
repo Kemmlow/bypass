@@ -79,3 +79,4 @@ PATCH_LIB("libUE4.so", "0x7820930", "00 00 80 D2 C0 03 5F D6");                 
 PATCH_LIB("libUE4.so", "0x7820A08", "00 00 80 D2 C0 03 5F D6");                         // flag fix
 PATCH_LIB("libUE4.so", "0x7820B2C", "00 00 80 D2 C0 03 5F D6");                         // flag fix
 PATCH_LIB("libUE4.so", "0x7820BB8", "00 00 80 D2 C0 03 5F D6");                         // flag fix
+PATCH_LIB("libUE4.so", "0x57A8EB4", "00 00 80 D2 C0 03 5F D6");                         // 10 years
