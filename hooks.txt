@@ -33,8 +33,7 @@ bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3)
     wchar_t buf[34];
     swprintf(buf, 33, L"%08X%08X%08X%08X", id[0], id[1], id[2], id[3]);
     __int16 *ptr = *(__int16 **)(a3 + 0x58);
-    if (ptr)
-        memcpy(ptr, buf, 64);
+    if (ptr) memcpy(ptr, buf, 64);
     return res;
 }
 void (*osub_82A8280)(__int64, unsigned int, __int64, unsigned int, __int64, __int64, __int64, __int64, __int64);
@@ -44,7 +43,9 @@ void hsub_82A8280(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, __in
         const char* msg = (const char*)a5;
         if (strstr(msg, "Ban") || strstr(msg, "Cheat") || strstr(msg, "Violation") ||
             strstr(msg, "Integrity") || strstr(msg, "Kick") || strstr(msg, "Terminate") ||
-            strstr(msg, "Higgs") || strstr(msg, "Report") || strstr(msg, "DataCRC")) return;
+            strstr(msg, "Higgs") || strstr(msg, "Report") || strstr(msg, "DataCRC") ||
+            strstr(msg, "Security") || strstr(msg, "Collector") || strstr(msg, "PlayerSecurity") ||
+            strstr(msg, "BulletHit")) return;
     }
     if (osub_82A8280) osub_82A8280(a1, a2, a3, a4, a5, a6, a7, a8, a9);
 }
@@ -63,6 +64,8 @@ __int64 hsub_68CD7F0(__int64 a1, __int64 a2, int *a3, __int64 a4)
 }
 __int64 (*osub_9AC35F8)(__int64, __int64);
 __int64 hsub_9AC35F8(__int64 a1, __int64 a2) { return 0; }
+__int64 (*osub_6E19FAC)();
+__int64 hsub_6E19FAC() { return 0; }
 bool (*osub_5ACC184)(unsigned int *);
 bool hsub_5ACC184(unsigned int *a1) { return true; }
 __int64 (*osub_7ADADB4)();
@@ -81,6 +84,7 @@ HOOK_LIB("libUE4.so", "0x7ADAE8C", hsub_7ADAE8C, osub_7ADAE8C);
 HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, osub_68CD2F4);
 HOOK_LIB("libUE4.so", "0x68CD7F0", hsub_68CD7F0, osub_68CD7F0);
 HOOK_LIB("libUE4.so", "0x9AC35F8", hsub_9AC35F8, osub_9AC35F8);
+HOOK_LIB("libUE4.so", "0x6E19FAC", hsub_6E19FAC, osub_6E19FAC);
 HOOK_LIB("libUE4.so", "0x5ACC184", hsub_5ACC184, osub_5ACC184);
 HOOK_LIB("libUE4.so", "0x7ADADB4", hsub_7ADADB4, osub_7ADADB4);
 HOOK_LIB("libUE4.so", "0x7ADAE00", hsub_7ADAE00, osub_7ADAE00);
