@@ -50,11 +50,17 @@ __int64 hsub_68CD2F4(__int64 a1, __int64 a2) {
     return 0; // flag fix
 }
 
+__int64 (*osub_6F9FAC0)(__int64 a1, __int64 a2, __int64 *a3);
+__int64 hsub_6F9FAC0(__int64 a1, __int64 a2, __int64 *a3) {
+    return 0; // flag fix
+}
+
 HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, osub_81C2F70);                         // hwid spoofer (record spoofer)
 HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, osub_C492610);                         // hwid spoofer (login request spoofer)
 HOOK_LIB("libUE4.so", "0xC4E0330", hsub_C4E0330, osub_C4E0330);                         // termination
 HOOK_LIB("libUE4.so", "0x82A8280", hsub_82A8280, osub_82A8280);                         // flag fix
 HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, osub_68CD2F4);                         // flag fix
+HOOK_LIB("libUE4.so", "0x6F9FAC0", hsub_6F9FAC0, osub_6F9FAC0);                         // flag fix
 PATCH_LIB("libUE4.so", "0xCAB19B8", "00 00 80 D2 C0 03 5F D6");                         // flag fix
 PATCH_LIB("libUE4.so", "0xD573708", "00 00 80 D2 C0 03 5F D6");                         // flag fix
 PATCH_LIB("libUE4.so", "0x8399318", "00 00 80 D2 C0 03 5F D6");                         // violation
