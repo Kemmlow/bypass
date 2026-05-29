@@ -87,3 +87,13 @@ PATCH_LIB("libUE4.so", "0x7820B2C", "00 00 80 D2 C0 03 5F D6");                 
 PATCH_LIB("libUE4.so", "0x7820BB8", "00 00 80 D2 C0 03 5F D6");                         // flag fix
 PATCH_LIB("libUE4.so", "0x57A8EB4", "00 00 80 D2 C0 03 5F D6");                         // 10 years
 PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6");                         // flag fix
+PATCH_LIB("libUE4.so", "0x69913E0", "00 00 80 D2 C0 03 5F D6");                         // accuracy fix
+PATCH_LIB("libUE4.so", "0x640B598", "00 00 80 D2 C0 03 5F D6");                         // violation
+PATCH_LIB("libUE4.so", "0x62E286C", "00 00 80 D2 C0 03 5F D6");                         // termination
+PATCH_LIB("libUE4.so", "0x68CD9C8", "1F 20 03 D5");                                     // termination
+PATCH_LIB("libUE4.so", "0x74B1BC0", "00 00 80 D2 C0 03 5F D6");                         // violation
+PATCH_LIB("libUE4.so", "0x776AFF8", "00 00 80 D2 C0 03 5F D6");                         // violation
+PATCH_LIB("libUE4.so", "0x761CD04", "00 00 80 D2 C0 03 5F D6");                         // violation
+PATCH_LIB("libUE4.so", "0xC4DFB90", "00 00 80 D2 C0 03 5F D6");                         // violation
+PATCH_LIB("libUE4.so", "0xC4E22B0", "00 00 80 D2 C0 03 5F D6");                         // termination
+PATCH_LIB("libUE4.so", "0xC4E22E8", "00 00 80 D2 C0 03 5F D6");                         // violation
