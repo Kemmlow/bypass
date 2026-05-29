@@ -61,16 +61,6 @@ HOOK_LIB("libUE4.so", "0xC4E0330", hsub_C4E0330, osub_C4E0330);                 
 HOOK_LIB("libUE4.so", "0x82A8280", hsub_82A8280, osub_82A8280);                         // flag fix
 HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, osub_68CD2F4);                         // flag fix
 HOOK_LIB("libUE4.so", "0x7ADAE8C", hsub_7ADAE8C, osub_7ADAE8C);                         // 10 years
-PATCH_LIB("libUE4.so", "0xCAB19B8", "00 00 80 D2 C0 03 5F D6");                         // flag fix
-PATCH_LIB("libUE4.so", "0xD573708", "00 00 80 D2 C0 03 5F D6");                         // flag fix
 PATCH_LIB("libUE4.so", "0x5ACC184", "00 00 80 D2 C0 03 5F D6");                         // termination
-PATCH_LIB("libUE4.so", "0x7ADADB4", "00 00 80 D2 C0 03 5F D6");                         // 10 years
-PATCH_LIB("libUE4.so", "0x7ADAE00", "00 00 80 D2 C0 03 5F D6");                         // 10 years
-PATCH_LIB("libUE4.so", "0x7ADAE4C", "00 00 80 D2 C0 03 5F D6");                         // 10 years
-PATCH_LIB("libUE4.so", "0x77DFF68", "00 00 80 D2 C0 03 5F D6");                         // flag delay
 PATCH_LIB("libUE4.so", "0x59C0EB8", "00 00 80 D2 C0 03 5F D6");                         // violation
-PATCH_LIB("libUE4.so", "0x7820930", "00 00 80 D2 C0 03 5F D6");                         // flag fix
-PATCH_LIB("libUE4.so", "0x7820A08", "00 00 80 D2 C0 03 5F D6");                         // flag fix
-PATCH_LIB("libUE4.so", "0x7820B2C", "00 00 80 D2 C0 03 5F D6");                         // flag fix
-PATCH_LIB("libUE4.so", "0x7820BB8", "00 00 80 D2 C0 03 5F D6");                         // flag fix
-PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6");                         // flag fix
+PATCH_LIB("libUE4.so", "0x77DFF68", "00 00 80 D2 C0 03 5F D6");                         // flag delay
