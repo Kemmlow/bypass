@@ -1,0 +1,311 @@
+// Priority 1: qword_8327B48[0] (The Formatter)
+// Called in sub_81C2F70 and sub_C493030 to convert raw entropy/identifiers into strings.
+
+// Context from sub_81C2F70:
+// ((void (__fastcall *)(__int128 *__return_ptr, _QWORD *, _QWORD))qword_8327B48[0])(&v16, v17, 0LL);
+
+// Context from sub_C493030:
+// v28[0] = ((__int64 (*)(void))dword_8327C5C)();
+// v28[1] = v25;
+// ((void (__fastcall *)(__int16 **__return_ptr, _QWORD *, _QWORD))qword_8327B48[0])(&v29, v28, 0LL);
+
+// Priority 2: loc_832290C (Cache Writer)
+// Identified as the terminal call in sub_8322578, which prepares normalized data for storage.
+
+//----- (0000000008322578) ----------------------------------------------------
+__int64 __fastcall sub_8322578(__int64 *a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5)
+{
+  int v5; // w20
+  __int64 v10; // x19
+  int v12; // w21
+  __int64 v13; // x22
+  unsigned int v14; // w23
+  unsigned __int64 v15; // x8
+  unsigned __int64 v16; // x9
+  int32x4_t v17; // q6
+  __int64 v18; // x9
+  const float *v19; // x10
+  int32x4_t v20; // q4
+  int32x4_t v21; // q5
+  int32x4_t v22; // q7
+  unsigned __int128 v23; // q0
+  unsigned __int128 v24; // q1
+  unsigned __int128 v25; // q2
+  int v26; // w10
+  int v27; // w10
+  __int64 v28; // x19
+  __int64 v30; // x24
+  __int64 v31; // x9
+  int v32; // w8
+  int v33; // w11
+  const void *v34; // x25
+  int v35; // w22
+  int v36; // w8
+  __int64 v37; // x10
+  size_t v38; // x26
+  char *v39; // x11
+  int v40; // w22
+  int v41; // w8
+  __int64 v43; // [xsp+30h] [xbp-B0h] BYREF
+  __int64 v44; // [xsp+38h] [xbp-A8h]
+
+  v5 = *((_DWORD *)a1 + 2);
+  v10 = *a1;
+  v17 = 0uLL;
+  if ( v5 >= 8 )
+  {
+    v15 = v5;
+    v16 = 0LL;
+    if ( (v15 & 7) != 0 )
+      v16 = v15 & 7;
+    v18 = v15 - v16;
+    v19 = (const float *)(v10 + 72);
+    v20 = 0uLL;
+    v21.n128_u64[0] = 0x100000001LL;
+    v21.n128_u64[1] = 0x100000001LL;
+    v13 = v10 + 16 * v18;
+    v22.n128_u64[0] = 0x200000002LL;
+    v22.n128_u64[1] = 0x200000002LL;
+    do
+    {
+      v23 = v19 - 16;
+      v24 = (unsigned __int128)vld4q_f32(v19);
+      v25 = (unsigned __int128)vld4q_f32(v23);
+      v18 -= 8LL;
+      v19 += 32;
+      v20 = vaddq_s32(vbslq_s8(vceqzq_s32((int32x4_t)v24), v22, vaddq_s32((int32x4_t)v24, v21)), v20);
+      v17 = vaddq_s32(vbslq_s8(vceqzq_s32((int32x4_t)v25), v22, vaddq_s32((int32x4_t)v25, v21)), v17);
+    }
+    while ( v18 );
+    v12 = vaddvq_s32(vaddq_s32(v20, v17));
+  }
+  else
+  {
+    v12 = 10;
+    v13 = *a1;
+  }
+  do
+  {
+    v26 = *(_DWORD *)(v13 + 8);
+    v13 += 16LL;
+    if ( v26 )
+      v27 = v26 + 1;
+    else
+      v27 = 2;
+    v12 += v27;
+  }
+  while ( v10 + 16 * v5 != v13 );
+  v14 = (unsigned int)(v12 + 1);
+  v43 = 0LL;
+  v44 = 0LL;
+  if ( (int)v14 >= 1 )
+  {
+LABEL_15:
+    ((void (__fastcall *)(__int64 *, __int64))loc_5625A64)(&v43, v14);
+    v5 = *((int *)a1 + 2);
+    v10 = *a1;
+    if ( !*((_DWORD *)a1 + 2) )
+      goto LABEL_18;
+  }
+  v30 = v10 + 16 * v5;
+  do
+  {
+    v32 = *(_DWORD *)(v10 + 8);
+    if ( v32 )
+    {
+      v33 = v32 - 1;
+      if ( v32 != 1 )
+      {
+        v34 = *(const void **)v10;
+        v35 = (int)v44;
+        v36 = v44 + v33;
+        if ( !(_DWORD)v44 )
+          ++v36;
+        LODWORD(v44) = v36;
+        if ( v36 > SHIDWORD(v44) )
+          ((void (__fastcall *)(__int64 *, _QWORD))loc_56259D4)(&v43, (unsigned int)v35);
+        if ( (_DWORD)v35 )
+          v37 = -2LL;
+        else
+          v37 = 0LL;
+        v38 = 2LL * v33;
+        v39 = (char *)(v43 + 2 * v35 + v37);
+        memcpy(v39, v34, v38);
+        *(_WORD *)&v39[v38] = 0;
+      }
+    }
+    v40 = (int)v44;
+    if ( (_DWORD)v44 )
+      v41 = v44;
+    else
+      v41 = 1;
+    LODWORD(v44) = v41 + 1;
+    if ( v41 + 1 > SHIDWORD(v44) )
+      ((void (__fastcall *)(__int64 *, _QWORD))loc_56259D4)(&v43, (unsigned int)v40);
+    v10 += 16LL;
+    if ( (_DWORD)v40 )
+      v31 = -2LL;
+    else
+      v31 = 0LL;
+    *(_DWORD *)(v43 + 2 * v40 + v31) = 10;
+  }
+  while ( v10 != v30 );
+LABEL_18:
+  v28 = ((__int64 (__fastcall *)(__int64 *, __int64, _QWORD, __int64, _QWORD))loc_832290C)(&v43, a2, a3, a4, a5);
+  if ( v43 )
+    sub_8241084(v43);
+  return v28 & 1;
+}
+
+// Priority 3: sub_81FF6F4 (File reader / Path Builder)
+// Used to construct paths for 'login-identifier.txt' and other persistent records.
+
+//----- (00000000081FF6F4) ----------------------------------------------------
+int *__fastcall sub_81FF6F4(int *result, _WORD *src, int a3)
+{
+  int v3; // w8
+  int *v4; // x19
+  int v7; // w9
+  int v8; // w11
+  int v9; // w9
+  int v10; // w8
+  __int64 v11; // x22
+  int v12; // w8
+  __int64 v13; // x20
+  int v14; // w10
+
+  v3 = result[2];
+  v4 = result;
+  if ( a3 )
+  {
+    v7 = v3 - 1;
+    if ( v3 >= 1 )
+    {
+      if ( v3 != 1 )
+      {
+        v8 = *(unsigned __int16 *)(*(_QWORD *)result + 2LL * (v3 - 2));
+        if ( v8 != 47 && v8 != 92 && *src != 47 )
+        {
+          *(_WORD *)(*(_QWORD *)result + 2LL * v7) = 47;
+          v9 = result[3];
+          v10 = v3 + a3;
+          if ( v9 > v10 )
+            goto LABEL_10;
+          goto LABEL_9;
+        }
+      }
+      --v3;
+      result[2] = v7;
+    }
+    v9 = result[3];
+    v10 = v3 + a3;
+    if ( v9 > v10 )
+    {
+LABEL_10:
+      v11 = v4[2];
+      v4[2] = v11 + a3;
+      if ( (int)v11 + a3 > v9 )
+        ((void (__fastcall *)(int *, _QWORD))loc_56259D4)(v4, (unsigned int)v11);
+      result = (int *)memcpy((void *)(*(_QWORD *)v4 + 2 * v11), src, 2LL * a3);
+      goto LABEL_13;
+    }
+LABEL_9:
+    ((void (__fastcall *)(int *, _QWORD))loc_5625A64)(result, (unsigned int)(v10 + 1));
+    v9 = v4[3];
+    goto LABEL_10;
+  }
+  if ( v3 < 2 )
+    return result;
+  v14 = *(unsigned __int16 *)(*(_QWORD *)result + 2LL * (v3 - 2));
+  if ( v14 == 47 || v14 == 92 )
+    return result;
+  *(_WORD *)(*(_QWORD *)result + 2LL * (v3 - 1)) = 47;
+LABEL_13:
+  v12 = v4[3];
+  v13 = v4[2];
+  v4[2] = v13 + 1;
+  if ( (int)v13 >= v12 )
+    result = (int *)((__int64 (__fastcall *)(int *, _QWORD))loc_56259D4)(v4, (unsigned int)v13);
+  *(_WORD *)(*(_QWORD *)v4 + 2 * v13) = 0;
+  return result;
+}
+
+// Orchestrator: sub_81C2F70 (The 'Old Ban Record' Subroutine)
+// Manages the identification file and calls the Formatter.
+
+//----- (00000000081C2F70) ----------------------------------------------------
+__int16 *__usercall sub_81C2F70@<X0>(__int64 a1@<X8>)
+{
+  unsigned __int8 v1; // w9
+  __int64 v3; // x20
+  __int64 v4; // x21
+  const void *v5; // x20
+  int v6; // w8
+  __int16 *v7; // x1
+  __int64 v8; // x21
+  const void *v9; // x20
+  const void *v10; // x21
+  int v11; // w20
+  __int16 *v12; // x22
+  _QWORD *v13; // x0
+  __int16 *v14; // x1
+  __int16 *result; // x0
+  __int128 v16; // [xsp+90h] [xbp-30h] BYREF
+  _QWORD v17[2]; // [xsp+A0h] [xbp-20h] BYREF
+  __int16 *v18; // [xsp+B0h] [xbp-10h] BYREF
+  int v19; // [xsp+B8h] [xbp-8h]
+
+  v1 = atomic_load((unsigned __int8 *)&qword_E0DE668);
+  if ( (v1 & 1) == 0 && __cxa_guard_acquire(&qword_E0DE668) )
+  {
+    xmmword_E0DEAD0 = 0u;
+    __cxa_atexit((void (*)(void *))start, &xmmword_E0DEAD0, &unk_DF742F0);
+    __cxa_guard_release(&qword_E0DE668);
+  }
+  v3 = DWORD2(xmmword_E0DEAD0);
+  if ( SDWORD2(xmmword_E0DEAD0) >= 2 )
+  {
+    v10 = (const void *)xmmword_E0DEAD0;
+    *(_QWORD *)a1 = 0LL;
+    *(_DWORD *)(a1 + 8) = v3;
+    ((void (__fastcall *)(__int64, _QWORD, _QWORD))dword_5625AEC)(a1, (unsigned int)v3, 0LL);
+    return (__int16 *)memcpy(*(void **)a1, v10, 2 * v3);
+  }
+  v4 = (int)qword_E0DD4E0;
+  v5 = (const void *)qword_E0DD4D8;
+  v18 = 0LL;
+  if ( (_DWORD)qword_E0DD4E0 )
+    v6 = 21;
+  else
+    v6 = 22;
+  v19 = qword_E0DD4E0;
+  ((void (__fastcall *)(__int16 **, _QWORD, _QWORD))dword_5625AEC)(&v18, (unsigned int)(v6 + qword_E0DD4E0), 0LL);
+  memcpy(v18, v5, 2 * v4);
+  sub_81FF6F4((int *)&v18, L"login-identifier.txt", 20);
+  if ( (((__int64 (__fastcall *)(__int16 **))loc_8342350)(&v18) & 1) != 0 )
+  {
+    v7 = v19 ? v18 : word_3BBA1A8;
+    if ( (((__int64 (__fastcall *)(__int128 *, __int16 *, _QWORD))loc_8315134)(&xmmword_E0DEAD0, v7, 0LL) & 1) != 0 )
+    {
+      v8 = SDWORD2(xmmword_E0DEAD0);
+      v9 = (const void *)xmmword_E0DEAD0;
+      *(_QWORD *)a1 = 0LL;
+      *(_DWORD *)(a1 + 8) = v8;
+      if ( (_DWORD)v8 )
+      {
+        ((void (__fastcall *)(__int64, _QWORD, _QWORD))dword_5625AEC)(a1, (unsigned int)v8, 0LL);
+        goto LABEL_21;
+      }
+LABEL_23:
+      *(_DWORD *)(a1 + 12) = 0;
+      result = v18;
+      if ( !v18 )
+        return result;
+      return (__int16 *)sub_8241084((__int64)result);
+    }
+  }
+  // Call to Formatter (Priority 1)
+  ((void (__fastcall *)(__int128 *__return_ptr, _QWORD *, _QWORD))qword_8327B48[0])(&v16, v17, 0LL);
+  // ... (omitted)
+  return result;
+}

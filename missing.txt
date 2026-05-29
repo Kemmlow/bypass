@@ -1,0 +1,47 @@
+// Target: qword_8327B48[0] (The Formatter)
+// Description: Converts raw 128-bit entropy (int[4]) into a hex string record.
+// Called by: sub_81C2F70 (Old Ban Record Orchestrator) and sub_C493030.
+
+// Actual Function Call Context:
+// ((void (__fastcall *)(__int128 *return_fstring, int *input_4ints, _QWORD flags))qword_8327B48[0])(&fstring_out, guid_bits, 0LL);
+
+// Replicated Formatting Logic:
+// The function processes the 4 integers in sequence (A, B, C, D) and formats each as an 8-character
+// uppercase hexadecimal string, resulting in a 32-character identifier with no delimiters.
+
+void Replicated_Formatter_qword_8327B48_0(int* input_4ints, wchar_t* output_buffer)
+{
+    // Replicates the logic of the internal UE4 GUID to Digits formatting
+    // input_4ints[0] = 0xAAAAAAAA
+    // input_4ints[1] = 0xBBBBBBBB
+    // input_4ints[2] = 0xCCCCCCCC
+    // input_4ints[3] = 0xDDDDDDDD
+
+    // Output Format: "AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDD"
+    swprintf(output_buffer, 33, L"%08X%08X%08X%08X",
+             input_4ints[0],
+             input_4ints[1],
+             input_4ints[2],
+             input_4ints[3]);
+}
+
+// Full Pseudocode Context from Orchestrator sub_81C2F70:
+//----- (00000000081C2F70) ----------------------------------------------------
+__int16 *__usercall sub_81C2F70@<X0>(__int64 a1@<X8>)
+{
+  __int128 v16; // [xsp+90h] [xbp-30h] BYREF
+  _QWORD v17[2]; // [xsp+A0h] [xbp-20h] BYREF
+
+  // ... (record loading logic)
+
+  // Critical call to the Formatter using the pointer array
+  // v17 contains the 128-bit raw identification entropy (int[4])
+  ((void (__fastcall *)(__int128 *__return_ptr, _QWORD *, _QWORD))qword_8327B48[0])(&v16, v17, 0LL);
+
+  // v16 now contains the FString pointing to the 32-character hex string
+  v11 = SDWORD2(v16);
+  v12 = (__int16 *)v16;
+
+  // ... (logic to return or save the formatted record)
+  return result;
+}
