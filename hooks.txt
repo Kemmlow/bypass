@@ -139,7 +139,7 @@ __int64 hsub_69CBE8C(__int64 result, __int64 a2)
 }
 __int64 hsub_68CD2F4(__int64 a1, __int64 a2)
 {
-    if (a1 && a2 && (uintptr_t)a1 > 0x1000) { *(_QWORD *)(a1 + 496) = a2; return osub_69CBE8C(a1, a2); }
+    if (a1 && a2 && (uintptr_t)a1 > 0x1000) { *(_QWORD *)(a1 + 496) = a2; }
     return osub_68CD2F4(a1, a2);
 }
 __int16 *(*osub_81C2F70)(__int64 a1);
