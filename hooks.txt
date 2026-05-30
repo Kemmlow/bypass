@@ -1,52 +1,61 @@
-osub_5E031A8 osub_5E031A8_orig;
-__int64 hsub_5E031A8(__int64 a1, __int64 a2, int a3) {
-    if (a1) return osub_5E031A8_orig(a1, a2, a3);
-    return 0;
+__int64 (*osub_5E031A8)(__int64 a1, __int64 a2, int a3);
+__int64 hsub_5E031A8(__int64 a1, __int64 a2, int a3)
+{
+    __int64 res = osub_5E031A8(a1, a2, a3);
+    if (a2 && a3 >= 4) *(uint32_t*)a2 = 0;
+    return res;
 }
-osub_640C054 osub_640C054_orig;
-void* hsub_640C054(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) {
+void* (*osub_640C054)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
+void* hsub_640C054(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
+{
     if (a1 == 37 || a1 == 46) return (void*)1;
-    return osub_640C054_orig(a1, a2, a3, a4, a5, a6, a7, a8);
+    return osub_640C054(a1, a2, a3, a4, a5, a6, a7, a8);
 }
-osub_68CEC0C osub_68CEC0C_orig;
-__int64 hsub_68CEC0C(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) {
+__int64 (*osub_68CEC0C)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
+__int64 hsub_68CEC0C(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
+{
     if (a1 == 37) return 1;
-    return osub_68CEC0C_orig(a1, a2, a3, a4, a5, a6, a7, a8);
+    return osub_68CEC0C(a1, a2, a3, a4, a5, a6, a7, a8);
 }
-osub_749F534 osub_749F534_orig;
-void hsub_749F534(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) {
+void (*osub_749F534)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
+void hsub_749F534(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
+{
     return;
 }
-osub_74A0058 osub_74A0058_orig;
-void hsub_74A0058(__int64 a1, __int64 a2) {
+void (*osub_74A0058)(__int64 a1, __int64 a2);
+void hsub_74A0058(__int64 a1, __int64 a2)
+{
     return;
 }
-osub_74A03E4 osub_74A03E4_orig;
-bool hsub_74A03E4(char *a1, unsigned __int64 a2) {
+bool (*osub_74A03E4)(char *a1, unsigned __int64 a2);
+bool hsub_74A03E4(char *a1, unsigned __int64 a2)
+{
     if (a1 && a2 > 0) return true;
-    return osub_74A03E4_orig(a1, a2);
+    return osub_74A03E4(a1, a2);
 }
-osub_74A0A00 osub_74A0A00_orig;
-__int64 hsub_74A0A00(__int64 result) {
-    if (result) return osub_74A0A00_orig(result);
+__int64 (*osub_74A0A00)(__int64 result);
+__int64 hsub_74A0A00(__int64 result)
+{
     return 1;
 }
-osub_74A0B34 osub_74A0B34_orig;
-__int64 hsub_74A0B34(__int64 a1) {
-    if (a1) return osub_74A0B34_orig(a1);
+__int64 (*osub_74A0B34)(__int64 a1);
+__int64 hsub_74A0B34(__int64 a1)
+{
+    __int16 *res = (__int16 *)osub_74A0B34(a1);
+    if (res) *res = 0;
+    return (__int64)res;
+}
+__int64 (*osub_74A0BB8)(_QWORD *a1);
+__int64 hsub_74A0BB8(_QWORD *a1)
+{
     return 0;
 }
-osub_74A0BB8 osub_74A0BB8_orig;
-__int64 hsub_74A0BB8(_QWORD *a1) {
-    if (a1) return osub_74A0BB8_orig(a1);
-    return 0;
-}
-HOOK_LIB("libUE4.so", 0x5E031A8, hsub_5E031A8, (void**)&osub_5E031A8_orig); // anosdkgetreportdata2 hook
-HOOK_LIB("libUE4.so", 0x640C054, hsub_640C054, (void**)&osub_640C054_orig); // anosdkioctlold hook
-HOOK_LIB("libUE4.so", 0x68CEC0C, hsub_68CEC0C, (void**)&osub_68CEC0C_orig); // anosdkioctlold hook
-HOOK_LIB("libUE4.so", 0x749F534, hsub_749F534, (void**)&osub_749F534_orig); // anosdkinit hook
-HOOK_LIB("libUE4.so", 0x74A0058, hsub_74A0058, (void**)&osub_74A0058_orig); // anosdkgetreportdata2 hook
-HOOK_LIB("libUE4.so", 0x74A03E4, hsub_74A03E4, (void**)&osub_74A03E4_orig); // anosdkioctlold hook
-HOOK_LIB("libUE4.so", 0x74A0A00, hsub_74A0A00, (void**)&osub_74A0A00_orig); // anosdkonrecvsignature hook
-HOOK_LIB("libUE4.so", 0x74A0B34, hsub_74A0B34, (void**)&osub_74A0B34_orig); // anosdkgetreportdata hook
-HOOK_LIB("libUE4.so", 0x74A0BB8, hsub_74A0BB8, (void**)&osub_74A0BB8_orig); // anosdkonrecvdata hook
+HOOK_LIB("libUE4.so", 0x5E031A8, hsub_5E031A8, (void**)&osub_5E031A8); // anosdkgetreportdata2 hook
+HOOK_LIB("libUE4.so", 0x640C054, hsub_640C054, (void**)&osub_640C054); // anosdkioctlold hook
+HOOK_LIB("libUE4.so", 0x68CEC0C, hsub_68CEC0C, (void**)&osub_68CEC0C); // anosdkioctlold hook
+HOOK_LIB("libUE4.so", 0x749F534, hsub_749F534, (void**)&osub_749F534); // anosdkinit hook
+HOOK_LIB("libUE4.so", 0x74A0058, hsub_74A0058, (void**)&osub_74A0058); // anosdkgetreportdata2 hook
+HOOK_LIB("libUE4.so", 0x74A03E4, hsub_74A03E4, (void**)&osub_74A03E4); // anosdkioctlold hook
+HOOK_LIB("libUE4.so", 0x74A0A00, hsub_74A0A00, (void**)&osub_74A0A00); // anosdkonrecvsignature hook
+HOOK_LIB("libUE4.so", 0x74A0B34, hsub_74A0B34, (void**)&osub_74A0B34); // anosdkgetreportdata hook
+HOOK_LIB("libUE4.so", 0x74A0BB8, hsub_74A0BB8, (void**)&osub_74A0BB8); // anosdkonrecvdata hook
