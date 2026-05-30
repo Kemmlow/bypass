@@ -128,29 +128,11 @@ double hsub_77FE9CC(__int64 a1, __int64 a2)
 {
     return 0.0;
 }
-__int64 (*osub_64081E0)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
-__int64 hsub_64081E0(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
+__int64 (*osub_82AE490)(__int64 a1, __int64 a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9);
+__int64 hsub_82AE490(__int64 a1, __int64 a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
 {
-    if (a1) *(_DWORD *)(a1 + 72) = 0;
-    return osub_64081E0(a1, 0, a3, a4, a5, a6, a7, a8);
-}
-__int64 (*osub_6408738)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
-__int64 hsub_6408738(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
-{
-    if (a2) *(_QWORD *)(a2 + 16) = 0;
-    return osub_6408738(a1, a2, 0, a4, a5, a6, a7, a8);
-}
-void (*osub_640B598)(__int64 a1, __int64 a2, unsigned int *a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
-void hsub_640B598(__int64 a1, __int64 a2, unsigned int *a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
-{
-    if (a3) *a3 = 0;
-    return;
-}
-__int64 (*osub_640BCA0)(__int64 *a1);
-__int64 hsub_640BCA0(__int64 *a1)
-{
-    if (a1) { for(int i=0; i<40; i++) a1[i] = 0; }
-    return 0;
+    if (a1 && a5) { const char *e = (const char *)a1; if (strstr(e, "LogWeapon") || strstr(e, "Violation")) return 0; }
+    return osub_82AE490(a1, a2, a3, a4, a5, a6, a7, a8, a9);
 }
 HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8); // anosdkgetreportdata2 hook
 HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054); // anosdkioctlold hook
@@ -170,7 +152,4 @@ HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, (void**)&osub_81C2F70); // hwid
 HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, (void**)&osub_C492610); // hwid spoofer (login request spoofer)
 HOOK_LIB("libUE4.so", "0x61CCA90", hsub_61CCA90, (void**)&osub_61CCA90); // headshot stat normalization
 HOOK_LIB("libUE4.so", "0x77FE9CC", hsub_77FE9CC, (void**)&osub_77FE9CC); // win ratio normalization
-HOOK_LIB("libUE4.so", "0x64081E0", hsub_64081E0, (void**)&osub_64081E0); // gun log collector hook
-HOOK_LIB("libUE4.so", "0x6408738", hsub_6408738, (void**)&osub_6408738); // gun log dispatcher hook
-HOOK_LIB("libUE4.so", "0x640B598", hsub_640B598, (void**)&osub_640B598); // gun log assembler hook
-HOOK_LIB("libUE4.so", "0x640BCA0", hsub_640BCA0, (void**)&osub_640BCA0); // gun log finalizer hook
+HOOK_LIB("libUE4.so", "0x82AE490", hsub_82AE490, (void**)&osub_82AE490); // gun log server bypass
