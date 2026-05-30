@@ -1,40 +1,52 @@
-__int16 *(*osub_81C2F70)(__int64 a1);
-__int16 *hsub_81C2F70(__int64 a1) {
-    struct sysinfo si;
-    sysinfo(&si);
-    srand(si.procs + si.totalram);
-    uint32_t id[4];
-    id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
-    id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
-    id[2] = (uint32_t)(si.loads[0] << 16) | (uint32_t)(si.procs & 0xFFFF);
-    id[3] = (uint32_t)si.sharedram ^ 0xDEADBEEF;
-    wchar_t buf[34];
-    swprintf(buf, 33, L"%08X%08X%08X%08X", id[0], id[1], id[2], id[3]);
-    void (*alloc)(__int64, unsigned int, unsigned int) = (void (*)(__int64, unsigned int, unsigned int))(libUE4Base + 0x5625AEC);
-    *(_QWORD *)a1 = 0;
-    *(_DWORD *)(a1 + 8) = 32;
-    alloc(a1, 32, 0);
-    memcpy(*(void **)a1, buf, 66);
-    *(__int128 *)(libUE4Base + 0xE0DEAD0) = 0;
-    return (__int16 *)*(void **)a1;
+osub_5E031A8 osub_5E031A8_orig;
+__int64 hsub_5E031A8(__int64 a1, __int64 a2, int a3) {
+    if (a1) return osub_5E031A8_orig(a1, a2, a3);
+    return 0;
 }
-
-bool (*osub_C492610)(__int64 a1, unsigned int a2, __int64 a3);
-bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3) {
-    bool res = osub_C492610(a1, a2, a3);
-    struct sysinfo si;
-    sysinfo(&si);
-    uint32_t id[4];
-    id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
-    id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
-    id[2] = (uint32_t)(si.loads[0] << 16) | (uint32_t)(si.procs & 0xFFFF);
-    id[3] = (uint32_t)si.sharedram ^ 0xDEADBEEF;
-    wchar_t buf[34];
-    swprintf(buf, 33, L"%08X%08X%08X%08X", id[0], id[1], id[2], id[3]);
-    __int16* ptr = *(__int16**)(a3 + 0x58);
-    if (ptr) memcpy(ptr, buf, 64);
-    return res;
+osub_640C054 osub_640C054_orig;
+void* hsub_640C054(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) {
+    if (a1 == 37 || a1 == 46) return (void*)1;
+    return osub_640C054_orig(a1, a2, a3, a4, a5, a6, a7, a8);
 }
-
-HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, osub_81C2F70); // pvt record spoofer
-HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, osub_C492610); // login request spoofer
+osub_68CEC0C osub_68CEC0C_orig;
+__int64 hsub_68CEC0C(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) {
+    if (a1 == 37) return 1;
+    return osub_68CEC0C_orig(a1, a2, a3, a4, a5, a6, a7, a8);
+}
+osub_749F534 osub_749F534_orig;
+void hsub_749F534(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) {
+    return;
+}
+osub_74A0058 osub_74A0058_orig;
+void hsub_74A0058(__int64 a1, __int64 a2) {
+    return;
+}
+osub_74A03E4 osub_74A03E4_orig;
+bool hsub_74A03E4(char *a1, unsigned __int64 a2) {
+    if (a1 && a2 > 0) return true;
+    return osub_74A03E4_orig(a1, a2);
+}
+osub_74A0A00 osub_74A0A00_orig;
+__int64 hsub_74A0A00(__int64 result) {
+    if (result) return osub_74A0A00_orig(result);
+    return 1;
+}
+osub_74A0B34 osub_74A0B34_orig;
+__int64 hsub_74A0B34(__int64 a1) {
+    if (a1) return osub_74A0B34_orig(a1);
+    return 0;
+}
+osub_74A0BB8 osub_74A0BB8_orig;
+__int64 hsub_74A0BB8(_QWORD *a1) {
+    if (a1) return osub_74A0BB8_orig(a1);
+    return 0;
+}
+HOOK_LIB("libUE4.so", 0x5E031A8, hsub_5E031A8, (void**)&osub_5E031A8_orig); // anosdkgetreportdata2 hook
+HOOK_LIB("libUE4.so", 0x640C054, hsub_640C054, (void**)&osub_640C054_orig); // anosdkioctlold hook
+HOOK_LIB("libUE4.so", 0x68CEC0C, hsub_68CEC0C, (void**)&osub_68CEC0C_orig); // anosdkioctlold hook
+HOOK_LIB("libUE4.so", 0x749F534, hsub_749F534, (void**)&osub_749F534_orig); // anosdkinit hook
+HOOK_LIB("libUE4.so", 0x74A0058, hsub_74A0058, (void**)&osub_74A0058_orig); // anosdkgetreportdata2 hook
+HOOK_LIB("libUE4.so", 0x74A03E4, hsub_74A03E4, (void**)&osub_74A03E4_orig); // anosdkioctlold hook
+HOOK_LIB("libUE4.so", 0x74A0A00, hsub_74A0A00, (void**)&osub_74A0A00_orig); // anosdkonrecvsignature hook
+HOOK_LIB("libUE4.so", 0x74A0B34, hsub_74A0B34, (void**)&osub_74A0B34_orig); // anosdkgetreportdata hook
+HOOK_LIB("libUE4.so", 0x74A0BB8, hsub_74A0BB8, (void**)&osub_74A0BB8_orig); // anosdkonrecvdata hook
