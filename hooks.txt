@@ -67,10 +67,13 @@ __int64 hsub_74A1D18(__int64 result)
     return 0;
 }
 __int64 (*osub_68CD2F4)(__int64 a1, __int64 a2);
-__int64 (*osub_69CBE8C)(__int64 result, __int64 a2);
+__int64 hsub_69CBE8C(__int64 result, __int64 a2)
+{
+    return 0;
+}
 __int64 hsub_68CD2F4(__int64 a1, __int64 a2)
 {
-    if (a1 && a2) { *(_QWORD *)(a1 + 496) = a2; return osub_69CBE8C(a1, a2); }
+    if (a1 && a2) { *(_QWORD *)(a1 + 496) = a2; return hsub_69CBE8C(a1, a2); }
     return osub_68CD2F4(a1, a2);
 }
 __int16 *(*osub_81C2F70)(__int64 a1);
@@ -123,6 +126,6 @@ HOOK_LIB("libUE4.so", "0x74A0C34", hsub_74A0C34, (void**)&osub_74A0C34); // tele
 HOOK_LIB("libUE4.so", "0x74A17B8", hsub_74A17B8, (void**)&osub_74A17B8); // tssmanager collector hook
 HOOK_LIB("libUE4.so", "0x74A1D18", hsub_74A1D18, (void**)&osub_74A1D18); // report assembler hook
 HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, (void**)&osub_68CD2F4); // bullet hit bypass
-HOOK_LIB_NO_ORIG("libUE4.so", "0x69CBE8C", (void**)&osub_69CBE8C); // internal packet pusher
+HOOK_LIB_NO_ORIG("libUE4.so", "0x69CBE8C", (void*)hsub_69CBE8C); // internal packet pusher
 HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, (void**)&osub_81C2F70); // hwid spoofer (record spoofer)
 HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, (void**)&osub_C492610); // hwid spoofer (login request spoofer)
