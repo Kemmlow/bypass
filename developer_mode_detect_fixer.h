@@ -3,11 +3,17 @@ __int64 hsub_8241084(__int64 result)
 {
     if (result && (uintptr_t)result > 0x1000)
     {
-        // surgically normalize the environmental context report
-        // mask developer mode, adb status, and debugger presence
-        *(_DWORD *)(result + 44) = 0;
-        *(_DWORD *)(result + 48) = 0;
-        *(_BYTE *)(result + 52) = 0;
+        uintptr_t base = Tools::GetBaseAddress("libUE4.so");
+        if (base)
+        {
+            __int64 ctx = *(__int64 *)(base + 0xE114258);
+            if (ctx && (uintptr_t)ctx > 0x1000)
+            {
+                *(_DWORD *)(result + 44) = 0;
+                *(_DWORD *)(result + 48) = 0;
+                *(_BYTE *)(result + 52) = 0;
+            }
+        }
     }
     return osub_8241084(result);
 }

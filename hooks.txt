@@ -52,9 +52,7 @@
 __int64 (*osub_5E031A8)(__int64 a1, __int64 a2, int a3);
 __int64 hsub_5E031A8(__int64 a1, __int64 a2, int a3)
 {
-    __int64 res = osub_5E031A8(a1, a2, a3);
-    if (a2 && a3 >= 4) *(uint32_t*)a2 = 0;
-    return res;
+    return 0;
 }
 void* (*osub_640C054)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
 void* hsub_640C054(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
@@ -243,7 +241,20 @@ bool hsub_5ACC184(unsigned int *a1)
 __int64 (*osub_8241084)(__int64 result);
 __int64 hsub_8241084(__int64 result)
 {
-    if (result && (uintptr_t)result > 0x1000) { *(_DWORD *)(result + 44) = 0; *(_DWORD *)(result + 48) = 0; *(_BYTE *)(result + 52) = 0; }
+    if (result && (uintptr_t)result > 0x1000)
+    {
+        uintptr_t base = Tools::GetBaseAddress("libUE4.so");
+        if (base)
+        {
+            __int64 ctx = *(__int64 *)(base + 0xE114258);
+            if (ctx && (uintptr_t)ctx > 0x1000)
+            {
+                *(_DWORD *)(result + 44) = 0;
+                *(_DWORD *)(result + 48) = 0;
+                *(_BYTE *)(result + 52) = 0;
+            }
+        }
+    }
     return osub_8241084(result);
 }
 
