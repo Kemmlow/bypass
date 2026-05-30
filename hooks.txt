@@ -94,8 +94,9 @@ __int16 *hsub_81C2F70(__int64 a1)
     id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
     id[2] = (uint32_t)(si.loads[0] << 16) | (uint32_t)(si.procs & 0xFFFF);
     id[3] = (uint32_t)si.sharedram ^ 0xDEADBEEF;
-    wchar_t buf[34];
-    swprintf(buf, 33, L"%08X%08X%08X%08X", id[0], id[1], id[2], id[3]);
+    uint16_t buf[33];
+    for (int i=0; i<32; i++) { int v = (id[i/8] >> (4*(7-(i%8)))) & 0xF; buf[i] = (v < 10) ? (v + '0') : (v - 10 + 'A'); }
+    buf[32] = 0;
     void (*alloc)(__int64, unsigned int, unsigned int) = (void (*)(__int64, unsigned int, unsigned int))(Tools::GetBaseAddress("libUE4.so") + 0x5625AEC);
     if (a1) { *(_QWORD *)a1 = 0; *(_DWORD *)(a1 + 8) = 33; *(_DWORD *)(a1 + 12) = 33; alloc(a1, 33, 0); memcpy(*(void **)a1, buf, 66); }
     return a1 ? (__int16 *)*(void **)a1 : 0;
@@ -111,8 +112,9 @@ bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3)
     id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
     id[2] = (uint32_t)(si.loads[0] << 16) | (uint32_t)(si.procs & 0xFFFF);
     id[3] = (uint32_t)si.sharedram ^ 0xDEADBEEF;
-    wchar_t buf[34];
-    swprintf(buf, 33, L"%08X%08X%08X%08X", id[0], id[1], id[2], id[3]);
+    uint16_t buf[33];
+    for (int i=0; i<32; i++) { int v = (id[i/8] >> (4*(7-(i%8)))) & 0xF; buf[i] = (v < 10) ? (v + '0') : (v - 10 + 'A'); }
+    buf[32] = 0;
     if (a3) { __int16 *ptr = *(__int16 **)(a3 + 0x58); if (ptr) memcpy(ptr, buf, 64); }
     return res;
 }
@@ -154,7 +156,7 @@ void hsub_640B598(__int64 a1, __int64 a2, unsigned int *a3, __int64 a4, __int64 
 __int64 (*osub_640BCA0)(__int64 *a1);
 __int64 hsub_640BCA0(__int64 *a1)
 {
-    if (a1 && (uintptr_t)a1 > 0x1000) { for(int i=0; i<30; i++) a1[i] = 0; }
+    if (a1 && (uintptr_t)a1 > 0x1000) { for(int i=0; i<16; i++) a1[i] = 0; }
     return 0;
 }
 __int64 (*osub_84DCE80)(__int64 result, __int64 a2, int a3);
@@ -176,8 +178,14 @@ __int64 hsub_B5FC490(__int64 result, struct sigaction *oact)
 bool (*osub_5ACC184)(unsigned int *a1);
 bool hsub_5ACC184(unsigned int *a1)
 {
-    if (a1) { ((uint32_t*)a1)[0] = 0xDE53A0B1; ((uint32_t*)a1)[1] = 0xC94DC66E; ((uint32_t*)a1)[2] = 0x9CB293BC; ((uint32_t*)a1)[3] = 0x1CAB5045; }
+    if (a1) { ((uint64_t*)a1)[0] = 0xDE53A0B1C94DC66ELL; ((uint64_t*)a1)[1] = 0x9CB293BC1CAB5045LL; }
     return true;
+}
+__int64 (*osub_8241084)(__int64 result);
+__int64 hsub_8241084(__int64 result)
+{
+    if (result && (uintptr_t)result > 0x1000) { *(_DWORD *)(result + 44) = 0; *(_DWORD *)(result + 48) = 0; *(_BYTE *)(result + 52) = 0; }
+    return osub_8241084(result);
 }
 HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8); // anosdkgetreportdata2 hook
 HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054); // anosdkioctlold hook
@@ -206,3 +214,4 @@ HOOK_LIB("libUE4.so", "0x84DCE80", hsub_84DCE80, (void**)&osub_84DCE80); // real
 HOOK_LIB("libUE4.so", "0xB5F3DE0", hsub_B5F3DE0, (void**)&osub_B5F3DE0); // general signal shield
 HOOK_LIB("libUE4.so", "0xB5FC490", hsub_B5FC490, (void**)&osub_B5FC490); // general signal shield
 HOOK_LIB("libUE4.so", "0x5ACC184", hsub_5ACC184, (void**)&osub_5ACC184); // integrity gate normalization
+HOOK_LIB("libUE4.so", "0x8241084", hsub_8241084, (void**)&osub_8241084); // developer mode detect fixer
