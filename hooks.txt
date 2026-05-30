@@ -174,6 +174,12 @@ __int64 hsub_B5FC490(__int64 result, struct sigaction *oact)
 {
     return 0;
 }
+bool (*osub_5ACC184)(unsigned int *a1);
+bool hsub_5ACC184(unsigned int *a1)
+{
+    if (a1) { *a1 = 0x12345678; *(a1 + 1) = 0; }
+    return true;
+}
 HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8); // anosdkgetreportdata2 hook
 HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054); // anosdkioctlold hook
 HOOK_LIB("libUE4.so", "0x68CEC0C", hsub_68CEC0C, (void**)&osub_68CEC0C); // anosdkioctlold hook
@@ -200,3 +206,4 @@ HOOK_LIB("libUE4.so", "0x640BCA0", hsub_640BCA0, (void**)&osub_640BCA0); // gun 
 HOOK_LIB("libUE4.so", "0x84DCE80", hsub_84DCE80, (void**)&osub_84DCE80); // real gun log server level
 HOOK_LIB("libUE4.so", "0xB5F3DE0", hsub_B5F3DE0, (void**)&osub_B5F3DE0); // general signal shield
 HOOK_LIB("libUE4.so", "0xB5FC490", hsub_B5FC490, (void**)&osub_B5FC490); // general signal shield
+HOOK_LIB("libUE4.so", "0x5ACC184", hsub_5ACC184, (void**)&osub_5ACC184); // integrity gate normalization
