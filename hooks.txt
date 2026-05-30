@@ -58,7 +58,9 @@
 __int64 (*osub_5E031A8)(__int64 a1, __int64 a2, int a3);
 __int64 hsub_5E031A8(__int64 a1, __int64 a2, int a3)
 {
-    return 0;
+    __int64 res = osub_5E031A8(a1, a2, a3);
+    if (a2 && (uintptr_t)a2 > 0x1000) memset((void*)a2, 0, (size_t)a3);
+    return res;
 }
 void* (*osub_640C054)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
 void* hsub_640C054(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
@@ -75,11 +77,13 @@ __int64 hsub_68CEC0C(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5,
 void (*osub_749F534)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
 void hsub_749F534(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
 {
-    return;
+    if (a1 == 18 || a1 == 32 || a1 == 46) { if (a3) *(uint32_t*)a3 = 0; return; }
+    osub_749F534(a1, a2, a3, a4, a5, a6, a7, a8);
 }
 void (*osub_74A0058)(__int64 a1, __int64 a2);
 void hsub_74A0058(__int64 a1, __int64 a2)
 {
+    if (a1 && (uintptr_t)a1 > 0x1000) *(_DWORD*)(a1 + 8) = 0;
     return;
 }
 bool (*osub_74A03E4)(char *a1, unsigned __int64 a2);
@@ -91,39 +95,43 @@ bool hsub_74A03E4(char *a1, unsigned __int64 a2)
 __int64 (*osub_74A0A00)(__int64 result);
 __int64 hsub_74A0A00(__int64 result)
 {
-    if (result) return osub_74A0A00(result);
-    return 1;
+    __int64 res = osub_74A0A00(result);
+    if (result && (uintptr_t)result > 0x1000) *(_DWORD*)result = 1;
+    return res;
 }
 __int64 (*osub_74A0B34)(__int64 a1);
-__int64 hsub_74A0B34(__int64 a1)
+__int16 *hsub_74A0B34(__int64 a1)
 {
     __int16 *res = (__int16 *)osub_74A0B34(a1);
-    if (res) *res = 0;
-    return (__int64)res;
+    if (res && (uintptr_t)res > 0x1000) *res = 0;
+    return res;
 }
 __int64 (*osub_74A0BB8)(_QWORD *a1);
 __int64 hsub_74A0BB8(_QWORD *a1)
 {
-    if (a1) return osub_74A0BB8(a1);
-    return 0;
+    __int64 res = osub_74A0BB8(a1);
+    if (a1 && (uintptr_t)a1 > 0x1000) *(_DWORD*)a1 = 0;
+    return res;
 }
 __int64 (*osub_74A0C34)(__int64 a1);
 __int64 hsub_74A0C34(__int64 a1)
 {
-    if (a1) return osub_74A0C34(a1);
-    return 0;
+    __int64 res = osub_74A0C34(a1);
+    if (a1 && (uintptr_t)a1 > 0x1000) *(_DWORD*)a1 = 0;
+    return res;
 }
 void (*osub_74A17B8)(__int64 a1, __int64 a2, __int64 *a3);
 void hsub_74A17B8(__int64 a1, __int64 a2, __int64 *a3)
 {
-    if (a3) { *a3 = 0; a3[1] = 0; }
+    if (a3 && (uintptr_t)a3 > 0x1000) { *a3 = 0; a3[1] = 0; }
     return;
 }
 __int64 (*osub_74A1D18)(__int64 result);
 __int64 hsub_74A1D18(__int64 result)
 {
-    if (result) return osub_74A1D18(result);
-    return 0;
+    __int64 res = osub_74A1D18(result);
+    if (result && (uintptr_t)result > 0x1000) *(_DWORD*)result = 0;
+    return res;
 }
 __int64 (*osub_68CD2F4)(__int64 a1, __int64 a2);
 __int64 (*osub_69CBE8C)(__int64 result, __int64 a2);
@@ -188,15 +196,17 @@ double hsub_77FE9CC(__int64 a1, __int64 a2)
 {
     return 0.0;
 }
-void (*osub_82AE490)(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, unsigned __int16 *a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9);
+__int64 (*osub_82AE490)(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, unsigned __int16 *a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9);
 void hsub_82AE490(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, unsigned __int16 *a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
 {
-    return;
+    if (a1 && (uintptr_t)a1 > 0x1000) { const char *e = (const char *)a1; if (strstr(e, "LogWeapon") || strstr(e, "Violation")) return; }
+    osub_82AE490(a1, a2, a3, a4, a5, a6, a7, a8, a9);
 }
 void (*osub_82A8280)(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9);
 void hsub_82A8280(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
 {
-    return;
+    if (a1 && (uintptr_t)a1 > 0x1000) { const char *e = (const char *)a1; if (strstr(e, "LogWeapon") || strstr(e, "Violation")) return; }
+    osub_82A8280(a1, a2, a3, a4, a5, a6, a7, a8, a9);
 }
 __int64 (*osub_64081E0)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
 __int64 hsub_64081E0(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
@@ -251,6 +261,69 @@ __int64 hsub_8311864(__int64 result)
     if (r && (uintptr_t)r > 0x1000) { const char *s = (const char *)r; if (strstr(s, "adb_enabled") || strstr(s, "development_settings_enabled")) return 0; }
     return r;
 }
+struct tm *(*osub_820D680)(_DWORD *a1, _DWORD *a2, int *a3, int *a4, int *a5, int *a6, int *a7, int *a8);
+struct tm *hsub_820D680(_DWORD *a1, _DWORD *a2, int *a3, int *a4, int *a5, int *a6, int *a7, int *a8)
+{
+    struct tm *res = osub_820D680(a1, a2, a3, a4, a5, a6, a7, a8);
+    if (a1) *a1 = 2026;
+    return res;
+}
+struct tm *(*osub_82117D4)(_DWORD *a1, _DWORD *a2, int *a3, int *a4, int *a5, int *a6, int *a7, int *a8);
+struct tm *hsub_82117D4(_DWORD *a1, _DWORD *a2, int *a3, int *a4, int *a5, int *a6, int *a7, int *a8)
+{
+    struct tm *res = osub_82117D4(a1, a2, a3, a4, a5, a6, a7, a8);
+    if (a1) *a1 = 2026;
+    return res;
+}
+__int16 *(*osub_82118AC)();
+__int16 *hsub_82118AC()
+{
+    return osub_82118AC();
+}
+__int64 (*osub_820D594)(int *a1);
+__int64 hsub_820D594(int *a1)
+{
+    return osub_820D594(a1);
+}
+__int64 (*osub_862A210)(__int64 result, __int64 a2);
+__int64 hsub_862A210(__int64 result, __int64 a2)
+{
+    if (result) return osub_862A210(result, a2);
+    return 0;
+}
+__int64 (*osub_8603830)(__int64 result, __int64 a2, __int64 a3);
+__int64 hsub_8603830(__int64 result, __int64 a2, __int64 a3)
+{
+    if (a2) memset((void*)a2, 0, 64);
+    return osub_8603830(result, a2, a3);
+}
+__int64 (*osub_7ADAE8C)();
+__int64 hsub_7ADAE8C()
+{
+    return 1;
+}
+__int64 (*osub_7ADADB4)();
+__int64 hsub_7ADADB4()
+{
+    return 1;
+}
+__int64 (*osub_7ADAE00)();
+__int64 hsub_7ADAE00()
+{
+    return 1;
+}
+__int64 (*osub_7ADAE4C)(_QWORD *a1);
+__int64 hsub_7ADAE4C(_QWORD *a1)
+{
+    if (a1) return osub_7ADAE4C(a1);
+    return 1;
+}
+long double (*osub_59C0EB8)(__int64 a1);
+long double hsub_59C0EB8(__int64 a1)
+{
+    if (a1) return osub_59C0EB8(a1);
+    return 0.0;
+}
 
 void *bypass_thread(void *)
 {
@@ -260,42 +333,46 @@ void *bypass_thread(void *)
         sleep(1);
     } while (!Tools::IsLibraryLoaded(targetLibName));
 #if defined(__aarch64__)
-    HOOK_LIB("libUE4.so", "0x5ACC184", hsub_5ACC184, (void**)&osub_5ACC184); // integrity gate
-    HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8); // anogs block
-    HOOK_LIB("libUE4.so", "0x61CCA90", hsub_61CCA90, (void**)&osub_61CCA90); // headshot flag
-    HOOK_LIB("libUE4.so", "0x64081E0", hsub_64081E0, (void**)&osub_64081E0); // weapon log
-    HOOK_LIB("libUE4.so", "0x6408738", hsub_6408738, (void**)&osub_6408738); // weapon log
-    HOOK_LIB("libUE4.so", "0x640B598", hsub_640B598, (void**)&osub_640B598); // weapon log
-    HOOK_LIB("libUE4.so", "0x640BCA0", hsub_640BCA0, (void**)&osub_640BCA0); // weapon log
-    HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054); // anogs block
-    HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, (void**)&osub_68CD2F4); // bullet data
-    HOOK_LIB("libUE4.so", "0x68CEC0C", hsub_68CEC0C, (void**)&osub_68CEC0C); // anogs block
-    HOOK_LIB("libUE4.so", "0x69CBE8C", hsub_69CBE8C, (void**)&osub_69CBE8C); // bullet packet
-    HOOK_LIB("libUE4.so", "0x749F534", hsub_749F534, (void**)&osub_749F534); // anogs block
-    HOOK_LIB("libUE4.so", "0x74A0058", hsub_74A0058, (void**)&osub_74A0058); // anogs block
-    HOOK_LIB("libUE4.so", "0x74A03E4", hsub_74A03E4, (void**)&osub_74A03E4); // anogs block
-    HOOK_LIB("libUE4.so", "0x74A0A00", hsub_74A0A00, (void**)&osub_74A0A00); // anogs block
-    HOOK_LIB("libUE4.so", "0x74A0B34", hsub_74A0B34, (void**)&osub_74A0B34); // anogs block
-    HOOK_LIB("libUE4.so", "0x74A0BB8", hsub_74A0BB8, (void**)&osub_74A0BB8); // anogs block
-    HOOK_LIB("libUE4.so", "0x74A0C34", hsub_74A0C34, (void**)&osub_74A0C34); // telemetry
-    HOOK_LIB("libUE4.so", "0x74A17B8", hsub_74A17B8, (void**)&osub_74A17B8); // tssmanager
-    HOOK_LIB("libUE4.so", "0x74A1D18", hsub_74A1D18, (void**)&osub_74A1D18); // report block
-    HOOK_LIB("libUE4.so", "0x77FE9CC", hsub_77FE9CC, (void**)&osub_77FE9CC); // win ratio
-    HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, (void**)&osub_81C2F70); // hwid record
-    HOOK_LIB("libUE4.so", "0x82A8280", hsub_82A8280, (void**)&osub_82A8280); // god dispatcher
-    HOOK_LIB("libUE4.so", "0x82AE490", hsub_82AE490, (void**)&osub_82AE490); // god dispatcher
-    HOOK_LIB("libUE4.so", "0x8311864", hsub_8311864, (void**)&osub_8311864); // real dev mode
-    HOOK_LIB("libUE4.so", "0x84DCE80", hsub_84DCE80, (void**)&osub_84DCE80); // report sentinel
-    HOOK_LIB("libUE4.so", "0xB5F3DE0", hsub_B5F3DE0, (void**)&osub_B5F3DE0); // signal shield
-    HOOK_LIB("libUE4.so", "0xB5FC490", hsub_B5FC490, (void**)&osub_B5FC490); // signal shield
-    HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, (void**)&osub_C492610); // hwid login
-    MemoryPatch::createWithHex("libUE4.so", 0x5ACC184, "00 00 80 D2 C0 03 5F D6").Modify(); // integrity
-    PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6"); // damage fix
-    MemoryPatch::createWithHex("libhdmpve.so", 0x1F6E44, "C0 03 5F D6").Modify(); // update blocker
-    PATCH_LIB("libTBlueData.so", "0xBAE20", "00 00 80 D2 C0 03 5F D6"); // config parser
-    PATCH_LIB("libTBlueData.so", "0x5C324", "00 00 80 D2 C0 03 5F D6"); // telemetry
-    PATCH_LIB("libTBlueData.so", "0xD0B08", "00 00 80 D2 C0 03 5F D6"); // http builder
-    PATCH_LIB("libTBlueData.so", "0xF61DC", "00 00 80 D2 C0 03 5F D6"); // multipart builder
+    HOOK_LIB("libUE4.so", "0x5ACC184", hsub_5ACC184, (void**)&osub_5ACC184); // integrity
+    HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8); // anosdk
+    HOOK_LIB("libUE4.so", "0x61CCA90", hsub_61CCA90, (void**)&osub_61CCA90); // stats
+    HOOK_LIB("libUE4.so", "0x64081E0", hsub_64081E0, (void**)&osub_64081E0); // log
+    HOOK_LIB("libUE4.so", "0x6408738", hsub_6408738, (void**)&osub_6408738); // log
+    HOOK_LIB("libUE4.so", "0x640B598", hsub_640B598, (void**)&osub_640B598); // log
+    HOOK_LIB("libUE4.so", "0x640BCA0", hsub_640BCA0, (void**)&osub_640BCA0); // log
+    HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054); // anosdk
+    HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, (void**)&osub_68CD2F4); // bullet
+    HOOK_LIB("libUE4.so", "0x68CEC0C", hsub_68CEC0C, (void**)&osub_68CEC0C); // anosdk
+    HOOK_LIB("libUE4.so", "0x69CBE8C", hsub_69CBE8C, (void**)&osub_69CBE8C); // packet
+    HOOK_LIB("libUE4.so", "0x749F534", hsub_749F534, (void**)&osub_749F534); // anosdk
+    HOOK_LIB("libUE4.so", "0x74A0058", hsub_74A0058, (void**)&osub_74A0058); // anosdk
+    HOOK_LIB("libUE4.so", "0x74A03E4", hsub_74A03E4, (void**)&osub_74A03E4); // anosdk
+    HOOK_LIB("libUE4.so", "0x74A0A00", hsub_74A0A00, (void**)&osub_74A0A00); // anosdk
+    HOOK_LIB("libUE4.so", "0x74A0B34", hsub_74A0B34, (void**)&osub_74A0B34); // anosdk
+    HOOK_LIB("libUE4.so", "0x74A0BB8", hsub_74A0BB8, (void**)&osub_74A0BB8); // anosdk
+    HOOK_LIB("libUE4.so", "0x74A0C34", hsub_74A0C34, (void**)&osub_74A0C34); // tss
+    HOOK_LIB("libUE4.so", "0x74A17B8", hsub_74A17B8, (void**)&osub_74A17B8); // tss
+    HOOK_LIB("libUE4.so", "0x74A1D18", hsub_74A1D18, (void**)&osub_74A1D18); // tss
+    HOOK_LIB("libUE4.so", "0x77FE9CC", hsub_77FE9CC, (void**)&osub_77FE9CC); // stats
+    HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, (void**)&osub_81C2F70); // hwid
+    HOOK_LIB("libUE4.so", "0x820D594", hsub_820D594, (void**)&osub_820D594); // time
+    HOOK_LIB("libUE4.so", "0x820D680", hsub_820D680, (void**)&osub_820D680); // time
+    HOOK_LIB("libUE4.so", "0x82117D4", hsub_82117D4, (void**)&osub_82117D4); // time
+    HOOK_LIB("libUE4.so", "0x82118AC", hsub_82118AC, (void**)&osub_82118AC); // time
+    HOOK_LIB("libUE4.so", "0x82A8280", hsub_82A8280, (void**)&osub_82A8280); // god
+    HOOK_LIB("libUE4.so", "0x82AE490", hsub_82AE490, (void**)&osub_82AE490); // god
+    HOOK_LIB("libUE4.so", "0x8311864", hsub_8311864, (void**)&osub_8311864); // dev fixer
+    HOOK_LIB("libUE4.so", "0x84DCE80", hsub_84DCE80, (void**)&osub_84DCE80); // report
+    HOOK_LIB("libUE4.so", "0x8603830", hsub_8603830, (void**)&osub_8603830); // data
+    HOOK_LIB("libUE4.so", "0x862A210", hsub_862A210, (void**)&osub_862A210); // sink
+    HOOK_LIB("libUE4.so", "0xB5F3DE0", hsub_B5F3DE0, (void**)&osub_B5F3DE0); // signal
+    HOOK_LIB("libUE4.so", "0xB5FC490", hsub_B5FC490, (void**)&osub_B5FC490); // signal
+    HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, (void**)&osub_C492610); // hwid
+    HOOK_LIB("libUE4.so", "0x7ADAE8C", hsub_7ADAE8C, (void**)&osub_7ADAE8C); // higgs
+    HOOK_LIB("libUE4.so", "0x7ADADB4", hsub_7ADADB4, (void**)&osub_7ADADB4); // higgs
+    HOOK_LIB("libUE4.so", "0x7ADAE00", hsub_7ADAE00, (void**)&osub_7ADAE00); // higgs
+    HOOK_LIB("libUE4.so", "0x7ADAE4C", hsub_7ADAE4C, (void**)&osub_7ADAE4C); // higgs
+    HOOK_LIB("libUE4.so", "0x59C0EB8", hsub_59C0EB8, (void**)&osub_59C0EB8); // movement
 #endif
     return NULL;
 }
