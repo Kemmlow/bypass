@@ -18,6 +18,7 @@
 #include <netdb.h>
 #include <sys/mman.h>
 #include <sys/ptrace.h>
+#include <sys/sysinfo.h>
 #include <unwind.h>
 #include <libgen.h>
 #include <stdint.h>
@@ -26,13 +27,9 @@
 #include <fcntl.h>
 #include <android/log.h>
 
-#include "Main/Tools.h"
-#include "Main/Logger.h"
-#include "Main/oxorany.h"
-#include "Main/obfuscate.h"
-#include "Main/Utils.h"
-#include "Main/KittyMemory/MemoryPatch.h"
-#include "Main/Macros.h"
+#include "Tools.h"
+#include "oxorany.h"
+#include "Macros.h"
 
 #define targetLibName oxorany("libanogs.so")
 
@@ -215,7 +212,7 @@ __int16 *(*osub_81C2F70)(__int64 a1);
 __int16 *hsub_81C2F70(__int64 a1)
 {
     struct sysinfo si;
-    sysinfo(&si);
+    if (sysinfo(&si) != 0) return nullptr;
     srand(si.procs + si.totalram);
     uint32_t id[4];
     id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
@@ -226,7 +223,7 @@ __int16 *hsub_81C2F70(__int64 a1)
     uint16_t buf[32];
     format_hex_utf16(buf, id);
 
-    void (*alloc)(__int64, unsigned int, unsigned int) = (void (*)(__int64, unsigned int, unsigned int))(getLibraryBase("libUE4.so") + 0x5625AEC);
+    void (*alloc)(__int64, unsigned int, unsigned int) = (void (*)(__int64, unsigned int, unsigned int))(Tools::GetBaseAddress("libUE4.so") + 0x5625AEC);
     *(_QWORD *)a1 = 0;
     *(_DWORD *)(a1 + 8) = 64;
     alloc(a1, 64, 0);
@@ -239,7 +236,7 @@ bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3)
 {
     bool res = osub_C492610(a1, a2, a3);
     struct sysinfo si;
-    sysinfo(&si);
+    if (sysinfo(&si) != 0) return res;
     uint32_t id[4];
     id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
     id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
