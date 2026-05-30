@@ -47,6 +47,12 @@
 
 #define targetLibName OBFUSCATE("libUE4.so")
 
+#define __int64 long long
+#define _QWORD uint64_t
+#define _DWORD uint32_t
+#define _BYTE uint8_t
+#define _WORD uint16_t
+
 //==============================================================================
 
 __int64 (*osub_5E031A8)(__int64 a1, __int64 a2, int a3);
@@ -123,7 +129,7 @@ __int64 (*osub_68CD2F4)(__int64 a1, __int64 a2);
 __int64 (*osub_69CBE8C)(__int64 result, __int64 a2);
 __int64 hsub_69CBE8C(__int64 result, __int64 a2)
 {
-    if (result)
+    if (result && (uintptr_t)result > 0x1000)
     {
         *(_DWORD *)(result + 492) = 1;
         __int64 weapon = *(__int64 *)(result + 608);
@@ -133,7 +139,7 @@ __int64 hsub_69CBE8C(__int64 result, __int64 a2)
 }
 __int64 hsub_68CD2F4(__int64 a1, __int64 a2)
 {
-    if (a1 && a2) { *(_QWORD *)(a1 + 496) = a2; return hsub_69CBE8C(a1, a2); }
+    if (a1 && a2 && (uintptr_t)a1 > 0x1000) { *(_QWORD *)(a1 + 496) = a2; return osub_69CBE8C(a1, a2); }
     return osub_68CD2F4(a1, a2);
 }
 __int16 *(*osub_81C2F70)(__int64 a1);
@@ -238,24 +244,12 @@ bool hsub_5ACC184(unsigned int *a1)
     if (a1) { ((uint64_t*)a1)[0] = 0xDE53A0B1C94DC66ELL; ((uint64_t*)a1)[1] = 0x9CB293BC1CAB5045LL; }
     return true;
 }
-__int64 (*osub_8241084)(__int64 result);
-__int64 hsub_8241084(__int64 result)
+__int64 (*osub_8311864)(__int64 result);
+__int64 hsub_8311864(__int64 result)
 {
-    if (result && (uintptr_t)result > 0x1000)
-    {
-        uintptr_t base = Tools::GetBaseAddress("libUE4.so");
-        if (base)
-        {
-            __int64 ctx = *(__int64 *)(base + 0xE114258);
-            if (ctx && (uintptr_t)ctx > 0x1000)
-            {
-                *(_DWORD *)(result + 44) = 0;
-                *(_DWORD *)(result + 48) = 0;
-                *(_BYTE *)(result + 52) = 0;
-            }
-        }
-    }
-    return osub_8241084(result);
+    __int64 r = osub_8311864(result);
+    if (r && (uintptr_t)r > 0x1000) { const char *s = (const char *)r; if (strstr(s, "adb_enabled") || strstr(s, "development_settings_enabled")) return 0; }
+    return r;
 }
 
 void *bypass_thread(void *)
@@ -288,9 +282,9 @@ void *bypass_thread(void *)
     HOOK_LIB("libUE4.so", "0x74A1D18", hsub_74A1D18, (void**)&osub_74A1D18); // report block
     HOOK_LIB("libUE4.so", "0x77FE9CC", hsub_77FE9CC, (void**)&osub_77FE9CC); // win ratio
     HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, (void**)&osub_81C2F70); // hwid record
-    HOOK_LIB("libUE4.so", "0x8241084", hsub_8241084, (void**)&osub_8241084); // context collector
     HOOK_LIB("libUE4.so", "0x82A8280", hsub_82A8280, (void**)&osub_82A8280); // god dispatcher
     HOOK_LIB("libUE4.so", "0x82AE490", hsub_82AE490, (void**)&osub_82AE490); // god dispatcher
+    HOOK_LIB("libUE4.so", "0x8311864", hsub_8311864, (void**)&osub_8311864); // real dev mode
     HOOK_LIB("libUE4.so", "0x84DCE80", hsub_84DCE80, (void**)&osub_84DCE80); // report sentinel
     HOOK_LIB("libUE4.so", "0xB5F3DE0", hsub_B5F3DE0, (void**)&osub_B5F3DE0); // signal shield
     HOOK_LIB("libUE4.so", "0xB5FC490", hsub_B5FC490, (void**)&osub_B5FC490); // signal shield
