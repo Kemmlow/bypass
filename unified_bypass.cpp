@@ -312,7 +312,6 @@ __int64 hsub_84DCE80(__int64 result, __int64 a2, int a3)
 
 // --- PURE UE4 CRASH FIXER (Signal Shield & God Silence) ---
 
-// Signal Shield: Prevent engine from registering termination handlers
 __int64 (*osub_B5F3DE0)(__int64 a1, struct sigaction *oact);
 __int64 hsub_B5F3DE0(__int64 a1, struct sigaction *oact)
 {
@@ -325,11 +324,39 @@ __int64 hsub_B5FC490(__int64 a1, struct sigaction *oact)
     return 0; // Success but skip registration
 }
 
-// UQMCrash God Silence: Disable the internal crash reporter
 __int64 (*osub_C4E0770)(_QWORD a1);
 __int64 hsub_C4E0770(_QWORD a1)
 {
     return 0; // Silent success, no observer set
+}
+
+// --- TOTAL LOBOTOMY SET (Freeze & Transition Crash Fixers) ---
+
+// Late-Stage God Dispatcher: Handles 'late' security events
+void (*osub_82AE490)(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, unsigned __int16 *a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9);
+void hsub_82AE490(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, unsigned __int16 *a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
+{
+    return; // God silence for late telemetry
+}
+
+// Context Collector God Hook: Fixes the 1-second freeze before crash
+__int64 (*osub_8241084)(__int64 result);
+__int64 hsub_8241084(__int64 result)
+{
+    return 0; // Skip memory context collection (The culprit for the freeze)
+}
+
+// Violation Sink & Data Preparer: Prevent process 'Dirty Process' flags
+__int64 (*osub_862A210)(__int64 result, __int64 a2);
+__int64 hsub_862A210(__int64 result, __int64 a2)
+{
+    return 0; // Silently sink violation flags
+}
+
+__int64 (*osub_8603830)(__int64 result, __int64 a2, __int64 a3);
+__int64 hsub_8603830(__int64 result, __int64 a2, __int64 a3)
+{
+    return 0; // Silently sink data preparation
 }
 
 void *ue4_thread(void *)
@@ -343,10 +370,16 @@ void *ue4_thread(void *)
     HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, osub_68CD2F4);
     HOOK_LIB("libUE4.so", "0x84DCE80", hsub_84DCE80, osub_84DCE80);
 
+    // Total Lobotomy Set - FREEZE FIX & TRANSITION STABILITY
+    HOOK_LIB("libUE4.so", "0x82AE490", hsub_82AE490, osub_82AE490); // Late Dispatcher
+    HOOK_LIB("libUE4.so", "0x8241084", hsub_8241084, osub_8241084); // Context Collector (Freeze Fix)
+    HOOK_LIB("libUE4.so", "0x862A210", hsub_862A210, osub_862A210); // Violation Sink
+    HOOK_LIB("libUE4.so", "0x8603830", hsub_8603830, osub_8603830); // Data Preparer
+
     // Pure UE4 Crash Fixer - Stability Overload
     HOOK_LIB("libUE4.so", "0xB5F3DE0", hsub_B5F3DE0, osub_B5F3DE0); // Signal Shield 1
     HOOK_LIB("libUE4.so", "0xB5FC490", hsub_B5FC490, osub_B5FC490); // Signal Shield 2
-    HOOK_LIB("libUE4.so", "0xC4E0770", hsub_C4E0770, osub_C4E0770); // UQMCrash God Silence
+    HOOK_LIB("libUE4.so", "0xC4E0770", hsub_C4E0330, osub_C4E0770); // UQMCrash God Silence
 
     PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6"); // fake damage fix
     PATCH_LIB("libUE4.so", "0x69913E0", "00 00 80 D2 C0 03 5F D6"); // accuracy fix
