@@ -177,7 +177,7 @@ __int64 hsub_B5FC490(__int64 result, struct sigaction *oact)
 bool (*osub_5ACC184)(unsigned int *a1);
 bool hsub_5ACC184(unsigned int *a1)
 {
-    if (a1) { *a1 = 0x12345678; *(a1 + 1) = 0; }
+    if (a1) { *a1 = 0xDE53A0B1; *(a1 + 1) = 0; }
     return true;
 }
 HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8); // anosdkgetreportdata2 hook
