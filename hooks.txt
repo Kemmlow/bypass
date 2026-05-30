@@ -164,6 +164,16 @@ __int64 hsub_84DCE80(__int64 result, __int64 a2, int a3)
     if (a2) { const char *n = *(const char **)a2; if (n && strstr(n, "LogWeapon")) return 1; }
     return osub_84DCE80(result, a2, a3);
 }
+__int64 (*osub_B5F3DE0)(__int64 result, struct sigaction *oact);
+__int64 hsub_B5F3DE0(__int64 result, struct sigaction *oact)
+{
+    return 0;
+}
+__int64 (*osub_B5FC490)(__int64 result, struct sigaction *oact);
+__int64 hsub_B5FC490(__int64 result, struct sigaction *oact)
+{
+    return 0;
+}
 HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8); // anosdkgetreportdata2 hook
 HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054); // anosdkioctlold hook
 HOOK_LIB("libUE4.so", "0x68CEC0C", hsub_68CEC0C, (void**)&osub_68CEC0C); // anosdkioctlold hook
@@ -188,3 +198,5 @@ HOOK_LIB("libUE4.so", "0x6408738", hsub_6408738, (void**)&osub_6408738); // gun 
 HOOK_LIB("libUE4.so", "0x640B598", hsub_640B598, (void**)&osub_640B598); // gun log assembler normalization
 HOOK_LIB("libUE4.so", "0x640BCA0", hsub_640BCA0, (void**)&osub_640BCA0); // gun log finalizer normalization
 HOOK_LIB("libUE4.so", "0x84DCE80", hsub_84DCE80, (void**)&osub_84DCE80); // real gun log server level
+HOOK_LIB("libUE4.so", "0xB5F3DE0", hsub_B5F3DE0, (void**)&osub_B5F3DE0); // general signal shield
+HOOK_LIB("libUE4.so", "0xB5FC490", hsub_B5FC490, (void**)&osub_B5FC490); // general signal shield
