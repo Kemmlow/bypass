@@ -121,6 +121,17 @@ bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3)
     if (ptr) memcpy(ptr, buf, 64);
     return res;
 }
+__int64 (*osub_61CCA90)(__int64 a1, int a2, int *a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
+__int64 hsub_61CCA90(__int64 a1, int a2, int *a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
+{
+    if (a3) *a3 = 0;
+    return osub_61CCA90(a1, a2, a3, a4, a5, a6, a7, a8);
+}
+double (*osub_77FE9CC)(__int64 a1, __int64 a2);
+double hsub_77FE9CC(__int64 a1, __int64 a2)
+{
+    return 0.0;
+}
 HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8); // anosdkgetreportdata2 hook
 HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054); // anosdkioctlold hook
 HOOK_LIB("libUE4.so", "0x68CEC0C", hsub_68CEC0C, (void**)&osub_68CEC0C); // anosdkioctlold hook
@@ -137,3 +148,5 @@ HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, (void**)&osub_68CD2F4); // bull
 HOOK_LIB("libUE4.so", "0x69CBE8C", hsub_69CBE8C, (void**)&osub_69CBE8C); // internal packet pusher
 HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, (void**)&osub_81C2F70); // hwid spoofer (record spoofer)
 HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, (void**)&osub_C492610); // hwid spoofer (login request spoofer)
+HOOK_LIB("libUE4.so", "0x61CCA90", hsub_61CCA90, (void**)&osub_61CCA90); // headshot stat normalization
+HOOK_LIB("libUE4.so", "0x77FE9CC", hsub_77FE9CC, (void**)&osub_77FE9CC); // win ratio normalization
