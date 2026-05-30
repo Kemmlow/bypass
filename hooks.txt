@@ -1,3 +1,54 @@
+#include <jni.h>
+#include <string>
+#include <list>
+#include <vector>
+#include <string.h>
+#include <pthread.h>
+#include <list>
+#include <vector>
+#include <string.h>
+#include <pthread.h>
+#include <thread>
+#include <cstring>
+#include <jni.h>
+#include <unistd.h>
+#include <fstream>
+#include <iostream>
+#include <unordered_map>
+#include <cstdlib>
+#include <ctime>
+#include <dlfcn.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <netdb.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <sys/ptrace.h>
+#include <sys/sysinfo.h>
+#include <unwind.h>
+#include <dlfcn.h>
+#include <libgen.h>
+#include <stdint.h>
+#include <cstring>
+#include <functional>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <android/log.h>
+#include <sys/ptrace.h>
+#include <sys/mman.h>
+#include "Main/Tools.h"
+#include "Main/Logger.h"
+#include "Main/oxorany.h"
+#include "Main/obfuscate.h"
+#include "Main/Utils.h"
+#include "Main/KittyMemory/MemoryPatch.h"
+#include "Main/Macros.h"
+#include "Main/Dobby/dobby.h"
+
+#define targetLibName OBFUSCATE("libUE4.so")
+
+//==============================================================================
+
 __int64 (*osub_5E031A8)(__int64 a1, __int64 a2, int a3);
 __int64 hsub_5E031A8(__int64 a1, __int64 a2, int a3)
 {
@@ -36,6 +87,7 @@ bool hsub_74A03E4(char *a1, unsigned __int64 a2)
 __int64 (*osub_74A0A00)(__int64 result);
 __int64 hsub_74A0A00(__int64 result)
 {
+    if (result) return osub_74A0A00(result);
     return 1;
 }
 __int64 (*osub_74A0B34)(__int64 a1);
@@ -48,11 +100,13 @@ __int64 hsub_74A0B34(__int64 a1)
 __int64 (*osub_74A0BB8)(_QWORD *a1);
 __int64 hsub_74A0BB8(_QWORD *a1)
 {
+    if (a1) return osub_74A0BB8(a1);
     return 0;
 }
 __int64 (*osub_74A0C34)(__int64 a1);
 __int64 hsub_74A0C34(__int64 a1)
 {
+    if (a1) return osub_74A0C34(a1);
     return 0;
 }
 void (*osub_74A17B8)(__int64 a1, __int64 a2, __int64 *a3);
@@ -64,6 +118,7 @@ void hsub_74A17B8(__int64 a1, __int64 a2, __int64 *a3)
 __int64 (*osub_74A1D18)(__int64 result);
 __int64 hsub_74A1D18(__int64 result)
 {
+    if (result) return osub_74A1D18(result);
     return 0;
 }
 __int64 (*osub_68CD2F4)(__int64 a1, __int64 a2);
@@ -129,11 +184,15 @@ double hsub_77FE9CC(__int64 a1, __int64 a2)
 {
     return 0.0;
 }
-__int64 (*osub_82AE490)(__int64 a1, __int64 a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9);
-__int64 hsub_82AE490(__int64 a1, __int64 a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
+void (*osub_82AE490)(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, unsigned __int16 *a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9);
+void hsub_82AE490(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, unsigned __int16 *a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
 {
-    if (a1 && (uintptr_t)a1 > 0x1000) { const char *e = (const char *)a1; if (strstr(e, "LogWeapon") || strstr(e, "Violation")) return 0; }
-    return osub_82AE490(a1, a2, a3, a4, a5, a6, a7, a8, a9);
+    return;
+}
+void (*osub_82A8280)(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9);
+void hsub_82A8280(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
+{
+    return;
 }
 __int64 (*osub_64081E0)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
 __int64 hsub_64081E0(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
@@ -187,31 +246,57 @@ __int64 hsub_8241084(__int64 result)
     if (result && (uintptr_t)result > 0x1000) { *(_DWORD *)(result + 44) = 0; *(_DWORD *)(result + 48) = 0; *(_BYTE *)(result + 52) = 0; }
     return osub_8241084(result);
 }
-HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8); // anosdkgetreportdata2 hook
-HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054); // anosdkioctlold hook
-HOOK_LIB("libUE4.so", "0x68CEC0C", hsub_68CEC0C, (void**)&osub_68CEC0C); // anosdkioctlold hook
-HOOK_LIB("libUE4.so", "0x749F534", hsub_749F534, (void**)&osub_749F534); // anosdkinit hook
-HOOK_LIB("libUE4.so", "0x74A0058", hsub_74A0058, (void**)&osub_74A0058); // anosdkgetreportdata2 hook
-HOOK_LIB("libUE4.so", "0x74A03E4", hsub_74A03E4, (void**)&osub_74A03E4); // anosdkioctlold hook
-HOOK_LIB("libUE4.so", "0x74A0A00", hsub_74A0A00, (void**)&osub_74A0A00); // anosdkonrecvsignature hook
-HOOK_LIB("libUE4.so", "0x74A0B34", hsub_74A0B34, (void**)&osub_74A0B34); // anosdkgetreportdata hook
-HOOK_LIB("libUE4.so", "0x74A0BB8", hsub_74A0BB8, (void**)&osub_74A0BB8); // anosdkonrecvdata hook
-HOOK_LIB("libUE4.so", "0x74A0C34", hsub_74A0C34, (void**)&osub_74A0C34); // telemetry dispatcher hook
-HOOK_LIB("libUE4.so", "0x74A17B8", hsub_74A17B8, (void**)&osub_74A17B8); // tssmanager collector hook
-HOOK_LIB("libUE4.so", "0x74A1D18", hsub_74A1D18, (void**)&osub_74A1D18); // report assembler hook
-HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, (void**)&osub_68CD2F4); // bullet hit bypass
-HOOK_LIB("libUE4.so", "0x69CBE8C", hsub_69CBE8C, (void**)&osub_69CBE8C); // internal packet pusher
-HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, (void**)&osub_81C2F70); // hwid spoofer (record spoofer)
-HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, (void**)&osub_C492610); // hwid spoofer (login request spoofer)
-HOOK_LIB("libUE4.so", "0x61CCA90", hsub_61CCA90, (void**)&osub_61CCA90); // headshot stat normalization
-HOOK_LIB("libUE4.so", "0x77FE9CC", hsub_77FE9CC, (void**)&osub_77FE9CC); // win ratio normalization
-HOOK_LIB("libUE4.so", "0x82AE490", hsub_82AE490, (void**)&osub_82AE490); // gun log master bypass
-HOOK_LIB("libUE4.so", "0x64081E0", hsub_64081E0, (void**)&osub_64081E0); // gun log collector normalization
-HOOK_LIB("libUE4.so", "0x6408738", hsub_6408738, (void**)&osub_6408738); // gun log dispatcher normalization
-HOOK_LIB("libUE4.so", "0x640B598", hsub_640B598, (void**)&osub_640B598); // gun log assembler normalization
-HOOK_LIB("libUE4.so", "0x640BCA0", hsub_640BCA0, (void**)&osub_640BCA0); // gun log finalizer normalization
-HOOK_LIB("libUE4.so", "0x84DCE80", hsub_84DCE80, (void**)&osub_84DCE80); // real gun log server level
-HOOK_LIB("libUE4.so", "0xB5F3DE0", hsub_B5F3DE0, (void**)&osub_B5F3DE0); // general signal shield
-HOOK_LIB("libUE4.so", "0xB5FC490", hsub_B5FC490, (void**)&osub_B5FC490); // general signal shield
-HOOK_LIB("libUE4.so", "0x5ACC184", hsub_5ACC184, (void**)&osub_5ACC184); // integrity gate normalization
-HOOK_LIB("libUE4.so", "0x8241084", hsub_8241084, (void**)&osub_8241084); // developer mode detect fixer
+
+void *bypass_thread(void *)
+{
+    LOGI(oxorany("BYPASS THREAD STARTING...."));
+    do
+    {
+        sleep(1);
+    } while (!Tools::IsLibraryLoaded(targetLibName));
+#if defined(__aarch64__)
+    HOOK_LIB("libUE4.so", "0x5ACC184", hsub_5ACC184, (void**)&osub_5ACC184); // integrity gate
+    HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8); // anogs block
+    HOOK_LIB("libUE4.so", "0x61CCA90", hsub_61CCA90, (void**)&osub_61CCA90); // headshot flag
+    HOOK_LIB("libUE4.so", "0x64081E0", hsub_64081E0, (void**)&osub_64081E0); // weapon log
+    HOOK_LIB("libUE4.so", "0x6408738", hsub_6408738, (void**)&osub_6408738); // weapon log
+    HOOK_LIB("libUE4.so", "0x640B598", hsub_640B598, (void**)&osub_640B598); // weapon log
+    HOOK_LIB("libUE4.so", "0x640BCA0", hsub_640BCA0, (void**)&osub_640BCA0); // weapon log
+    HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054); // anogs block
+    HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, (void**)&osub_68CD2F4); // bullet data
+    HOOK_LIB("libUE4.so", "0x68CEC0C", hsub_68CEC0C, (void**)&osub_68CEC0C); // anogs block
+    HOOK_LIB("libUE4.so", "0x69CBE8C", hsub_69CBE8C, (void**)&osub_69CBE8C); // bullet packet
+    HOOK_LIB("libUE4.so", "0x749F534", hsub_749F534, (void**)&osub_749F534); // anogs block
+    HOOK_LIB("libUE4.so", "0x74A0058", hsub_74A0058, (void**)&osub_74A0058); // anogs block
+    HOOK_LIB("libUE4.so", "0x74A03E4", hsub_74A03E4, (void**)&osub_74A03E4); // anogs block
+    HOOK_LIB("libUE4.so", "0x74A0A00", hsub_74A0A00, (void**)&osub_74A0A00); // anogs block
+    HOOK_LIB("libUE4.so", "0x74A0B34", hsub_74A0B34, (void**)&osub_74A0B34); // anogs block
+    HOOK_LIB("libUE4.so", "0x74A0BB8", hsub_74A0BB8, (void**)&osub_74A0BB8); // anogs block
+    HOOK_LIB("libUE4.so", "0x74A0C34", hsub_74A0C34, (void**)&osub_74A0C34); // telemetry
+    HOOK_LIB("libUE4.so", "0x74A17B8", hsub_74A17B8, (void**)&osub_74A17B8); // tssmanager
+    HOOK_LIB("libUE4.so", "0x74A1D18", hsub_74A1D18, (void**)&osub_74A1D18); // report block
+    HOOK_LIB("libUE4.so", "0x77FE9CC", hsub_77FE9CC, (void**)&osub_77FE9CC); // win ratio
+    HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, (void**)&osub_81C2F70); // hwid record
+    HOOK_LIB("libUE4.so", "0x8241084", hsub_8241084, (void**)&osub_8241084); // context collector
+    HOOK_LIB("libUE4.so", "0x82A8280", hsub_82A8280, (void**)&osub_82A8280); // god dispatcher
+    HOOK_LIB("libUE4.so", "0x82AE490", hsub_82AE490, (void**)&osub_82AE490); // god dispatcher
+    HOOK_LIB("libUE4.so", "0x84DCE80", hsub_84DCE80, (void**)&osub_84DCE80); // report sentinel
+    HOOK_LIB("libUE4.so", "0xB5F3DE0", hsub_B5F3DE0, (void**)&osub_B5F3DE0); // signal shield
+    HOOK_LIB("libUE4.so", "0xB5FC490", hsub_B5FC490, (void**)&osub_B5FC490); // signal shield
+    HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, (void**)&osub_C492610); // hwid login
+    MemoryPatch::createWithHex("libUE4.so", 0x5ACC184, "00 00 80 D2 C0 03 5F D6").Modify(); // integrity
+    PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6"); // damage fix
+    MemoryPatch::createWithHex("libhdmpve.so", 0x1F6E44, "C0 03 5F D6").Modify(); // update blocker
+    PATCH_LIB("libTBlueData.so", "0xBAE20", "00 00 80 D2 C0 03 5F D6"); // config parser
+    PATCH_LIB("libTBlueData.so", "0x5C324", "00 00 80 D2 C0 03 5F D6"); // telemetry
+    PATCH_LIB("libTBlueData.so", "0xD0B08", "00 00 80 D2 C0 03 5F D6"); // http builder
+    PATCH_LIB("libTBlueData.so", "0xF61DC", "00 00 80 D2 C0 03 5F D6"); // multipart builder
+#endif
+    return NULL;
+}
+
+__attribute__((constructor)) void lib_main()
+{
+    pthread_t ptid;
+    pthread_create(&ptid, NULL, bypass_thread, NULL);
+}
