@@ -8,7 +8,7 @@ __int64 hsub_5E031A8(__int64 a1, __int64 a2, int a3)
 void* (*osub_640C054)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
 void* hsub_640C054(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
 {
-    if (a1 == 37 || a1 == 46) return (void*)1;
+    if (a1 == 37 || a1 == 46 || a1 == 18) return (void*)1;
     return osub_640C054(a1, a2, a3, a4, a5, a6, a7, a8);
 }
 __int64 (*osub_68CEC0C)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
@@ -50,6 +50,22 @@ __int64 hsub_74A0BB8(_QWORD *a1)
 {
     return 0;
 }
+__int64 (*osub_74A0C34)(__int64 a1);
+__int64 hsub_74A0C34(__int64 a1)
+{
+    return 0;
+}
+void (*osub_74A17B8)(__int64 a1, __int64 a2, __int64 *a3);
+void hsub_74A17B8(__int64 a1, __int64 a2, __int64 *a3)
+{
+    if (a3) { *a3 = 0; a3[1] = 0; }
+    return;
+}
+__int64 (*osub_74A1D18)(__int64 result);
+__int64 hsub_74A1D18(__int64 result)
+{
+    return 0;
+}
 HOOK_LIB("libUE4.so", 0x5E031A8, hsub_5E031A8, (void**)&osub_5E031A8); // anosdkgetreportdata2 hook
 HOOK_LIB("libUE4.so", 0x640C054, hsub_640C054, (void**)&osub_640C054); // anosdkioctlold hook
 HOOK_LIB("libUE4.so", 0x68CEC0C, hsub_68CEC0C, (void**)&osub_68CEC0C); // anosdkioctlold hook
@@ -59,3 +75,6 @@ HOOK_LIB("libUE4.so", 0x74A03E4, hsub_74A03E4, (void**)&osub_74A03E4); // anosdk
 HOOK_LIB("libUE4.so", 0x74A0A00, hsub_74A0A00, (void**)&osub_74A0A00); // anosdkonrecvsignature hook
 HOOK_LIB("libUE4.so", 0x74A0B34, hsub_74A0B34, (void**)&osub_74A0B34); // anosdkgetreportdata hook
 HOOK_LIB("libUE4.so", 0x74A0BB8, hsub_74A0BB8, (void**)&osub_74A0BB8); // anosdkonrecvdata hook
+HOOK_LIB("libUE4.so", 0x74A0C34, hsub_74A0C34, (void**)&osub_74A0C34); // telemetry dispatcher hook
+HOOK_LIB("libUE4.so", 0x74A17B8, hsub_74A17B8, (void**)&osub_74A17B8); // tssmanager collector hook
+HOOK_LIB("libUE4.so", 0x74A1D18, hsub_74A1D18, (void**)&osub_74A1D18); // report assembler hook
