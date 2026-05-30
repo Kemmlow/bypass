@@ -26,6 +26,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <android/log.h>
+#include <signal.h>
 
 #include "Tools.h"
 #include "oxorany.h"
@@ -290,12 +291,7 @@ __int64 (*osub_68CD2F4)(__int64 a1, __int64 a2);
 __int64 hsub_68CD2F4(__int64 a1, __int64 a2)
 {
     if (!a1 || !a2) return 0;
-
-    // Normalization: Ensure weapon state is synchronized
     *(_QWORD *)(a1 + 496) = a2;
-
-    // God Bypass: Call the internal UE4 packet pusher directly
-    // This skips the entire middle section of 0x68CD2F4 which triggers security reports
     typedef __int64 (*Pusher_t)(__int64, __int64);
     Pusher_t pusher = (Pusher_t)(Tools::GetBaseAddress("libUE4.so") + 0x69CBE8C);
     return pusher(a1, a2);
@@ -307,12 +303,33 @@ __int64 hsub_84DCE80(__int64 result, __int64 a2, int a3)
 {
     if (a2) {
         uintptr_t base = Tools::GetBaseAddress("libUE4.so");
-        // Compare the event string address directly (Hyper Precision)
         if (a2 == (base + 0xD573708) || a2 == (base + 0xCAB19B8)) {
             return 0; // Silently drop the report
         }
     }
     return osub_84DCE80(result, a2, a3);
+}
+
+// --- PURE UE4 CRASH FIXER (Signal Shield & God Silence) ---
+
+// Signal Shield: Prevent engine from registering termination handlers
+__int64 (*osub_B5F3DE0)(__int64 a1, struct sigaction *oact);
+__int64 hsub_B5F3DE0(__int64 a1, struct sigaction *oact)
+{
+    return 0; // Success but skip registration
+}
+
+__int64 (*osub_B5FC490)(__int64 a1, struct sigaction *oact);
+__int64 hsub_B5FC490(__int64 a1, struct sigaction *oact)
+{
+    return 0; // Success but skip registration
+}
+
+// UQMCrash God Silence: Disable the internal crash reporter
+__int64 (*osub_C4E0770)(_QWORD a1);
+__int64 hsub_C4E0770(_QWORD a1)
+{
+    return 0; // Silent success, no observer set
 }
 
 void *ue4_thread(void *)
@@ -326,36 +343,33 @@ void *ue4_thread(void *)
     HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, osub_68CD2F4);
     HOOK_LIB("libUE4.so", "0x84DCE80", hsub_84DCE80, osub_84DCE80);
 
+    // Pure UE4 Crash Fixer - Stability Overload
+    HOOK_LIB("libUE4.so", "0xB5F3DE0", hsub_B5F3DE0, osub_B5F3DE0); // Signal Shield 1
+    HOOK_LIB("libUE4.so", "0xB5FC490", hsub_B5FC490, osub_B5FC490); // Signal Shield 2
+    HOOK_LIB("libUE4.so", "0xC4E0770", hsub_C4E0770, osub_C4E0770); // UQMCrash God Silence
+
     PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6"); // fake damage fix
     PATCH_LIB("libUE4.so", "0x69913E0", "00 00 80 D2 C0 03 5F D6"); // accuracy fix
 
-    // HWID & Identity
+    // Identity & Anti-Cheat
     HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, osub_81C2F70);
     HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, osub_C492610);
     HOOK_LIB("libUE4.so", "0x81FF6F4", hsub_81FF6F4, osub_81FF6F4);
-
-    // Global Anti-Cheat Dispatchers
     HOOK_LIB("libUE4.so", "0xC4E0330", hsub_C4E0330, osub_C4E0330);
     HOOK_LIB("libUE4.so", "0x82A8280", hsub_82A8280, osub_82A8280);
 
-    // Security Orchestration
+    // Higgs & Global Security
     HOOK_LIB("libUE4.so", "0x7ADAE8C", hsub_7ADAE8C, osub_7ADAE8C);
     PATCH_LIB("libUE4.so", "0x5ACC184", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libUE4.so", "0x7ADADB4", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libUE4.so", "0x7ADAE00", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libUE4.so", "0x7ADAE4C", "00 00 80 D2 C0 03 5F D6");
-
-    // Movement & Environment
     PATCH_LIB("libUE4.so", "0x77DFF68", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libUE4.so", "0x59C0EB8", "00 00 80 D2 C0 03 5F D6");
-
-    // Security Collectors
     PATCH_LIB("libUE4.so", "0x7820930", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libUE4.so", "0x7820A08", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libUE4.so", "0x7820B2C", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libUE4.so", "0x7820BB8", "00 00 80 D2 C0 03 5F D6");
-
-    // Server-Side Kick & Flag Bypasses
     PATCH_LIB("libUE4.so", "0x640B598", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libUE4.so", "0x62E286C", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libUE4.so", "0x74B1BC0", "00 00 80 D2 C0 03 5F D6");
