@@ -212,7 +212,7 @@ __int16 *(*osub_81C2F70)(__int64 a1);
 __int16 *hsub_81C2F70(__int64 a1)
 {
     struct sysinfo si;
-    if (sysinfo(&si) != 0) return nullptr;
+    if (::sysinfo(&si) != 0) return nullptr;
     srand(si.procs + si.totalram);
     uint32_t id[4];
     id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
@@ -236,7 +236,7 @@ bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3)
 {
     bool res = osub_C492610(a1, a2, a3);
     struct sysinfo si;
-    if (sysinfo(&si) != 0) return res;
+    if (::sysinfo(&si) != 0) return res;
     uint32_t id[4];
     id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
     id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
@@ -275,7 +275,6 @@ int *hsub_81FF6F4(int *result, uint16_t *src, int a3)
 {
     if (src && a3 >= 20)
     {
-        // Simple manual UTF-16 match for "login-identifier.txt"
         const uint16_t target[] = {'l','o','g','i','n','-','i','d','e','n','t','i','f','i','e','r','.','t','x','t'};
         bool match = true;
         for(int i=0; i<20; i++) {
@@ -286,6 +285,36 @@ int *hsub_81FF6F4(int *result, uint16_t *src, int a3)
     return osub_81FF6F4(result, src, a3);
 }
 
+// Hyper Precise Bullet Registration God Hook
+__int64 (*osub_68CD2F4)(__int64 a1, __int64 a2);
+__int64 hsub_68CD2F4(__int64 a1, __int64 a2)
+{
+    if (!a1 || !a2) return 0;
+
+    // Normalization: Ensure weapon state is synchronized
+    *(_QWORD *)(a1 + 496) = a2;
+
+    // God Bypass: Call the internal UE4 packet pusher directly
+    // This skips the entire middle section of 0x68CD2F4 which triggers security reports
+    typedef __int64 (*Pusher_t)(__int64, __int64);
+    Pusher_t pusher = (Pusher_t)(Tools::GetBaseAddress("libUE4.so") + 0x69CBE8C);
+    return pusher(a1, a2);
+}
+
+// God Event Filter: Silently drop specific security reports
+__int64 (*osub_84DCE80)(__int64 result, __int64 a2, int a3);
+__int64 hsub_84DCE80(__int64 result, __int64 a2, int a3)
+{
+    if (a2) {
+        uintptr_t base = Tools::GetBaseAddress("libUE4.so");
+        // Compare the event string address directly (Hyper Precision)
+        if (a2 == (base + 0xD573708) || a2 == (base + 0xCAB19B8)) {
+            return 0; // Silently drop the report
+        }
+    }
+    return osub_84DCE80(result, a2, a3);
+}
+
 void *ue4_thread(void *)
 {
     do
@@ -293,29 +322,32 @@ void *ue4_thread(void *)
         sleep(1);
     } while (!isLibraryLoaded("libUE4.so"));
 #if defined(__aarch64__)
-    // Clean Bypass Set - Bogeys (0x68CD2F4, 0xD573708, 0xCAB19B8) Removed for Bullet Hax registration
+    // Premium God Hooks - Bullet Issues FIXED, Reports BLOCKED
+    HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, osub_68CD2F4);
+    HOOK_LIB("libUE4.so", "0x84DCE80", hsub_84DCE80, osub_84DCE80);
+
     PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6"); // fake damage fix
     PATCH_LIB("libUE4.so", "0x69913E0", "00 00 80 D2 C0 03 5F D6"); // accuracy fix
 
     // HWID & Identity
-    HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, osub_81C2F70); // hwid spoofer (record spoofer)
-    HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, osub_C492610); // hwid spoofer (login request spoofer)
-    HOOK_LIB("libUE4.so", "0x81FF6F4", hsub_81FF6F4, osub_81FF6F4); // security file filter
+    HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, osub_81C2F70);
+    HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, osub_C492610);
+    HOOK_LIB("libUE4.so", "0x81FF6F4", hsub_81FF6F4, osub_81FF6F4);
 
     // Global Anti-Cheat Dispatchers
-    HOOK_LIB("libUE4.so", "0xC4E0330", hsub_C4E0330, osub_C4E0330); // AnoSDKIoctlOld
-    HOOK_LIB("libUE4.so", "0x82A8280", hsub_82A8280, osub_82A8280); // God Dispatcher
+    HOOK_LIB("libUE4.so", "0xC4E0330", hsub_C4E0330, osub_C4E0330);
+    HOOK_LIB("libUE4.so", "0x82A8280", hsub_82A8280, osub_82A8280);
 
     // Security Orchestration
-    HOOK_LIB("libUE4.so", "0x7ADAE8C", hsub_7ADAE8C, osub_7ADAE8C); // Higgs Heartbeat
-    PATCH_LIB("libUE4.so", "0x5ACC184", "00 00 80 D2 C0 03 5F D6"); // Integrity Gate
-    PATCH_LIB("libUE4.so", "0x7ADADB4", "00 00 80 D2 C0 03 5F D6"); // Higgs Trinity 1
-    PATCH_LIB("libUE4.so", "0x7ADAE00", "00 00 80 D2 C0 03 5F D6"); // Higgs Trinity 2
-    PATCH_LIB("libUE4.so", "0x7ADAE4C", "00 00 80 D2 C0 03 5F D6"); // Higgs Trinity 3
+    HOOK_LIB("libUE4.so", "0x7ADAE8C", hsub_7ADAE8C, osub_7ADAE8C);
+    PATCH_LIB("libUE4.so", "0x5ACC184", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7ADADB4", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7ADAE00", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7ADAE4C", "00 00 80 D2 C0 03 5F D6");
 
     // Movement & Environment
-    PATCH_LIB("libUE4.so", "0x77DFF68", "00 00 80 D2 C0 03 5F D6"); // AntiMoveCheatFlow
-    PATCH_LIB("libUE4.so", "0x59C0EB8", "00 00 80 D2 C0 03 5F D6"); // Move Anti-Cheat
+    PATCH_LIB("libUE4.so", "0x77DFF68", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x59C0EB8", "00 00 80 D2 C0 03 5F D6");
 
     // Security Collectors
     PATCH_LIB("libUE4.so", "0x7820930", "00 00 80 D2 C0 03 5F D6");
@@ -344,15 +376,15 @@ void *anogs_thread(void *)
     HOOKSYM_LIB("libanogs.so", "AnoSDKGetReportData", hAnoSDKGetReportData, oAnoSDKGetReportData);
     HOOKSYM_LIB("libanogs.so", "AnoSDKOnRecvSignature", hAnoSDKOnRecvSignature, oAnoSDKOnRecvSignature);
 
-    HOOK_LIB("libanogs.so", "0x451564", hsub_451564, osub_451564); // fake hash returner
-    HOOK_LIB("libanogs.so", "0x21248C", hsub_21248C, osub_21248C); // case 16 (crash fix)
-    HOOK_LIB("libanogs.so", "0x228168", hsub_228168, osub_228168); // case 35
-    HOOK_LIB("libanogs.so", "0x228560", hsub_228560, osub_228560); // case 37
-    HOOK_LIB("libanogs.so", "0x389744", hsub_389744, osub_389744); // case 34
+    HOOK_LIB("libanogs.so", "0x451564", hsub_451564, osub_451564);
+    HOOK_LIB("libanogs.so", "0x21248C", hsub_21248C, osub_21248C);
+    HOOK_LIB("libanogs.so", "0x228168", hsub_228168, osub_228168);
+    HOOK_LIB("libanogs.so", "0x228560", hsub_228560, osub_228560);
+    HOOK_LIB("libanogs.so", "0x389744", hsub_389744, osub_389744);
     HOOK_LIB("libanogs.so", "0x2940D0", hsub_2940D0, osub_2940D0);
-    HOOK_LIB("libanogs.so", "0x425864", sub_425864, osub_425864);  // memory master
-    HOOK_LIB("libanogs.so", "0x21E9C4", hsub_21E9C4, osub_21E9C4); // new hook
-    HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00); // runtime hash verifier
+    HOOK_LIB("libanogs.so", "0x425864", sub_425864, osub_425864);
+    HOOK_LIB("libanogs.so", "0x21E9C4", hsub_21E9C4, osub_21E9C4);
+    HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00);
     HOOK_LIB("libanogs.so", "0x36A5B8", hsub_36A5B8, osub_36A5B8);
     HOOK_LIB("libanogs.so", "0x39F56C", hsub_39F56C, osub_39F56C);
     HOOK_LIB("libanogs.so", "0x447750", hsub_447750, osub_447750);
@@ -365,7 +397,7 @@ void *anogs_thread(void *)
     HOOK_LIB("libanogs.so", "0x2328F0", hsub_2328F0, osub_2328F0);
     HOOK_LIB("libanogs.so", "0x51F980", hsub_51F980, osub_51F980);
     HOOK_LIB("libanogs.so", "0x51F9A0", hsub_51F9A0, osub_51F9A0);
-    PATCH_LIB("libanogs.so", "0x4B3560", "20 00 80 D2 C0 03 5F D6"); // Fix Crash
+    PATCH_LIB("libanogs.so", "0x4B3560", "20 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libanogs.so", "0x225528", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libanogs.so", "0x31DCB0", "1F 20 03 D5");
     PATCH_LIB("libanogs.so", "0x330494", "E0 03 27 1E C0 03 5F D6");
@@ -377,7 +409,6 @@ void *anogs_thread(void *)
     PATCH_LIB("libanogs.so", "0x4B39E0", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libanogs.so", "0x4F7074", "E0 03 27 1E C0 03 5F D6");
     PATCH_LIB("libanogs.so", "0x51F9C0", "00 00 80 D2 C0 03 5F D6");
-    // crash : PATCH_LIB("libanogs.so", "0x51FA20", "1F 20 03 D5");
     PATCH_LIB("libanogs.so", "0x51FAB0", "20 00 80 D2 C0 03 5F D6");
     return NULL;
 }
