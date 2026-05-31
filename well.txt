@@ -1,89 +1,176 @@
+#include <jni.h>
+#include <string>
+#include <list>
+#include <vector>
+#include <string.h>
+#include <pthread.h>
+#include <list>
+#include <vector>
+#include <string.h>
+#include <pthread.h>
+#include <thread>
+#include <cstring>
+#include <jni.h>
+#include <unistd.h>
+#include <fstream>
+#include <iostream>
+#include <unordered_map>
+#include <cstdlib>
+#include <ctime>
+#include <dlfcn.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <netdb.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <sys/ptrace.h>
+#include <sys/sysinfo.h>
+#include <unwind.h>
+#include <dlfcn.h>
+#include <libgen.h>
+#include <stdint.h>
+#include <cstring>
+#include <functional>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <android/log.h>
+#include <sys/ptrace.h>
+#include <sys/mman.h>
+#include "Main/Tools.h"
+#include "Main/Logger.h"
+#include "Main/oxorany.h"
+#include "Main/obfuscate.h"
+#include "Main/Utils.h"
+#include "Main/KittyMemory/MemoryPatch.h"
+#include "Main/Macros.h"
+#include "Main/Dobby/dobby.h"
+
+#define targetLibName OBFUSCATE("libUE4.so")
+
+#define __int64 long long
+#define _QWORD uint64_t
+#define _DWORD uint32_t
+#define _BYTE uint8_t
+#define _WORD uint16_t
+
 __int64 (*osub_5E031A8)(__int64 a1, __int64 a2, int a3);
 __int64 hsub_5E031A8(__int64 a1, __int64 a2, int a3)
 {
     __int64 res = osub_5E031A8(a1, a2, a3);
-    if (a2 && a3 >= 4) *(uint32_t*)a2 = 0;
+    if (a2 && (uintptr_t)a2 > 0x1000) memset((void*)a2, 0, (size_t)a3);
     return res;
 }
+
 void* (*osub_640C054)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
 void* hsub_640C054(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
 {
     if (a1 == 37) return (void*)1;
     return osub_640C054(a1, a2, a3, a4, a5, a6, a7, a8);
 }
+
 __int64 (*osub_68CEC0C)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
 __int64 hsub_68CEC0C(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
 {
     if (a1 == 37) return 1;
     return osub_68CEC0C(a1, a2, a3, a4, a5, a6, a7, a8);
 }
+
 void (*osub_749F534)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
 void hsub_749F534(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
 {
-    if (a1 == 46 || a1 == 32 || a1 == 33 || a1 == 18) return;
+    if (a1 == 46 || a1 == 32 || a1 == 33 || a1 == 18) { if (a3 && (uintptr_t)a3 > 0x1000) *(_QWORD*)a3 = 0; return; }
     osub_749F534(a1, a2, a3, a4, a5, a6, a7, a8);
 }
+
 void (*osub_74A0058)(__int64 a1, __int64 a2);
 void hsub_74A0058(__int64 a1, __int64 a2)
 {
     if (a1 && (uintptr_t)a1 > 0x1000) *(_DWORD*)(a1 + 8) = 0;
     osub_74A0058(a1, a2);
 }
+
 bool (*osub_74A03E4)(char *a1, unsigned __int64 a2);
 bool hsub_74A03E4(char *a1, unsigned __int64 a2)
 {
     if (a1 && a2 > 0) return true;
     return osub_74A03E4(a1, a2);
 }
-/*
+
 __int64 (*osub_74A0A00)(__int64 result);
 __int64 hsub_74A0A00(__int64 result)
 {
-    if (result) *(uint32_t*)result = 1;
+    if (result && (uintptr_t)result > 0x1000) *(_DWORD*)result = 1;
     return 1;
 }
-*/
+
 __int64 (*osub_74A0B34)(__int64 a1);
 __int64 hsub_74A0B34(__int64 a1)
 {
     __int64 res = osub_74A0B34(a1);
-    if (res) *(__int16*)res = 0;
+    if (res && (uintptr_t)res > 0x1000) *(__int16*)res = 0;
     return res;
 }
-/*
+
 __int64 (*osub_74A0BB8)(_QWORD *a1);
 __int64 hsub_74A0BB8(_QWORD *a1)
 {
-    if (a1) *(_DWORD*)a1 = 0;
+    if (a1 && (uintptr_t)a1 > 0x1000) return 0;
     return 0;
 }
-*/
+
 __int64 (*osub_74A0C34)(__int64 a1);
 __int64 hsub_74A0C34(__int64 a1)
 {
-    if (a1) *(_DWORD*)a1 = 0;
+    if (a1 && (uintptr_t)a1 > 0x1000) return 0;
     return 0;
 }
+
 void (*osub_74A17B8)(__int64 a1, __int64 a2, __int64 *a3);
 void hsub_74A17B8(__int64 a1, __int64 a2, __int64 *a3)
 {
-    if (a3) { *a3 = 0; a3[1] = 0; }
+    if (a3 && (uintptr_t)a3 > 0x1000) { *a3 = 0; a3[1] = 0; }
 }
+
 __int64 (*osub_74A1D18)(__int64 result);
 __int64 hsub_74A1D18(__int64 result)
 {
-    if (result && (uintptr_t)result > 0x1000) *(_DWORD*)result = 0;
-    return osub_74A1D18(result);
+    if (result && (uintptr_t)result > 0x1000) *(_DWORD*)result = 1;
+    return 1;
 }
-HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8);
-HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054);
-HOOK_LIB("libUE4.so", "0x68CEC0C", hsub_68CEC0C, (void**)&osub_68CEC0C);
-HOOK_LIB("libUE4.so", "0x749F534", hsub_749F534, (void**)&osub_749F534);
-HOOK_LIB("libUE4.so", "0x74A0058", hsub_74A0058, (void**)&osub_74A0058);
-HOOK_LIB("libUE4.so", "0x74A03E4", hsub_74A03E4, (void**)&osub_74A03E4);
-// HOOK_LIB("libUE4.so", "0x74A0A00", hsub_74A0A00, (void**)&osub_74A0A00);
-HOOK_LIB("libUE4.so", "0x74A0B34", hsub_74A0B34, (void**)&osub_74A0B34);
-// HOOK_LIB("libUE4.so", "0x74A0BB8", hsub_74A0BB8, (void**)&osub_74A0BB8);
-HOOK_LIB("libUE4.so", "0x74A0C34", hsub_74A0C34, (void**)&osub_74A0C34);
-HOOK_LIB("libUE4.so", "0x74A17B8", hsub_74A17B8, (void**)&osub_74A17B8);
-HOOK_LIB("libUE4.so", "0x74A1D18", hsub_74A1D18, (void**)&osub_74A1D18);
+
+__int64 (*osub_731CE48)();
+__int64 hsub_731CE48()
+{
+    return 0x3E8;
+}
+
+void *Nikonmod_thread(void *)
+{
+    LOGI(oxorany("NIKON THREAD STARTING...."));
+    do
+    {
+        sleep(1);
+    } while (!isLibraryLoaded(targetLibName));
+#if defined(__aarch64__)
+    HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8);
+    HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054);
+    HOOK_LIB("libUE4.so", "0x68CEC0C", hsub_68CEC0C, (void**)&osub_68CEC0C);
+    HOOK_LIB("libUE4.so", "0x749F534", hsub_749F534, (void**)&osub_749F534);
+    HOOK_LIB("libUE4.so", "0x74A0058", hsub_74A0058, (void**)&osub_74A0058);
+    HOOK_LIB("libUE4.so", "0x74A03E4", hsub_74A03E4, (void**)&osub_74A03E4);
+    HOOK_LIB("libUE4.so", "0x74A0A00", hsub_74A0A00, (void**)&osub_74A0A00);
+    HOOK_LIB("libUE4.so", "0x74A0B34", hsub_74A0B34, (void**)&osub_74A0B34);
+    HOOK_LIB("libUE4.so", "0x74A0BB8", hsub_74A0BB8, (void**)&osub_74A0BB8);
+    HOOK_LIB("libUE4.so", "0x74A0C34", hsub_74A0C34, (void**)&osub_74A0C34);
+    HOOK_LIB("libUE4.so", "0x74A17B8", hsub_74A17B8, (void**)&osub_74A17B8);
+    HOOK_LIB("libUE4.so", "0x74A1D18", hsub_74A1D18, (void**)&osub_74A1D18);
+    HOOK_LIB("libUE4.so", "0x731CE48", hsub_731CE48, (void**)&osub_731CE48);
+#endif
+    return NULL;
+}
+
+__attribute__((constructor)) void lib_main()
+{
+    pthread_t ptid;
+    pthread_create(&ptid, NULL, Nikonmod_thread, NULL);
+}
