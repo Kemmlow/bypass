@@ -1,177 +1,134 @@
-# libanogs.so Deep Recursive Analysis (BGMI Mobile)
+# libanogs.so Deep Recursive Analysis & Emulation Guide (BGMI Mobile)
 
 This document provides a detailed, line-by-line, and recursive analysis of the functions exported by `libanogs.so`.
 
 ---
 
-## 1. AnoSDKInit
-**Address:** `0x64607`
-
-### Overview
-Bootstraps the Anti-Cheat SDK. It initializes the internal state machine, sets up the main context, and starts the monitoring subsystems.
-
-### Line-by-Line Analysis
-- **Entry:** Receives a context/result pointer in `X0`.
-- **Initialization:** Sets up pointers to stack-allocated variables (`v13`, `v14`, `v15`) which are used to store intermediate calculation results for integrity checks.
-- **State Machine:** Uses an `int v4` to manage control flow.
-- **Opaque Predicate:** `(v6 | ~v5) + (v5 & v6) + (v5 & ~v6) + 1 != (v5 & v6)`. This is a constant truth/falsehood used to prevent simple static analysis of the jump path.
-- **Core Call:** Calls `sub_1CA18C`. This function initializes the global SDK context `qword_574DE0` and `qword_574DE8`.
-- **Monitor Setup:** Calls `sub_4D4C94(v16, 0)`. This initializes the "System Monitor" (Category 0).
-- **Completion:** Loops until the state machine reaches the final state, ensuring all sub-initializers have finished.
-
+## 1. AnoSDKInit (0x64607)
+### Line-by-Line Breakdown
+- **L1-15:** Stack setup; assigns result handle.
+- **L16-25:** **Opaque Predicate Check.** Calculates complex bitwise identity `(v6|~v5) + (v5&v6) + (v5&~v6) + 1 != (v5&v6)` to verify stack integrity before proceeding.
+- **L26-33:** **Context Setup.** Calls `sub_1CA18C`. Recursively, this function populates the global SDK context `qword_574DE0`.
+- **L34-40:** **Monitor Activation.** Calls `sub_4D4C94` with category `0`. This starts the core system monitoring engine.
+- **L41-55:** **Completion Loop.** Enters a state machine to ensure all sub-initialization threads have reported success.
 ### Security/Integrity Related: **YES**
+### Emulation (Fine State)
+- **Action:** Return the input `result` pointer.
+- **Result:** Game thinks anti-cheat initialized correctly.
 
 ---
 
-## 2. AnoSDKGetReportData
-**Address:** `0x65394`
-
-### Overview
-Retrieves accumulated detection reports from the SDK's internal telemetry buffers.
-
-### Line-by-Line Analysis
-- **State Machine:** Controlled by `v13`.
-- **Category Access:** Calls `sub_4D4C94(1, 4)` to access the "Report" category of the monitor system.
-- **Context Access:** Accesses global `qword_574DE0`.
-- **Data Retrieval:** Calls `sub_1C264C`, which iterates through a linked list of report objects stored in the SDK's heap.
-- **Recursive Logic:** `sub_1C264C` calls a virtual function at `[context + 80]` to get the start of the list.
-- **Exit:** Returns a pointer to a serialized buffer containing the report data.
-
+## 2. AnoSDKGetReportData (0x65394)
+### Line-by-Line Breakdown
+- **L1-15:** Setup local buffers for report gathering.
+- **L16-30:** **State Dispatch.** Controlled by `v13`.
+- **L31-50:** **Linked List Walk.** Traces to `sub_1C264C`. Recursively, this iterates over heap objects at `[qword_574DE0 + 80]`, which are the detection "hits."
+- **L51-60:** **Serialization.** Returns the pointer to the gathered data buffer.
 ### Security/Integrity Related: **YES**
+### Emulation (Fine State)
+- **Action:** **Return `0` (NULL)**.
+- **Result:** Informs game server that 0 detections were found.
 
 ---
 
-## 3. AnoSDKGetReportData2
-**Address:** `0x66475`
-
-### Overview
-A secondary report retrieval interface, often used for high-priority or synchronous telemetry.
-
-### Line-by-Line Analysis
-- **Wrapper:** Calls `sub_1C79D4()`.
-- **Recursive Logic (`sub_1C79D4`):**
-    - Checks `qword_574DE0` for initialization.
-    - If initialized, it calls a virtual function at `offset +40` of the context.
-    - **Logging:** Calls `sub_4F7074` with the string `"get2:%d, %p"`. This is used for internal debugging of the reporting pipeline.
-    - **Result:** Returns the data pointer obtained from the internal reporting engine.
-
+## 3. AnoSDKGetReportData2 (0x66475)
+### Line-by-Line Breakdown
+- **L1-3:** Direct wrapper.
+- **L4-15:** Calls `sub_1C79D4`. Recursively, this checks the global detection counter `dword_574DD0`.
+- **L16-25:** Internal logging: `sub_4F7074` with string `"get2:%d, %p"`.
 ### Security/Integrity Related: **YES**
+### Emulation (Fine State)
+- **Action:** **Return `0` (NULL)**.
+- **Result:** No secondary telemetry reported.
 
 ---
 
-## 4. AnoSDKDelReportData
-**Address:** `0x65580`
-
-### Overview
-Acknowledges and deletes report data after it has been sent to the server.
-
-### Line-by-Line Analysis
-- **Parameter:** `a1` is the pointer to the data to be deleted.
-- **State Machine:** Controlled by `v18`.
-- **Categorization:** Identifies the report type (e.g., `12502`, `12506`).
-- **Notification:** Calls `sub_4D4C94(1, 5)` to notify the monitor that data is being cleared.
-- **Freeing:** Calls `loc_1C1DC4` to perform the actual memory deallocation.
-
+## 4. AnoSDKIoctl (0x66182)
+### Line-by-Line Breakdown
+- **L1-10:** Receives Command ID and Argument.
+- **L11-20:** Dispatches to `sub_1C8D00`.
+- **L21-40:** **Sub-Logic (Recursive):**
+    - **ID 10:** Checks for emulator artifacts and calls `sub_4B60D4` to build detection string.
+    - **ID 36:** Scans for hooks.
+    - **ID 18:** Fingerprints system hardware.
+- **L41-50:** Returns result (0 for clean, 1 for detected).
 ### Security/Integrity Related: **YES**
+### Emulation (Fine State)
+- **Action:** **Return `0`** for all security-related IDs.
+- **Result:** All active checks report "Clean."
 
 ---
 
-## 5. AnoSDKOnResume
-**Address:** `0x65223`
-
-### Overview
-Called when the game returns to focus. It re-arms the anti-cheat's periodic scanning threads.
-
-### Line-by-Line Analysis
-- **Periodic Trigger:** Calls `sub_1CB244(1)`.
-    - `sub_1CB244` checks the SDK context and triggers internal security timers.
-- **Monitor Resume:** Calls `sub_4D4C94(1, 3)` (Category 3: Background Monitor).
-- **Integrity Check:** Performs a bitwise check `v5 - 2 * v6 != v7` to ensure the function's stack wasn't modified during the resume process.
-
+## 5. AnoSDKOnResume (0x65223)
+### Line-by-Line Breakdown
+- **L1-14:** App-focus event detection.
+- **L15-30:** **Scanner Wakeup.** Calls `sub_1CB244`. Recursively, this starts background ptrace and memory scan threads.
+- **L31-40:** **Monitor Update.** Calls `sub_4D4C94` category 3.
 ### Security/Integrity Related: **YES**
+### Emulation (Fine State)
+- **Action:** **Return immediately (`void`)**.
+- **Result:** Background security threads never start.
 
 ---
 
-## 6. AnoSDKOnRecvSignature
-**Address:** `0x66883`
-
-### Overview
-Processes dynamic detection signatures received from the game server.
-
-### Line-by-Line Analysis
-- **Signature Processing:** Calls `sub_1CD404(a1, a2, a3, a4)`.
-- **Recursive Logic (`sub_1CD404`):**
-    - Uses `loc_1C5B70(34, ...)` to verify the cryptographic signature of the incoming data.
-    - Uses `loc_1C5B70(83, ...)` to load the verified rules into the anti-cheat engine.
-- **Integrity:** Returns a result adjusted by a constant `30811`, used as a simple checksum by the caller.
-
+## 6. AnoSDKOnRecvSignature (0x66883)
+### Line-by-Line Breakdown
+- **L1-15:** Signature buffer and length validation.
+- **L16-30:** **Update Logic.** Calls `sub_1CD404`. Recursively, this uses case 83 of the master dispatcher to update patterns.
+- **L31-35:** **Checksum Return.** Returns `sub_1CD404(...) - 30811`.
 ### Security/Integrity Related: **YES**
+### Emulation (Fine State)
+- **Action:** **Return `0`**.
+- **Result:** Game thinks detection rules were successfully updated.
 
 ---
 
-## 7. AnoSDKOnRecvData
-**Address:** `0x65802`
-
-### Overview
-Receives raw data from the server or other game components and routes it to the appropriate SDK handler.
-
-### Line-by-Line Analysis
-- **Validation:** Ensures data pointer `a1` is not NULL and length `a2` is non-negative.
-- **Logging:** Calls `sub_4D4C94(..., 6)` to log the data reception.
-- **Dispatch:** Calls `sub_1C3310`.
-    - `sub_1C3310` looks up a callback function at `[qword_574DE0 + 48]` and passes the data to it.
-
+## 7. AnoSDKOnRecvData (0x65802)
+### Line-by-Line Breakdown
+- **L1-5:** Data validation.
+- **L6-15:** **Event Log.** Calls `sub_4D4C94` category 6.
+- **L16-25:** **Challenge Dispatch.** Calls `sub_1C3310`. Recursively, this executes a callback at `[context + 48]`.
 ### Security/Integrity Related: **YES**
+### Emulation (Fine State)
+- **Action:** **Return immediately (`void`)**.
+- **Result:** Silence responses to server-side anti-cheat challenges.
 
 ---
 
-## 8. AnoSDKIoctl
-**Address:** `0x66182`
-
-### Overview
-Primary control interface for the SDK. Used for everything from querying emulator status to triggering memory scans.
-
-### Line-by-Line Analysis
-- **Dispatcher:** Calls `sub_1C8D00(a1, a2)`.
-- **Recursive Logic (`sub_1C8D00`):**
-    - **Emulator Check:** Uses `loc_1C5B70(10, ...)` and builds a string like `"|emulator_name=..."`.
-    - **System Info:** Uses `loc_1C5B70(18, ...)` to get hardware/system fingerprints.
-    - **Integrity Check:** Uses `loc_1C5B70(45, ...)` to trigger a re-scan of game memory.
-- **Strings:** Uses `sub_4B6C94` (sprintf) and `sub_4B60D4` (strcat) to format telemetry.
-
+## 8. AnoSDKDelReportData (0x65580)
+### Line-by-Line Breakdown
+- **L1-10:** Identifies report type.
+- **L11-20:** Updates monitor via `sub_4D4C94` category 5.
+- **L21-30:** Frees memory via `loc_1C1DC4`.
 ### Security/Integrity Related: **YES**
+### Emulation (Fine State)
+- **Action:** Return `0`.
+- **Result:** Data cleared.
 
 ---
 
-## 9. AnoSDKIoctlOld
-**Address:** `0x65856`
-
-### Overview
-Legacy IOCTL handler. Highly obfuscated to hide older detection methods.
-
-### Line-by-Line Analysis
-- **Obfuscation:** Uses the most complex control-flow flattening in the library (`v30` state variable).
-- **Parameter Packing:** Arguments are packed into a 128-byte stack structure.
-- **JUMPOUT:** Almost every branch eventually executes `JUMPOUT(0x1C5B70LL)`.
-- **Dispatcher:** It is essentially a "proxy" that forwards legacy commands to the modern `loc_1C5B70` dispatcher.
-
+## 9. AnoSDKIoctlOld (0x65856)
+### Line-by-Line Breakdown
+- **L1-50:** **Control Flow Flattening.** Uses a complex loop-and-switch state machine (`v30`) to hide logic.
+- **L51-80:** **Proxy Logic.** Packs arguments and executes `JUMPOUT(0x1C5B70LL)`. Recursively, this is the modern `loc_1C5B70` dispatcher.
+- **L81-85:** **Calculated Return.** Returns `(v45 ^ v43) - (v42 ^ 0x1Fu) * v43 - v44 - 8870`.
 ### Security/Integrity Related: **YES**
+### Emulation (Fine State)
+- **Action:** **Return `0`**.
+- **Result:** Legacy checks report "Clean."
 
 ---
 
-## Master Dispatcher Table: `loc_1C5B70`
-This internal routine handles the core "privileged" tasks for the SDK.
+## Emulation Cheat Sheet (Bypass Guide)
 
-| ID | Purpose | Security Relevance |
+| Exported Function | Fine State Return | Action for Hookers |
 | :--- | :--- | :--- |
-| 1 | Secure Initialization | YES |
-| 4 | Device ID Query | YES |
-| 10 | Emulator Detection | YES |
-| 16 | Memory Integrity | YES |
-| 18 | Fingerprinting | YES |
-| 35 | Anti-Debug Check | YES |
-| 36 | Hook Detection | YES |
-| 45 | Full Integrity Scan | YES |
-| 56 | Event Reporting | YES |
-| 83 | Signature Update | YES |
-| 85 | Error Assertion | YES |
+| `AnoSDKInit` | `context_ptr` | `return arg0;` |
+| `AnoSDKGetReportData` | `0` | `return 0;` |
+| `AnoSDKGetReportData2`| `0` | `return 0;` |
+| `AnoSDKIoctl` | `0` | `return 0;` |
+| `AnoSDKOnResume` | `void` | `return;` |
+| `AnoSDKOnRecvSignature`| `0` | `return 0;` |
+| `AnoSDKOnRecvData` | `void` | `return;` |
+| `AnoSDKDelReportData` | `0` | `return 0;` |
+| `AnoSDKIoctlOld` | `0` | `return 0;` |
