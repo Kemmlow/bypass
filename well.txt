@@ -4,13 +4,8 @@
 #include <vector>
 #include <string.h>
 #include <pthread.h>
-#include <list>
-#include <vector>
-#include <string.h>
-#include <pthread.h>
 #include <thread>
 #include <cstring>
-#include <jni.h>
 #include <unistd.h>
 #include <fstream>
 #include <iostream>
@@ -22,20 +17,15 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <sys/mman.h>
-#include <unistd.h>
 #include <sys/ptrace.h>
 #include <sys/sysinfo.h>
 #include <unwind.h>
-#include <dlfcn.h>
 #include <libgen.h>
 #include <stdint.h>
-#include <cstring>
 #include <functional>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <android/log.h>
-#include <sys/ptrace.h>
-#include <sys/mman.h>
 #include "Main/Tools.h"
 #include "Main/Logger.h"
 #include "Main/oxorany.h"
@@ -138,6 +128,81 @@ __int64 hsub_74A1D18(__int64 result)
     return 1;
 }
 
+__int64 (*osub_68CD2F4)(__int64 a1, __int64 a2);
+__int64 (*osub_69CBE8C)(__int64 result, __int64 a2);
+__int64 hsub_69CBE8C(__int64 result, __int64 a2)
+{
+    if (result && (uintptr_t)result > 0x1000)
+    {
+        *(_DWORD *)(result + 492) = 1;
+        __int64 weapon = *(__int64 *)(result + 608);
+        if (!weapon) *(__int64 *)(result + 608) = a2;
+    }
+    return osub_69CBE8C(result, a2);
+}
+__int64 hsub_68CD2F4(__int64 a1, __int64 a2)
+{
+    if (a1 && a2 && (uintptr_t)a1 > 0x1000) { *(_QWORD *)(a1 + 496) = a2; }
+    return osub_68CD2F4(a1, a2);
+}
+
+__int16 *(*osub_81C2F70)(__int64 a1);
+__int16 *hsub_81C2F70(__int64 a1)
+{
+    struct sysinfo si;
+    ::sysinfo(&si);
+    srand(si.procs + si.totalram);
+    uint32_t id[4];
+    id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
+    id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
+    id[2] = (uint32_t)(si.loads[0] << 16) | (uint32_t)(si.procs & 0xFFFF);
+    id[3] = (uint32_t)si.sharedram ^ 0xDEADBEEF;
+    uint16_t buf[33];
+    for (int i=0; i<32; i++) { int v = (id[i/8] >> (4*(7-(i%8)))) & 0xF; buf[i] = (v < 10) ? (v + '0') : (v - 10 + 'A'); }
+    buf[32] = 0;
+    void (*alloc)(__int64, unsigned int, unsigned int) = (void (*)(__int64, unsigned int, unsigned int))(Tools::GetBaseAddress("libUE4.so") + 0x5625AEC);
+    if (a1) { *(_QWORD *)a1 = 0; *(_DWORD *)(a1 + 8) = 33; *(_DWORD *)(a1 + 12) = 33; alloc(a1, 33, 0); memcpy(*(void **)a1, buf, 66); }
+    return a1 ? (__int16 *)*(void **)a1 : 0;
+}
+
+bool (*osub_C492610)(__int64 a1, unsigned int a2, __int64 a3);
+bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3)
+{
+    bool res = osub_C492610(a1, a2, a3);
+    struct sysinfo si;
+    ::sysinfo(&si);
+    uint32_t id[4];
+    id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
+    id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
+    id[2] = (uint32_t)(si.loads[0] << 16) | (uint32_t)(si.procs & 0xFFFF);
+    id[3] = (uint32_t)si.sharedram ^ 0xDEADBEEF;
+    uint16_t buf[33];
+    for (int i=0; i<32; i++) { int v = (id[i/8] >> (4*(7-(i%8)))) & 0xF; buf[i] = (v < 10) ? (v + '0') : (v - 10 + 'A'); }
+    buf[32] = 0;
+    if (a3) { __int16 *ptr = *(__int16 **)(a3 + 0x58); if (ptr) memcpy(ptr, buf, 64); }
+    return res;
+}
+
+__int64 (*osub_61CCA90)(__int64 a1, int a2, int *a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
+__int64 hsub_61CCA90(__int64 a1, int a2, int *a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
+{
+    if (a3) *a3 = 0;
+    return osub_61CCA90(a1, a2, a3, a4, a5, a6, a7, a8);
+}
+double (*osub_77FE9CC)(__int64 a1, __int64 a2);
+double hsub_77FE9CC(__int64 a1, __int64 a2)
+{
+    return 0.0;
+}
+
+__int64 (*osub_8311864)(__int64 result);
+__int64 hsub_8311864(__int64 result)
+{
+    __int64 r = osub_8311864(result);
+    if (r && (uintptr_t)r > 0x1000) { const char *s = (const char *)r; if (strstr(s, "adb_enabled") || strstr(s, "development_settings_enabled")) return 0; }
+    return r;
+}
+
 __int64 (*osub_731CE48)();
 __int64 hsub_731CE48()
 {
@@ -150,7 +215,7 @@ void *Nikonmod_thread(void *)
     do
     {
         sleep(1);
-    } while (!isLibraryLoaded(targetLibName));
+    } while (!Tools::IsLibraryLoaded(targetLibName));
 #if defined(__aarch64__)
     HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8);
     HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054);
@@ -159,12 +224,23 @@ void *Nikonmod_thread(void *)
     HOOK_LIB("libUE4.so", "0x74A0058", hsub_74A0058, (void**)&osub_74A0058);
     HOOK_LIB("libUE4.so", "0x74A03E4", hsub_74A03E4, (void**)&osub_74A03E4);
     HOOK_LIB("libUE4.so", "0x74A0A00", hsub_74A0A00, (void**)&osub_74A0A00);
-    HOOK_LIB("libUE4.so", "0x74A0B34", hsub_74A0B34, (void**)&osub_74A0B34);
+    // HOOK_LIB("libUE4.so", "0x74A0B34", hsub_74A0B34, (void**)&osub_74A0B34);
     HOOK_LIB("libUE4.so", "0x74A0BB8", hsub_74A0BB8, (void**)&osub_74A0BB8);
     HOOK_LIB("libUE4.so", "0x74A0C34", hsub_74A0C34, (void**)&osub_74A0C34);
     HOOK_LIB("libUE4.so", "0x74A17B8", hsub_74A17B8, (void**)&osub_74A17B8);
     HOOK_LIB("libUE4.so", "0x74A1D18", hsub_74A1D18, (void**)&osub_74A1D18);
+    HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, (void**)&osub_68CD2F4);
+    HOOK_LIB("libUE4.so", "0x69CBE8C", hsub_69CBE8C, (void**)&osub_69CBE8C);
+    HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, (void**)&osub_81C2F70);
+    HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, (void**)&osub_C492610);
+    HOOK_LIB("libUE4.so", "0x61CCA90", hsub_61CCA90, (void**)&osub_61CCA90);
+    HOOK_LIB("libUE4.so", "0x77FE9CC", hsub_77FE9CC, (void**)&osub_77FE9CC);
+    HOOK_LIB("libUE4.so", "0x64081E0", hsub_64081E0, (void**)&osub_64081E0);
+    HOOK_LIB("libUE4.so", "0x6408738", hsub_6408738, (void**)&osub_6408738);
     HOOK_LIB("libUE4.so", "0x731CE48", hsub_731CE48, (void**)&osub_731CE48);
+    MemoryPatch::createWithHex("libUE4.so", 0x5ACC184, "00 00 80 D2 C0 03 5F D6").Modify();
+    PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6");
+    MemoryPatch::createWithHex("libhdmpve.so", 0x1F6E44, "C0 03 5F D6").Modify();
 #endif
     return NULL;
 }
