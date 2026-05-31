@@ -1,0 +1,139 @@
+// libUE4.so Hyper-Precise Anticheat Hooks for BGMI
+// Targets AnoSDK Integration wrappers to disable all detections and fooling server-side checks.
+
+#include <stdint.h>
+#include <string.h>
+
+typedef uint64_t _QWORD;
+typedef uint32_t _DWORD;
+typedef uint16_t _WORD;
+typedef uint8_t _BYTE;
+
+// --- sub_5E031A8: SDK Global Lifecycle Orchestrator ---
+// Wraps core initialization and state management.
+unsigned int (*osub_5E031A8)(__int64 a1);
+unsigned int hsub_5E031A8(__int64 a1) {
+    if (a1) {
+        *(uint32_t *)(a1 + 24) = 1; // Set SDK state to "Initialized"
+        *(uint32_t *)(a1 + 28) = 0; // Clear any pending error codes
+    }
+    return 1; // Return "Ready"
+}
+
+// --- sub_640C054: Security Heartbeat / Integrity Monitor ---
+// Periodically checks if the anticheat environment is alive.
+__int64 (*osub_640C054)(__int64 a1, int a2);
+__int64 hsub_640C054(__int64 a1, int a2) {
+    // Return a faked heartbeat success
+    return 0LL;
+}
+
+// --- sub_68CEC0C: Integrity Check Orchestrator ---
+// Coordinates memory and file integrity scans.
+void (*osub_68CEC0C)(__int64 a1);
+void hsub_68CEC0C(__int64 a1) {
+    // Silently return to bypass full integrity re-scans
+    return;
+}
+
+// --- sub_749F534: Multi-parameter Report Gatherer ---
+// Wraps AnoSDKGetReportData4. Handles complex detection telemetry.
+unsigned int __fastcall (*osub_749F534)(__int64 a1, __int64 a2, __int64 a3, __int64 a4,
+                                        __int64 a5, __int64 a6, __int64 a7, __int64 a8);
+unsigned int __fastcall hsub_749F534(__int64 a1, __int64 a2, __int64 a3, __int64 a4,
+                                     __int64 a5, __int64 a6, __int64 a7, __int64 a8)
+{
+    // Deeply clear detection structure to spoof a "Fine" state
+    if (a1 != 0)
+    {
+        *(__int64 *)(a1 + 56) = 0;
+        *(__int64 *)(a1 + 64) = 0;
+        *(__int64 *)(a1 + 72) = 0;
+        *(__int64 *)(a1 + 80) = 0;
+        *(__int32 *)(a1 + 88) = 0;
+    }
+    // Call original to satisfy caller but return 0 (Success/No Data)
+    osub_749F534(a1, a2, a3, a4, a5, a6, a7, a8);
+    return 0;
+}
+
+// --- sub_74A0058: AnoSDKInit Wrapper ---
+// Bootstraps the security handles.
+__int64 (*osub_74A0058)(__int64 a1);
+__int64 hsub_74A0058(__int64 a1) {
+    // Mock the SDK handle and report success
+    if (a1) {
+        *(_QWORD *)(a1 + 8) = 0xDEADBEEF; // Fake SDK Handle
+    }
+    return 0LL;
+}
+
+// --- sub_74A03E4: AnoSDKOnResume Wrapper ---
+// Triggers scanners when game gains focus.
+void (*osub_74A03E4)();
+void hsub_74A03E4() {
+    // Suppress the scan trigger on focus resume
+    return;
+}
+
+// --- sub_74A0A00: AnoSDKGetReportData Wrapper ---
+// Primary getter for server-bound telemetry.
+__int64 (*osub_74A0A00)();
+__int64 hsub_74A0A00() {
+    // Return 0 (NULL) to indicate NO detections have been triggered
+    return 0LL;
+}
+
+// --- sub_74A0B34: AnoSDKGetReportData2 Wrapper ---
+// Secondary telemetry getter.
+__int64 (*osub_74A0B34)();
+__int64 hsub_74A0B34() {
+    return 0LL;
+}
+
+// --- sub_74A0BB8: AnoSDKDelReportData Wrapper ---
+// Telemetry lifecycle cleanup.
+void (*osub_74A0BB8)(__int64 a1);
+void hsub_74A0BB8(__int64 a1) {
+    return;
+}
+
+// --- sub_74A0C34: AnoSDKOnRecvData Wrapper ---
+// Handles incoming server challenges.
+void (*osub_74A0C34)(__int64 a1, int a2);
+void hsub_74A0C34(__int64 a1, int a2) {
+    // Swallow the server data to prevent detection challenge-responses
+    return;
+}
+
+// --- sub_74A17B8: AnoSDKIoctl Wrapper ---
+// Multi-purpose check interface (Emulator/Root/Hooks).
+_WORD *(*osub_74A17B8)(int a1, __int64 a2);
+_WORD *hsub_74A17B8(int a1, __int64 a2) {
+    // Return 0 (Success/No Detection) for all security command IDs
+    return 0;
+}
+
+// --- sub_74A1D18: AnoSDKOnRecvSignature Wrapper ---
+// Dynamic rule updater.
+__int64 (*osub_74A1D18)(_BYTE *a1, __int64 a2, uint32_t a3, int a4);
+__int64 hsub_74A1D18(_BYTE *a1, __int64 a2, uint32_t a3, int a4) {
+    // Report that the signature was applied successfully without actually processing it
+    return 0LL;
+}
+
+// --- Hook Registration ---
+void setup_ue4_hooks() {
+    HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, osub_5E031A8);
+    HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, osub_640C054);
+    HOOK_LIB("libUE4.so", "0x68CEC0C", hsub_68CEC0C, osub_68CEC0C);
+    HOOK_LIB("libUE4.so", "0x749F534", hsub_749F534, osub_749F534);
+    HOOK_LIB("libUE4.so", "0x74A0058", hsub_74A0058, osub_74A0058);
+    HOOK_LIB("libUE4.so", "0x74A03E4", hsub_74A03E4, osub_74A03E4);
+    HOOK_LIB("libUE4.so", "0x74A0A00", hsub_74A0A00, osub_74A0A00);
+    HOOK_LIB("libUE4.so", "0x74A0B34", hsub_74A0B34, osub_74A0B34);
+    HOOK_LIB("libUE4.so", "0x74A0BB8", hsub_74A0BB8, osub_74A0BB8);
+    HOOK_LIB("libUE4.so", "0x74A0C34", hsub_74A0C34, osub_74A0C34);
+    HOOK_LIB("libUE4.so", "0x74A17B8", hsub_74A17B8, osub_74A17B8);
+    HOOK_LIB("libUE4.so", "0x74A1D18", hsub_74A1D18, osub_74A1D18);
+}
