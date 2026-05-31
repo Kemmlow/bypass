@@ -20,6 +20,7 @@ __int16 *hsub_82118AC()
 __int64 (*osub_820D594)(int *a1);
 __int64 hsub_820D594(int *a1)
 {
+    if (a1 && (uintptr_t)a1 > 0x1000) { *a1 = 2026; }
     return osub_820D594(a1);
 }
 __int64 (*osub_862A210)(__int64 result, __int64 a2);
@@ -58,14 +59,14 @@ long double hsub_59C0EB8(__int64 a1)
 {
     return 0.0;
 }
-HOOK_LIB("libUE4.so", "0x820D680", hsub_820D680, (void**)&osub_820D680); // time normalization
-HOOK_LIB("libUE4.so", "0x82117D4", hsub_82117D4, (void**)&osub_82117D4); // time normalization
-HOOK_LIB("libUE4.so", "0x82118AC", hsub_82118AC, (void**)&osub_82118AC); // time normalization
-HOOK_LIB("libUE4.so", "0x820D594", hsub_820D594, (void**)&osub_820D594); // time normalization
-HOOK_LIB("libUE4.so", "0x862A210", hsub_862A210, (void**)&osub_862A210); // violation sink
-HOOK_LIB("libUE4.so", "0x8603830", hsub_8603830, (void**)&osub_8603830); // data preparer
-HOOK_LIB("libUE4.so", "0x7ADAE8C", hsub_7ADAE8C, (void**)&osub_7ADAE8C); // higgs heartbeat
-HOOK_LIB("libUE4.so", "0x7ADADB4", hsub_7ADADB4, (void**)&osub_7ADADB4); // higgs trinity
-HOOK_LIB("libUE4.so", "0x7ADAE00", hsub_7ADAE00, (void**)&osub_7ADAE00); // higgs trinity
-HOOK_LIB("libUE4.so", "0x7ADAE4C", hsub_7ADAE4C, (void**)&osub_7ADAE4C); // higgs trinity
-HOOK_LIB("libUE4.so", "0x59C0EB8", hsub_59C0EB8, (void**)&osub_59C0EB8); // move anti-cheat
+HOOK_LIB("libUE4.so", "0x820D680", hsub_820D680, (void**)&osub_820D680);
+HOOK_LIB("libUE4.so", "0x82117D4", hsub_82117D4, (void**)&osub_82117D4);
+HOOK_LIB("libUE4.so", "0x82118AC", hsub_82118AC, (void**)&osub_82118AC);
+HOOK_LIB("libUE4.so", "0x820D594", hsub_820D594, (void**)&osub_820D594);
+HOOK_LIB("libUE4.so", "0x862A210", hsub_862A210, (void**)&osub_862A210);
+HOOK_LIB("libUE4.so", "0x8603830", hsub_8603830, (void**)&osub_8603830);
+HOOK_LIB("libUE4.so", "0x7ADAE8C", hsub_7ADAE8C, (void**)&osub_7ADAE8C);
+HOOK_LIB("libUE4.so", "0x7ADADB4", hsub_7ADADB4, (void**)&osub_7ADADB4);
+HOOK_LIB("libUE4.so", "0x7ADAE00", hsub_7ADAE00, (void**)&osub_7ADAE00);
+HOOK_LIB("libUE4.so", "0x7ADAE4C", hsub_7ADAE4C, (void**)&osub_7ADAE4C);
+HOOK_LIB("libUE4.so", "0x59C0EB8", hsub_59C0EB8, (void**)&osub_59C0EB8);

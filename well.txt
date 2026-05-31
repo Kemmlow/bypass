@@ -23,24 +23,28 @@ void hsub_749F534(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __
     if (a1 == 46 || a1 == 32 || a1 == 33 || a1 == 18) return;
     osub_749F534(a1, a2, a3, a4, a5, a6, a7, a8);
 }
+/*
 void (*osub_74A0058)(__int64 a1, __int64 a2);
 void hsub_74A0058(__int64 a1, __int64 a2)
 {
     if (a1) *(_DWORD*)(a1 + 8) = 0;
     osub_74A0058(a1, a2);
 }
+*/
 bool (*osub_74A03E4)(char *a1, unsigned __int64 a2);
 bool hsub_74A03E4(char *a1, unsigned __int64 a2)
 {
     if (a1 && a2 > 0) return true;
     return osub_74A03E4(a1, a2);
 }
+/*
 __int64 (*osub_74A0A00)(__int64 result);
 __int64 hsub_74A0A00(__int64 result)
 {
     if (result) *(uint32_t*)result = 1;
     return 1;
 }
+*/
 __int64 (*osub_74A0B34)(__int64 a1);
 __int64 hsub_74A0B34(__int64 a1)
 {
@@ -48,12 +52,14 @@ __int64 hsub_74A0B34(__int64 a1)
     if (res) *(__int16*)res = 0;
     return res;
 }
+/*
 __int64 (*osub_74A0BB8)(_QWORD *a1);
 __int64 hsub_74A0BB8(_QWORD *a1)
 {
     if (a1) *(_DWORD*)a1 = 0;
     return 0;
 }
+*/
 __int64 (*osub_74A0C34)(__int64 a1);
 __int64 hsub_74A0C34(__int64 a1)
 {
@@ -65,21 +71,23 @@ void hsub_74A17B8(__int64 a1, __int64 a2, __int64 *a3)
 {
     if (a3) { *a3 = 0; a3[1] = 0; }
 }
+/*
 __int64 (*osub_74A1D18)(__int64 result);
 __int64 hsub_74A1D18(__int64 result)
 {
     if (result) *(_DWORD*)result = 0;
     return 0;
 }
+*/
 HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8);
 HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054);
 HOOK_LIB("libUE4.so", "0x68CEC0C", hsub_68CEC0C, (void**)&osub_68CEC0C);
 HOOK_LIB("libUE4.so", "0x749F534", hsub_749F534, (void**)&osub_749F534);
-HOOK_LIB("libUE4.so", "0x74A0058", hsub_74A0058, (void**)&osub_74A0058);
+// HOOK_LIB("libUE4.so", "0x74A0058", hsub_74A0058, (void**)&osub_74A0058);
 HOOK_LIB("libUE4.so", "0x74A03E4", hsub_74A03E4, (void**)&osub_74A03E4);
-HOOK_LIB("libUE4.so", "0x74A0A00", hsub_74A0A00, (void**)&osub_74A0A00);
+// HOOK_LIB("libUE4.so", "0x74A0A00", hsub_74A0A00, (void**)&osub_74A0A00);
 HOOK_LIB("libUE4.so", "0x74A0B34", hsub_74A0B34, (void**)&osub_74A0B34);
-HOOK_LIB("libUE4.so", "0x74A0BB8", hsub_74A0BB8, (void**)&osub_74A0BB8);
+// HOOK_LIB("libUE4.so", "0x74A0BB8", hsub_74A0BB8, (void**)&osub_74A0BB8);
 HOOK_LIB("libUE4.so", "0x74A0C34", hsub_74A0C34, (void**)&osub_74A0C34);
 HOOK_LIB("libUE4.so", "0x74A17B8", hsub_74A17B8, (void**)&osub_74A17B8);
-HOOK_LIB("libUE4.so", "0x74A1D18", hsub_74A1D18, (void**)&osub_74A1D18);
+// HOOK_LIB("libUE4.so", "0x74A1D18", hsub_74A1D18, (void**)&osub_74A1D18);
