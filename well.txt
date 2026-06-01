@@ -43,112 +43,114 @@
 #define _BYTE uint8_t
 #define _WORD uint16_t
 
+// --- Security & Research Hooks ---
 __int64 (*osub_5E031A8)(__int64 a1, __int64 a2, int a3);
-__int64 hsub_5E031A8(__int64 a1, __int64 a2, int a3)
-{
+__int64 hsub_5E031A8(__int64 a1, __int64 a2, int a3) {
     __int64 res = osub_5E031A8(a1, a2, a3);
     if (a2 && (uintptr_t)a2 > 0x1000) memset((void*)a2, 0, (size_t)a3);
     return res;
 }
 
 void* (*osub_640C054)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
-void* hsub_640C054(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
-{
+void* hsub_640C054(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) {
     if (a1 == 37) return (void*)1;
     return osub_640C054(a1, a2, a3, a4, a5, a6, a7, a8);
 }
 
 __int64 (*osub_68CEC0C)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
-__int64 hsub_68CEC0C(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
-{
+__int64 hsub_68CEC0C(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) {
     if (a1 == 37) return 1;
     return osub_68CEC0C(a1, a2, a3, a4, a5, a6, a7, a8);
 }
 
 void (*osub_749F534)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
-void hsub_749F534(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
-{
+void hsub_749F534(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) {
     if (a1 == 46 || a1 == 32 || a1 == 33 || a1 == 18) { if (a3 && (uintptr_t)a3 > 0x1000) *(_QWORD*)a3 = 0; return; }
     osub_749F534(a1, a2, a3, a4, a5, a6, a7, a8);
 }
 
 void (*osub_74A0058)(__int64 a1, __int64 a2);
-void hsub_74A0058(__int64 a1, __int64 a2)
-{
+void hsub_74A0058(__int64 a1, __int64 a2) {
     if (a1 && (uintptr_t)a1 > 0x1000) *(_DWORD*)(a1 + 8) = 0;
     osub_74A0058(a1, a2);
 }
 
 bool (*osub_74A03E4)(char *a1, unsigned __int64 a2);
-bool hsub_74A03E4(char *a1, unsigned __int64 a2)
-{
+bool hsub_74A03E4(char *a1, unsigned __int64 a2) {
     if (a1 && a2 > 0) return true;
     return osub_74A03E4(a1, a2);
 }
 
 __int64 (*osub_74A0A00)(__int64 result);
-__int64 hsub_74A0A00(__int64 result)
-{
+__int64 hsub_74A0A00(__int64 result) {
     if (result && (uintptr_t)result > 0x1000) *(_DWORD*)result = 1;
     return 1;
 }
 
 __int64 (*osub_74A0B34)(__int64 a1);
-__int64 hsub_74A0B34(__int64 a1)
-{
+__int64 hsub_74A0B34(__int64 a1) {
     __int64 res = osub_74A0B34(a1);
     if (res && (uintptr_t)res > 0x1000) *(__int16*)res = 0;
     return res;
 }
 
 __int64 (*osub_74A0BB8)(_QWORD *a1);
-__int64 hsub_74A0BB8(_QWORD *a1)
-{
+__int64 hsub_74A0BB8(_QWORD *a1) {
     if (a1 && (uintptr_t)a1 > 0x1000) return 0;
     return 0;
 }
 
 __int64 (*osub_74A0C34)(__int64 a1);
-__int64 hsub_74A0C34(__int64 a1)
-{
+__int64 hsub_74A0C34(__int64 a1) {
     if (a1 && (uintptr_t)a1 > 0x1000) return 0;
     return 0;
 }
 
 void (*osub_74A17B8)(__int64 a1, __int64 a2, __int64 *a3);
-void hsub_74A17B8(__int64 a1, __int64 a2, __int64 *a3)
-{
+void hsub_74A17B8(__int64 a1, __int64 a2, __int64 *a3) {
     if (a3 && (uintptr_t)a3 > 0x1000) { *a3 = 0; a3[1] = 0; }
 }
 
 __int64 (*osub_74A1D18)(__int64 result);
-__int64 hsub_74A1D18(__int64 result)
-{
+__int64 hsub_74A1D18(__int64 result) {
     if (result && (uintptr_t)result > 0x1000) *(_DWORD*)result = 1;
     return 1;
 }
 
+// --- Combat & Registration Hooks (Magic Bullet / Headshot) ---
+
+// sub_5AC2FC4: CalculateFinalDamageVal - Forces headshot flag to 1
+__int64 (*osub_5AC2FC4)(__int64 result, _QWORD *a2, __int64 a3, char a4, char a5, _DWORD *a6, float a7);
+__int64 hsub_5AC2FC4(__int64 result, _QWORD *a2, __int64 a3, char a4, char a5, _DWORD *a6, float a7) {
+    return osub_5AC2FC4(result, a2, a3, 1, a5, a6, a7); // a4 = bHitEnemyHeadFlag
+}
+
+// sub_6EC3A54: Headshot check verification - Forces return 1 (true)
+__int64 (*osub_6EC3A54)(__int64 a1, __int64 *a2);
+__int64 hsub_6EC3A54(__int64 a1, __int64 *a2) {
+    return 1; // head shot check successful
+}
+
+// Ghost Pusher & Registration reinforcement
 __int64 (*osub_68CD2F4)(__int64 a1, __int64 a2);
 __int64 (*osub_69CBE8C)(__int64 result, __int64 a2);
-__int64 hsub_69CBE8C(__int64 result, __int64 a2)
-{
+__int64 hsub_69CBE8C(__int64 result, __int64 a2) {
     if (result && (uintptr_t)result > 0x1000)
     {
-        *(_DWORD *)(result + 492) = 1;
+        *(_DWORD *)(result + 492) = 1; // bullet flag normalization
         __int64 weapon = *(__int64 *)(result + 608);
         if (!weapon) *(__int64 *)(result + 608) = a2;
     }
     return osub_69CBE8C(result, a2);
 }
-__int64 hsub_68CD2F4(__int64 a1, __int64 a2)
-{
+__int64 hsub_68CD2F4(__int64 a1, __int64 a2) {
     if (a1 && a2 && (uintptr_t)a1 > 0x1000) { *(_QWORD *)(a1 + 496) = a2; }
     return osub_68CD2F4(a1, a2);
 }
 
+// --- HWID & Identity ---
 __int16 *(*osub_81C2F70)(__int64 a1);
-__int16 *hsub_81C2F70(__int64 a1)
-{
+__int16 *hsub_81C2F70(__int64 a1) {
     struct sysinfo si;
     ::sysinfo(&si);
     srand(si.procs + si.totalram);
@@ -166,8 +168,7 @@ __int16 *hsub_81C2F70(__int64 a1)
 }
 
 bool (*osub_C492610)(__int64 a1, unsigned int a2, __int64 a3);
-bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3)
-{
+bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3) {
     bool res = osub_C492610(a1, a2, a3);
     struct sysinfo si;
     ::sysinfo(&si);
@@ -183,39 +184,23 @@ bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3)
     return res;
 }
 
-__int64 (*osub_61CCA90)(__int64 a1, int a2, int *a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8);
-__int64 hsub_61CCA90(__int64 a1, int a2, int *a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8)
-{
-    if (a3) *a3 = 0;
-    return osub_61CCA90(a1, a2, a3, a4, a5, a6, a7, a8);
-}
-double (*osub_77FE9CC)(__int64 a1, __int64 a2);
-double hsub_77FE9CC(__int64 a1, __int64 a2)
-{
-    return 0.0;
-}
-
+// --- Misc Fixes ---
 __int64 (*osub_8311864)(__int64 result);
-__int64 hsub_8311864(__int64 result)
-{
+__int64 hsub_8311864(__int64 result) {
     __int64 r = osub_8311864(result);
     if (r && (uintptr_t)r > 0x1000) { const char *s = (const char *)r; if (strstr(s, "adb_enabled") || strstr(s, "development_settings_enabled")) return 0; }
     return r;
 }
 
 __int64 (*osub_731CE48)();
-__int64 hsub_731CE48()
-{
+__int64 hsub_731CE48() {
     return 0x3E8;
 }
 
 void *Nikonmod_thread(void *)
 {
     LOGI(oxorany("NIKON THREAD STARTING...."));
-    do
-    {
-        sleep(1);
-    } while (!Tools::IsLibraryLoaded(targetLibName));
+    do { sleep(1); } while (!Tools::IsLibraryLoaded(targetLibName));
 #if defined(__aarch64__)
     HOOK_LIB("libUE4.so", "0x5E031A8", hsub_5E031A8, (void**)&osub_5E031A8);
     HOOK_LIB("libUE4.so", "0x640C054", hsub_640C054, (void**)&osub_640C054);
@@ -224,7 +209,6 @@ void *Nikonmod_thread(void *)
     HOOK_LIB("libUE4.so", "0x74A0058", hsub_74A0058, (void**)&osub_74A0058);
     HOOK_LIB("libUE4.so", "0x74A03E4", hsub_74A03E4, (void**)&osub_74A03E4);
     HOOK_LIB("libUE4.so", "0x74A0A00", hsub_74A0A00, (void**)&osub_74A0A00);
-    // HOOK_LIB("libUE4.so", "0x74A0B34", hsub_74A0B34, (void**)&osub_74A0B34);
     HOOK_LIB("libUE4.so", "0x74A0BB8", hsub_74A0BB8, (void**)&osub_74A0BB8);
     HOOK_LIB("libUE4.so", "0x74A0C34", hsub_74A0C34, (void**)&osub_74A0C34);
     HOOK_LIB("libUE4.so", "0x74A17B8", hsub_74A17B8, (void**)&osub_74A17B8);
@@ -233,14 +217,11 @@ void *Nikonmod_thread(void *)
     HOOK_LIB("libUE4.so", "0x69CBE8C", hsub_69CBE8C, (void**)&osub_69CBE8C);
     HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, (void**)&osub_81C2F70);
     HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, (void**)&osub_C492610);
-    HOOK_LIB("libUE4.so", "0x61CCA90", hsub_61CCA90, (void**)&osub_61CCA90);
-    HOOK_LIB("libUE4.so", "0x77FE9CC", hsub_77FE9CC, (void**)&osub_77FE9CC);
-    HOOK_LIB("libUE4.so", "0x64081E0", hsub_64081E0, (void**)&osub_64081E0);
-    HOOK_LIB("libUE4.so", "0x6408738", hsub_6408738, (void**)&osub_6408738);
     HOOK_LIB("libUE4.so", "0x731CE48", hsub_731CE48, (void**)&osub_731CE48);
+    HOOK_LIB("libUE4.so", "0x5AC2FC4", hsub_5AC2FC4, (void**)&osub_5AC2FC4); // magic bullet
+    HOOK_LIB("libUE4.so", "0x6EC3A54", hsub_6EC3A54, (void**)&osub_6EC3A54); // always headshot
     MemoryPatch::createWithHex("libUE4.so", 0x5ACC184, "00 00 80 D2 C0 03 5F D6").Modify();
     PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6");
-    MemoryPatch::createWithHex("libhdmpve.so", 0x1F6E44, "C0 03 5F D6").Modify();
 #endif
     return NULL;
 }

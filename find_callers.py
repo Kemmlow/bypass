@@ -22,8 +22,12 @@ with open("libUE4.so.c", "r") as f:
         if sub_match:
             current_sub = sub_match.group(2)
 
+        # Strip comments for search
+        content = line.split("//")[0]
+
         for target in targets:
-            if target in line and "//" not in line.split(target)[0]:
+            # Use word boundaries to avoid name shadowing (e.g., AnoSDKIoctl matching AnoSDKIoctlOld)
+            if re.search(rf'\b{target}\b', content):
                 if target not in results:
                     results[target] = set()
                 results[target].add(current_sub)

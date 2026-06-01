@@ -21,8 +21,22 @@ void* (*osub_862A210)(void*, void*, void*) = nullptr;
 uint64_t (*osub_731CE48)() = nullptr;
 uint64_t (*osub_C4E0770)(void*) = nullptr;
 uint64_t (*osub_8311864)(void*) = nullptr;
+// Magic Bullet declarations
+uint64_t (*osub_5AC2FC4)(void*, void*, void*, char, char, void*, float) = nullptr;
+uint64_t (*osub_6EC3A54)(void*, void*) = nullptr;
 
 // --- Hook Functions ---
+
+// sub_5AC2FC4: CalculateFinalDamageVal - Forces headshot flag to 1
+uint64_t hsub_5AC2FC4(void* result, void* a2, void* a3, char a4, char a5, void* a6, float a7) {
+    if (osub_5AC2FC4) return osub_5AC2FC4(result, a2, a3, 1, a5, a6, a7); // force a4 (headshot flag)
+    return 0;
+}
+
+// sub_6EC3A54: Headshot check verification - Forces return 1
+uint64_t hsub_6EC3A54(void* a1, void* a2) {
+    return 1; // head shot check successful
+}
 
 // sub_749F534: Primary AnoSDK lifecycle orchestrator (Init/Ioctl)
 void* hsub_749F534(void* a1, void* a2, void* a3, void* a4, void* a5, void* a6, void* a7, void* a8) {
@@ -111,6 +125,8 @@ uint64_t hsub_8311864(void* a1) {
 extern void HOOK_LIB(const char* lib, const char* offset, void* hook, void** original);
 
 inline void init_dus_sal() {
+    HOOK_LIB("libUE4.so", "0x5AC2FC4", (void*)hsub_5AC2FC4, (void**)&osub_5AC2FC4); // magic bullet
+    HOOK_LIB("libUE4.so", "0x6EC3A54", (void*)hsub_6EC3A54, (void**)&osub_6EC3A54); // always headshot
     HOOK_LIB("libUE4.so", "0x749F534", (void*)hsub_749F534, (void**)&osub_749F534); // anosdk init
     HOOK_LIB("libUE4.so", "0x82A8280", (void*)hsub_82A8280, (void**)&osub_82A8280); // god dispatcher
     HOOK_LIB("libUE4.so", "0x82AE490", (void*)hsub_82AE490, (void**)&osub_82AE490); // telemetry sink
