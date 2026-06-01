@@ -1,0 +1,5 @@
+sub_2F4138 | Standard CRC32 Calculation
+sub_2F41FC | CRC32 Accumulator/Update
+sub_490FC0 | Optimized CRC Calculation (8-byte block)
+sub_49AC10 | MD5/SHA Core Calculation (SIMD)
+sub_49B364 | Hash Buffer Update Step (SIMD)
