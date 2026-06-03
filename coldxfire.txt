@@ -1,0 +1,74 @@
+#include <stdint.h>
+#include <string.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <malloc.h>
+
+#define _QWORD uint64_t
+#define _OWORD __int128
+
+extern "C" int __vsnprintf_chk(char*, size_t, int, size_t, const char*, va_list);
+
+__int64 (*osub_3793CC)(__int64, __int64, __int64, __int64, ...);
+__int64 hsub_3793CC(__int64 a1, __int64 a2, __int64 a3, __int64 a4, ...) {
+    if (a4 && (strstr((const char*)a4, "crc") || strstr((const char*)a4, "mod") || strstr((const char*)a4, "error"))) {
+        if (a1) *(char*)a1 = 0;
+        return 0;
+    }
+    va_list args;
+    va_start(args, a4);
+    int res = __vsnprintf_chk((char*)a1, (size_t)a3, 0, (size_t)a2, (const char*)a4, args);
+    va_end(args);
+    return (__int64)res;
+}
+
+__int64 (*osub_379220)(__int64, const char*, const char*);
+__int64 hsub_379220(__int64 a1, const char *a2, const char *a3) {
+    if (a2 && (strstr(a2, "ms_") || strstr(a2, "mrpcs") || strstr(a2, "crc") || strstr(a2, "mod"))) return 0;
+    return osub_379220(a1, a2, a3);
+}
+
+_QWORD *(*osub_433EA0)(__int64, unsigned __int8*, int);
+_QWORD *hsub_433EA0(__int64 a1, unsigned __int8 *a2, int a3) {
+    _QWORD *res = osub_433EA0(a1, a2, a3);
+    if (res && a2 && (*a2 == '<' || strstr((const char*)a2, "<?xml"))) {
+        res[3] = 0;
+        return nullptr;
+    }
+    return res;
+}
+
+__int64 (*osub_3AC100)(void*, size_t, unsigned __int8*);
+__int64 hsub_3AC100(void *a1, size_t a2, unsigned __int8 *a3) {
+    if (a3) {
+        size_t pages = (a2 + 4095) / 4096;
+        for (size_t i = 0; i < pages; ++i) a3[i] = 1;
+    }
+    return 0;
+}
+
+char *(*osub_504854)(_QWORD*, unsigned __int64);
+char *hsub_504854(_QWORD *a1, unsigned __int64 a2) {
+    char *res = osub_504854(a1, a2);
+    if (res && (uintptr_t)res > 0x1000) {
+        size_t sz = (a1[3] - a1[2]);
+        if (sz > 0x1000) sz = 0x1000;
+        memset(res, 0, sz);
+    }
+    return res;
+}
+
+unsigned __int64 (*osub_1E4528)(unsigned __int64, int, int);
+unsigned __int64 hsub_1E4528(unsigned __int64 result, int a2, int a3) {
+    unsigned __int64 res = osub_1E4528(result, a2, a3);
+    return (res & 0xFFFFFFFF00000000LL) | 0xAAAAAAAA;
+}
+
+__attribute__((constructor)) void init_coldxfire() {
+    HOOK_LIB("libanogs.so", "0x3793CC", (void*)hsub_3793CC, (void**)&osub_3793CC);
+    HOOK_LIB("libanogs.so", "0x379220", (void*)hsub_379220, (void**)&osub_379220);
+    HOOK_LIB("libanogs.so", "0x433EA0", (void*)hsub_433EA0, (void**)&osub_433EA0);
+    HOOK_LIB("libanogs.so", "0x3AC100", (void*)hsub_3AC100, (void**)&osub_3AC100);
+    HOOK_LIB("libanogs.so", "0x504854", (void*)hsub_504854, (void**)&osub_504854);
+    HOOK_LIB("libanogs.so", "0x1E4528", (void*)hsub_1E4528, (void**)&osub_1E4528);
+}
