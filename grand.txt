@@ -1,0 +1,68 @@
+__int64 (*osub_2F4F04)(__int64, __int64);
+__int64 hsub_2F4F04(__int64 result, __int64 a2) {
+    int *v2;
+    const char *v3;
+    __int64 v4;
+    void *v5;
+    int v6;
+    const char *v7;
+    __int64 v8;
+    unsigned int v9;
+    __int64 v10;
+    unsigned int v11;
+    __int64 v12;
+    int v13;
+    __int64 v14;
+    unsigned __int8 v16;
+    __int64 v17;
+    uint64_t v18[2];
+
+    v18[1] = *(uint64_t *)(_ReadStatusReg(ARM64_SYSREG(3, 3, 13, 0, 2)) + 40);
+    v14 = result;
+    if (a2) {
+        result = (*(__int64 (__fastcall **)(uint64_t))(*(uint64_t *)(result + 8) + 24LL))(*(uint64_t *)(result + 8));
+        if ((result & 1) != 0) {
+            v2 = (int *)sub_379138();
+            sub_37966C(v2, a2);
+            v13 = sub_2F4A14(a2);
+            if (v13 <= (*(int (__fastcall **)(uint64_t))(*(uint64_t *)(v14 + 8) + 88LL))(*(uint64_t *)(v14 + 8))) {
+                v12 = *(uint64_t *)(v14 + 8);
+                v11 = 0;
+                (*(void (__fastcall **)(__int64, uint64_t, __int64))(*(uint64_t *)v12 + 176LL))(v12, v11, 1LL);
+                v10 = *(uint64_t *)(v14 + 8);
+                v9 = sub_2E3A58(*(uint64_t *)(a2 + 8));
+                (*(void (__fastcall **)(__int64, uint64_t))(*(uint64_t *)v10 + 160LL))(v10, v9);
+                if (!sub_2F4494(*(uint64_t *)(a2 + 8))) {
+                    v18[0] = sub_2F44C4((__int64 *)(a2 + 8));
+                    v17 = sub_2F44F8(a2 + 8);
+                    while (sub_2F452C((__int64)v18, (__int64)&v17)) {
+                        sub_2F4604((__int64)v18);
+                        sub_2E2FD0();
+                        v8 = *(uint64_t *)(v14 + 8);
+                        v7 = v3;
+                        v16 = strlen(v3);
+                        (*(void (__fastcall **)(__int64, const char *, uint64_t, __int64))(*(uint64_t *)v8 + 152LL))(v8, v7, v16, 182LL);
+                        sub_2F461C(v18);
+                    }
+                }
+                (*(void (__fastcall **)(uint64_t))(*(uint64_t *)(v14 + 8) + 64LL))(*(uint64_t *)(v14 + 8));
+            }
+            v6 = 0;
+            if (sub_2F4DDC(v14, v6)) {
+                sub_2E8A70(&stru_57A138);
+                if (qword_57A130) {
+                    v5 = (void *)qword_57A130;
+                    sub_2E2494(qword_57A130);
+                    sub_519B90(v5);
+                }
+                qword_57A130 = (__int64)sub_2F432C(a2);
+                sub_2E8AA8(&stru_57A138);
+                v4 = sub_464604();
+                sub_465790(v4);
+            }
+            result = (*(__int64 (__fastcall **)(uint64_t))(*(uint64_t *)(v14 + 8) + 32LL))(*(uint64_t *)(v14 + 8));
+        }
+    }
+    return result;
+}
+HOOK_LIB("libanogs.so", "0x2F4F04", (void *)hsub_2F4F04, (void **)&osub_2F4F04);
