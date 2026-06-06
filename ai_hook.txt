@@ -1,31 +1,4 @@
-__int64 (*osub_371418)(__int64, __int64, unsigned int, int);
-__int64 hsub_371418(__int64 a1, __int64 a2, unsigned int a3, int a4) {
-    __int64 res = osub_371418(a1, a2, a3, a4);
-    if (a1 && (uintptr_t)a1 > 0x1000) {
-        *(uint8_t *)(a1 + 64) = 0;
-    }
-    return res;
-}
-__int64 (*osub_431800)(__int64, unsigned __int8 *, size_t);
-__int64 hsub_431800(__int64 a1, unsigned __int8 *a2, size_t a3) {
-    if (a2 && a3 > 0 && (uintptr_t)a2 > 0x1000) {
-        memset(a2, 0, a3);
-    }
-    return osub_431800(a1, a2, a3);
-}
-__int64 (*osub_37FD78)(uint64_t *, __int64, uint64_t, unsigned int);
-__int64 hsub_37FD78(uint64_t *a1, __int64 a2, uint64_t a3, unsigned int a4) {
-    osub_37FD78(a1, a2, a3, a4);
-    return 1;
-}
-__int64 (*osub_39F56C)(unsigned __int8 *, unsigned int);
-__int64 hsub_39F56C(unsigned __int8 *a1, unsigned int a2) {
-    if (a1 && a2 > 0 && (uintptr_t)a1 > 0x1000) {
-        memset(a1, 0, a2);
-    }
-    return osub_39F56C(a1, a2);
-}
-HOOK_LIB("libanogs.so", "0x371418", (void *)hsub_371418, (void **)&osub_371418);
-HOOK_LIB("libanogs.so", "0x431800", (void *)hsub_431800, (void **)&osub_431800);
-HOOK_LIB("libanogs.so", "0x37FD78", (void *)hsub_37FD78, (void **)&osub_37FD78);
-HOOK_LIB("libanogs.so", "0x39F56C", (void *)hsub_39F56C, (void **)&osub_39F56C);
+PATCH_LIB("libanogs.so", "0x371418", "00 00 80 D2 C0 03 5F D6");
+PATCH_LIB("libanogs.so", "0x431800", "00 00 80 D2 C0 03 5F D6");
+PATCH_LIB("libanogs.so", "0x37FD78", "20 00 80 D2 C0 03 5F D6");
+PATCH_LIB("libanogs.so", "0x39F56C", "00 00 80 D2 C0 03 5F D6");
