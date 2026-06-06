@@ -1,0 +1,6 @@
+sub_4EA20 // core telemetry framework initialization logic
+sub_4E08C // master telemetry event dispatching hub
+sub_52E88 // primary binary telemetry data reporter
+sub_5AD14 // application integrity and metadata validator
+sub_4FADC // ultimate reporting payload submission gateway
+sub_80DB4 // local security environment tampering detector

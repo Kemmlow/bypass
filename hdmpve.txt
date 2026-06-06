@@ -1,0 +1,8 @@
+sub_BD790 // core security state dispatcher module
+sub_C3BBC // master integrity and hash validator
+sub_D5894 // global telemetry packet encryption engine
+sub_C22A4 // encrypted telemetry connection session controller
+sub_C89B8 // supreme security plugin lifecycle controller
+sub_C1BD4 // main account security service dispatcher
+sub_CEEA0 // local environment integrity validation module
+sub_D124C // secure network handshake protocol implementation
