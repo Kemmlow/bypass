@@ -1,0 +1,4 @@
+PATCH_LIB("libanogs.so", "0x371418", "00 00 80 D2 C0 03 5F D6");
+PATCH_LIB("libanogs.so", "0x431800", "00 00 80 D2 C0 03 5F D6");
+PATCH_LIB("libanogs.so", "0x37FD78", "20 00 80 D2 C0 03 5F D6");
+PATCH_LIB("libanogs.so", "0x39F56C", "00 00 80 D2 C0 03 5F D6");

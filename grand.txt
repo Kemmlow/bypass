@@ -1,0 +1,1 @@
+PATCH_LIB("libanogs.so", "0x2F4F04", "00 00 80 D2 C0 03 5F D6");
