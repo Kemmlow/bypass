@@ -1,5 +1,6 @@
 __int16 *(*osub_81C2F70)(__int64 a1);
-__int16 *hsub_81C2F70(__int64 a1) {
+__int16 *hsub_81C2F70(__int64 a1)
+{
     struct sysinfo si;
     sysinfo(&si);
     srand(si.procs + si.totalram);
@@ -18,9 +19,9 @@ __int16 *hsub_81C2F70(__int64 a1) {
     *(__int128 *)(libUE4Base + 0xE0DEAD0) = 0;
     return (__int16 *)*(void **)a1;
 }
-
 bool (*osub_C492610)(__int64 a1, unsigned int a2, __int64 a3);
-bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3) {
+bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3)
+{
     bool res = osub_C492610(a1, a2, a3);
     struct sysinfo si;
     sysinfo(&si);
@@ -31,10 +32,62 @@ bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3) {
     id[3] = (uint32_t)si.sharedram ^ 0xDEADBEEF;
     wchar_t buf[34];
     swprintf(buf, 33, L"%08X%08X%08X%08X", id[0], id[1], id[2], id[3]);
-    __int16* ptr = *(__int16**)(a3 + 0x58);
+    __int16 *ptr = *(__int16 **)(a3 + 0x58);
     if (ptr) memcpy(ptr, buf, 64);
     return res;
 }
-
-HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, osub_81C2F70); // pvt record spoofer
-HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, osub_C492610); // login request spoofer
+void (*osub_82A8280)(__int64, unsigned int, __int64, unsigned int, __int64, __int64, __int64, __int64, __int64);
+void hsub_82A8280(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
+{
+    if (a5 > 0x1000) {
+        const char* msg = (const char*)a5;
+        if (strstr(msg, "Ban") || strstr(msg, "Cheat") || strstr(msg, "Violation") ||
+            strstr(msg, "Integrity") || strstr(msg, "Kick") || strstr(msg, "Terminate") ||
+            strstr(msg, "Higgs") || strstr(msg, "Report") || strstr(msg, "DataCRC") ||
+            strstr(msg, "Security") || strstr(msg, "Collector") || strstr(msg, "PlayerSecurity") ||
+            strstr(msg, "BulletHit")) return;
+    }
+    if (osub_82A8280) osub_82A8280(a1, a2, a3, a4, a5, a6, a7, a8, a9);
+}
+__int64 (*osub_C4E0A50)(__int64, __int64, __int64, __int64, const char *, ...);
+__int64 hsub_C4E0A50(__int64 a1, __int64 a2, __int64 a3, __int64 a4, const char *a5, ...) { return 0; }
+__int64 (*osub_7ADAE8C)();
+__int64 hsub_7ADAE8C() { return 0; }
+__int64 (*osub_68CD2F4)(__int64, __int64);
+__int64 hsub_68CD2F4(__int64 a1, __int64 a2) { return 0; }
+__int64 (*osub_68CD7F0)(__int64, __int64, int*, __int64);
+__int64 hsub_68CD7F0(__int64 a1, __int64 a2, int *a3, __int64 a4)
+{
+    if (a3 && (unsigned long)a3 > 0x1000 && *a3 > 100) *a3 = 1;
+    if (osub_68CD7F0) return osub_68CD7F0(a1, a2, a3, a4);
+    return 0;
+}
+__int64 (*osub_9AC35F8)(__int64, __int64);
+__int64 hsub_9AC35F8(__int64 a1, __int64 a2) { return 0; }
+__int64 (*osub_6E19FAC)();
+__int64 hsub_6E19FAC() { return 0; }
+bool (*osub_5ACC184)(unsigned int *);
+bool hsub_5ACC184(unsigned int *a1) { return true; }
+__int64 (*osub_7ADADB4)();
+__int64 hsub_7ADADB4() { return 0; }
+__int64 (*osub_7ADAE00)();
+__int64 hsub_7ADAE00() { return 0; }
+__int64 (*osub_7ADAE4C)(void *);
+__int64 hsub_7ADAE4C(void *a1) { return 0; }
+__int64 (*osub_7ACBC74)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64);
+__int64 hsub_7ACBC74(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9) { return 1; }
+HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, osub_81C2F70);
+HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, osub_C492610);
+HOOK_LIB("libUE4.so", "0x82A8280", hsub_82A8280, osub_82A8280);
+HOOK_LIB("libUE4.so", "0xC4E0A50", hsub_C4E0A50, osub_C4E0A50);
+HOOK_LIB("libUE4.so", "0x7ADAE8C", hsub_7ADAE8C, osub_7ADAE8C);
+HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, osub_68CD2F4);
+HOOK_LIB("libUE4.so", "0x68CD7F0", hsub_68CD7F0, osub_68CD7F0);
+HOOK_LIB("libUE4.so", "0x9AC35F8", hsub_9AC35F8, osub_9AC35F8);
+HOOK_LIB("libUE4.so", "0x6E19FAC", hsub_6E19FAC, osub_6E19FAC);
+HOOK_LIB("libUE4.so", "0x5ACC184", hsub_5ACC184, osub_5ACC184);
+HOOK_LIB("libUE4.so", "0x7ADADB4", hsub_7ADADB4, osub_7ADADB4);
+HOOK_LIB("libUE4.so", "0x7ADAE00", hsub_7ADAE00, osub_7ADAE00);
+HOOK_LIB("libUE4.so", "0x7ADAE4C", hsub_7ADAE4C, osub_7ADAE4C);
+HOOK_LIB("libUE4.so", "0x7ACBC74", hsub_7ACBC74, osub_7ACBC74);
+PATCH_LIB("libUE4.so", "0x59C0EB8", "00 00 80 D2 C0 03 5F D6");
