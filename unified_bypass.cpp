@@ -18,6 +18,7 @@
 #include <netdb.h>
 #include <sys/mman.h>
 #include <sys/ptrace.h>
+#include <sys/sysinfo.h>
 #include <unwind.h>
 #include <libgen.h>
 #include <stdint.h>
@@ -25,14 +26,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <android/log.h>
+#include <signal.h>
 
-#include "Main/Tools.h"
-#include "Main/Logger.h"
-#include "Main/oxorany.h"
-#include "Main/obfuscate.h"
-#include "Main/Utils.h"
-#include "Main/KittyMemory/MemoryPatch.h"
-#include "Main/Macros.h"
+#include "Tools.h"
+#include "oxorany.h"
+#include "Macros.h"
 
 #define targetLibName oxorany("libanogs.so")
 
@@ -40,6 +38,20 @@ typedef uint64_t _QWORD;
 typedef uint32_t _DWORD;
 typedef uint16_t _WORD;
 typedef uint8_t _BYTE;
+
+// Helper for UTF-16 hex formatting (UE4 compatible)
+void format_hex_utf16(uint16_t* out, uint32_t* ids) {
+    const char* hex = "0123456789ABCDEF";
+    for (int i = 0; i < 4; i++) {
+        uint32_t val = ids[i];
+        for (int j = 7; j >= 0; j--) {
+            out[i * 8 + j] = (uint16_t)hex[val & 0xF];
+            val >>= 4;
+        }
+    }
+}
+
+// --- libanogs.so Hooks ---
 
 __pid_t (**(*osub_2940D0)(__pid_t (**result)(void)))(void) = nullptr;
 __pid_t (**__fastcall hsub_2940D0(__pid_t (**result)(void)))(void)
@@ -195,6 +207,158 @@ __int64 __fastcall hsub_451564(__int64 a1, __int64 a2)
 __int64 (*osub_21E9C4)(__int64 a1, __int64 a2, __int64 a3, int a4, int a5) = nullptr;
 void hsub_21E9C4(__int64 a1, __int64 a2, __int64 a3, int a4, int a5) { return; }
 
+// --- libUE4.so Hooks ---
+
+__int16 *(*osub_81C2F70)(__int64 a1);
+__int16 *hsub_81C2F70(__int64 a1)
+{
+    struct sysinfo si;
+    if (::sysinfo(&si) != 0) return nullptr;
+    srand(si.procs + si.totalram);
+    uint32_t id[4];
+    id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
+    id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
+    id[2] = (uint32_t)(si.loads[0] << 16) | (uint32_t)(si.procs & 0xFFFF);
+    id[3] = (uint32_t)si.sharedram ^ 0xDEADBEEF;
+
+    uint16_t buf[32];
+    format_hex_utf16(buf, id);
+
+    void (*alloc)(__int64, unsigned int, unsigned int) = (void (*)(__int64, unsigned int, unsigned int))(Tools::GetBaseAddress("libUE4.so") + 0x5625AEC);
+    *(_QWORD *)a1 = 0;
+    *(_DWORD *)(a1 + 8) = 64;
+    alloc(a1, 64, 0);
+    memcpy(*(void **)a1, buf, 64);
+    return (__int16 *)*(void **)a1;
+}
+
+bool (*osub_C492610)(__int64 a1, unsigned int a2, __int64 a3);
+bool hsub_C492610(__int64 a1, unsigned int a2, __int64 a3)
+{
+    bool res = osub_C492610(a1, a2, a3);
+    struct sysinfo si;
+    if (::sysinfo(&si) != 0) return res;
+    uint32_t id[4];
+    id[0] = (uint32_t)(si.uptime * 1000) ^ 0x55AA55AA;
+    id[1] = (uint32_t)(si.totalram >> 12) | 0x10000;
+    id[2] = (uint32_t)(si.loads[0] << 16) | (uint32_t)(si.procs & 0xFFFF);
+    id[3] = (uint32_t)si.sharedram ^ 0xDEADBEEF;
+
+    uint16_t buf[32];
+    format_hex_utf16(buf, id);
+
+    __int16 *ptr = *(__int16 **)(a3 + 0x58);
+    if (ptr)
+        memcpy(ptr, buf, 64);
+    return res;
+}
+
+__int64 (*osub_C4E0330)(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5);
+__int64 hsub_C4E0330(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5)
+{
+    return 0; // termination
+}
+
+void (*osub_82A8280)(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9);
+void hsub_82A8280(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
+{
+    return; // flag fix
+}
+
+__int64 (*osub_7ADAE8C)();
+__int64 hsub_7ADAE8C()
+{
+    return 0; // 10 years
+}
+
+int *(*osub_81FF6F4)(int *result, uint16_t *src, int a3);
+int *hsub_81FF6F4(int *result, uint16_t *src, int a3)
+{
+    if (src && a3 >= 20)
+    {
+        const uint16_t target[] = {'l','o','g','i','n','-','i','d','e','n','t','i','f','i','e','r','.','t','x','t'};
+        bool match = true;
+        for(int i=0; i<20; i++) {
+            if(src[i] != target[i]) { match = false; break; }
+        }
+        if (match) return nullptr;
+    }
+    return osub_81FF6F4(result, src, a3);
+}
+
+// Hyper Precise Bullet Registration God Hook
+__int64 (*osub_68CD2F4)(__int64 a1, __int64 a2);
+__int64 hsub_68CD2F4(__int64 a1, __int64 a2)
+{
+    if (!a1 || !a2) return 0;
+    *(_QWORD *)(a1 + 496) = a2;
+    typedef __int64 (*Pusher_t)(__int64, __int64);
+    Pusher_t pusher = (Pusher_t)(Tools::GetBaseAddress("libUE4.so") + 0x69CBE8C);
+    return pusher(a1, a2);
+}
+
+// God Event Filter: Silently drop specific security reports
+__int64 (*osub_84DCE80)(__int64 result, __int64 a2, int a3);
+__int64 hsub_84DCE80(__int64 result, __int64 a2, int a3)
+{
+    if (a2) {
+        uintptr_t base = Tools::GetBaseAddress("libUE4.so");
+        if (a2 == (base + 0xD573708) || a2 == (base + 0xCAB19B8)) {
+            return 0; // Silently drop the report
+        }
+    }
+    return osub_84DCE80(result, a2, a3);
+}
+
+// --- PURE UE4 CRASH FIXER (Signal Shield & God Silence) ---
+
+__int64 (*osub_B5F3DE0)(__int64 a1, struct sigaction *oact);
+__int64 hsub_B5F3DE0(__int64 a1, struct sigaction *oact)
+{
+    return 0; // Success but skip registration
+}
+
+__int64 (*osub_B5FC490)(__int64 a1, struct sigaction *oact);
+__int64 hsub_B5FC490(__int64 a1, struct sigaction *oact)
+{
+    return 0; // Success but skip registration
+}
+
+__int64 (*osub_C4E0770)(_QWORD a1);
+__int64 hsub_C4E0770(_QWORD a1)
+{
+    return 0; // Silent success, no observer set
+}
+
+// --- TOTAL LOBOTOMY SET (Freeze & Transition Crash Fixers) ---
+
+// Late-Stage God Dispatcher: Handles 'late' security events
+void (*osub_82AE490)(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, unsigned __int16 *a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9);
+void hsub_82AE490(__int64 a1, unsigned int a2, __int64 a3, unsigned int a4, unsigned __int16 *a5, __int64 a6, __int64 a7, __int64 a8, __int64 a9)
+{
+    return; // God silence for late telemetry
+}
+
+// Context Collector God Hook: Fixes the 1-second freeze before crash
+__int64 (*osub_8241084)(__int64 result);
+__int64 hsub_8241084(__int64 result)
+{
+    return 0; // Skip memory context collection (The culprit for the freeze)
+}
+
+// Violation Sink & Data Preparer: Prevent process 'Dirty Process' flags
+__int64 (*osub_862A210)(__int64 result, __int64 a2);
+__int64 hsub_862A210(__int64 result, __int64 a2)
+{
+    return 0; // Silently sink violation flags
+}
+
+__int64 (*osub_8603830)(__int64 result, __int64 a2, __int64 a3);
+__int64 hsub_8603830(__int64 result, __int64 a2, __int64 a3)
+{
+    return 0; // Silently sink data preparation
+}
+
 void *ue4_thread(void *)
 {
     do
@@ -202,14 +366,48 @@ void *ue4_thread(void *)
         sleep(1);
     } while (!isLibraryLoaded("libUE4.so"));
 #if defined(__aarch64__)
+    // Premium God Hooks - Bullet Issues FIXED, Reports BLOCKED
+    HOOK_LIB("libUE4.so", "0x68CD2F4", hsub_68CD2F4, osub_68CD2F4);
+    HOOK_LIB("libUE4.so", "0x84DCE80", hsub_84DCE80, osub_84DCE80);
 
-    PATCH_LIB("libUE4.so", "0x5ACC184", "00 00 80 D2 C0 03 5F D6"); // termination
-    PATCH_LIB("libUE4.so", "0x62E286C", "20 00 80 D2 C0 03 5F D6"); // termination
-    PATCH_LIB("libUE4.so", "0x68CD9C8", "1F 20 03 D5");             // termination
-    PATCH_LIB("libUE4.so", "0x7435D90", "00 00 80 D2 C0 03 5F D6"); // termination new
-    PATCH_LIB("libUE4.so", "0x74B1BC0", "E0 03 27 1E C0 03 5F D6"); // server kick
-    PATCH_LIB("libUE4.so", "0x776AFF8", "00 00 80 D2 C0 03 5F D6"); // server kick
-    PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6"); // fake damage fixer
+    // Total Lobotomy Set - FREEZE FIX & TRANSITION STABILITY
+    HOOK_LIB("libUE4.so", "0x82AE490", hsub_82AE490, osub_82AE490); // Late Dispatcher
+    HOOK_LIB("libUE4.so", "0x8241084", hsub_8241084, osub_8241084); // Context Collector (Freeze Fix)
+    HOOK_LIB("libUE4.so", "0x862A210", hsub_862A210, osub_862A210); // Violation Sink
+    HOOK_LIB("libUE4.so", "0x8603830", hsub_8603830, osub_8603830); // Data Preparer
+
+    // Pure UE4 Crash Fixer - Stability Overload
+    HOOK_LIB("libUE4.so", "0xB5F3DE0", hsub_B5F3DE0, osub_B5F3DE0); // Signal Shield 1
+    HOOK_LIB("libUE4.so", "0xB5FC490", hsub_B5FC490, osub_B5FC490); // Signal Shield 2
+    HOOK_LIB("libUE4.so", "0xC4E0770", hsub_C4E0330, osub_C4E0770); // UQMCrash God Silence
+
+    PATCH_LIB("libUE4.so", "0x7A649A8", "00 00 80 D2 C0 03 5F D6"); // fake damage fix
+    PATCH_LIB("libUE4.so", "0x69913E0", "00 00 80 D2 C0 03 5F D6"); // accuracy fix
+
+    // Identity & Anti-Cheat
+    HOOK_LIB("libUE4.so", "0x81C2F70", hsub_81C2F70, osub_81C2F70);
+    HOOK_LIB("libUE4.so", "0xC492610", hsub_C492610, osub_C492610);
+    HOOK_LIB("libUE4.so", "0x81FF6F4", hsub_81FF6F4, osub_81FF6F4);
+    HOOK_LIB("libUE4.so", "0xC4E0330", hsub_C4E0330, osub_C4E0330);
+    HOOK_LIB("libUE4.so", "0x82A8280", hsub_82A8280, osub_82A8280);
+
+    // Higgs & Global Security
+    HOOK_LIB("libUE4.so", "0x7ADAE8C", hsub_7ADAE8C, osub_7ADAE8C);
+    PATCH_LIB("libUE4.so", "0x5ACC184", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7ADADB4", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7ADAE00", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7ADAE4C", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x77DFF68", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x59C0EB8", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7820930", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7820A08", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7820B2C", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x7820BB8", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x640B598", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x62E286C", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x74B1BC0", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x776AFF8", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x761CD04", "00 00 80 D2 C0 03 5F D6");
 #endif
     return NULL;
 }
@@ -225,15 +423,15 @@ void *anogs_thread(void *)
     HOOKSYM_LIB("libanogs.so", "AnoSDKGetReportData", hAnoSDKGetReportData, oAnoSDKGetReportData);
     HOOKSYM_LIB("libanogs.so", "AnoSDKOnRecvSignature", hAnoSDKOnRecvSignature, oAnoSDKOnRecvSignature);
 
-    HOOK_LIB("libanogs.so", "0x451564", hsub_451564, osub_451564); // fake hash returner
-    HOOK_LIB("libanogs.so", "0x21248C", hsub_21248C, osub_21248C); // case 16 (crash fix)
-    HOOK_LIB("libanogs.so", "0x228168", hsub_228168, osub_228168); // case 35
-    HOOK_LIB("libanogs.so", "0x228560", hsub_228560, osub_228560); // case 37
-    HOOK_LIB("libanogs.so", "0x389744", hsub_389744, osub_389744); // case 34
+    HOOK_LIB("libanogs.so", "0x451564", hsub_451564, osub_451564);
+    HOOK_LIB("libanogs.so", "0x21248C", hsub_21248C, osub_21248C);
+    HOOK_LIB("libanogs.so", "0x228168", hsub_228168, osub_228168);
+    HOOK_LIB("libanogs.so", "0x228560", hsub_228560, osub_228560);
+    HOOK_LIB("libanogs.so", "0x389744", hsub_389744, osub_389744);
     HOOK_LIB("libanogs.so", "0x2940D0", hsub_2940D0, osub_2940D0);
-    HOOK_LIB("libanogs.so", "0x425864", sub_425864, osub_425864);  // memory master
-    HOOK_LIB("libanogs.so", "0x21E9C4", hsub_21E9C4, osub_21E9C4); // new hook
-    HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00); // runtime hash verifier
+    HOOK_LIB("libanogs.so", "0x425864", sub_425864, osub_425864);
+    HOOK_LIB("libanogs.so", "0x21E9C4", hsub_21E9C4, osub_21E9C4);
+    HOOK_LIB("libanogs.so", "0x49AA00", hsub_49AA00, osub_49AA00);
     HOOK_LIB("libanogs.so", "0x36A5B8", hsub_36A5B8, osub_36A5B8);
     HOOK_LIB("libanogs.so", "0x39F56C", hsub_39F56C, osub_39F56C);
     HOOK_LIB("libanogs.so", "0x447750", hsub_447750, osub_447750);
@@ -246,7 +444,7 @@ void *anogs_thread(void *)
     HOOK_LIB("libanogs.so", "0x2328F0", hsub_2328F0, osub_2328F0);
     HOOK_LIB("libanogs.so", "0x51F980", hsub_51F980, osub_51F980);
     HOOK_LIB("libanogs.so", "0x51F9A0", hsub_51F9A0, osub_51F9A0);
-    PATCH_LIB("libanogs.so", "0x4B3560", "20 00 80 D2 C0 03 5F D6"); // Fix Crash
+    PATCH_LIB("libanogs.so", "0x4B3560", "20 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libanogs.so", "0x225528", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libanogs.so", "0x31DCB0", "1F 20 03 D5");
     PATCH_LIB("libanogs.so", "0x330494", "E0 03 27 1E C0 03 5F D6");
@@ -258,7 +456,6 @@ void *anogs_thread(void *)
     PATCH_LIB("libanogs.so", "0x4B39E0", "00 00 80 D2 C0 03 5F D6");
     PATCH_LIB("libanogs.so", "0x4F7074", "E0 03 27 1E C0 03 5F D6");
     PATCH_LIB("libanogs.so", "0x51F9C0", "00 00 80 D2 C0 03 5F D6");
-    // crash : PATCH_LIB("libanogs.so", "0x51FA20", "1F 20 03 D5");
     PATCH_LIB("libanogs.so", "0x51FAB0", "20 00 80 D2 C0 03 5F D6");
     return NULL;
 }

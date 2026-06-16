@@ -1,0 +1,109 @@
+typedef uint64_t _QWORD;
+typedef uint32_t _DWORD;
+typedef uint16_t _WORD;
+typedef uint8_t _BYTE;
+
+bool (*osub_5ACC184)(unsigned int *);
+bool hsub_5ACC184(unsigned int *a1) {
+    return true;
+}
+
+unsigned int *(*osub_615974C)(unsigned int *result, int a2);
+unsigned int *hsub_615974C(unsigned int *result, int a2) {
+    return result;
+}
+
+__int64 (*osub_64081E0)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64);
+__int64 hsub_64081E0(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) {
+    return 0;
+}
+
+void (*osub_640B598)(__int64, __int64, unsigned int *, __int64, __int64, __int64, __int64, __int64);
+void hsub_640B598(__int64 a1, __int64 a2, unsigned int *a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) {
+    return;
+}
+
+__int64 (*osub_640E800)(__int64 a1, __int64 a2);
+__int64 hsub_640E800(__int64 a1, __int64 a2) {
+    return 0;
+}
+
+__int64 (*osub_68CEC0C)(__int64, __int64, __int64, __int64, __int64, __int64, __int64, __int64);
+__int64 hsub_68CEC0C(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) {
+    return 0;
+}
+
+__int64 (*osub_69A82C0)(__int64 a1, __int64 a2);
+__int64 hsub_69A82C0(__int64 a1, __int64 a2) {
+    return 0;
+}
+
+__int64 (*osub_69AE2E4)(__int64, unsigned int *, __int64, __int64, __int64, __int64, __int64, __int64);
+__int64 hsub_69AE2E4(__int64 a1, unsigned int *a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6, __int64 a7, __int64 a8) {
+    return 0;
+}
+
+bool (*osub_69AE538)(__int64 a1, unsigned int a2, char a3);
+bool hsub_69AE538(__int64 a1, unsigned int a2, char a3) {
+    return true;
+}
+
+__int64 (*osub_6CCAA8C)();
+__int64 hsub_6CCAA8C() {
+    return 0;
+}
+
+__int64 (*osub_AA63558)(__int64 result, __int64 a2);
+__int64 hsub_AA63558(__int64 result, __int64 a2) {
+    return 0;
+}
+
+void *(*osub_AD1EBE0)(__int64 a1, __int64 *a2, __int64 *a3);
+void *hsub_AD1EBE0(__int64 a1, __int64 *a2, __int64 *a3) {
+    return nullptr;
+}
+
+__int64 (*osub_AE8D0D0)(__int64 a1, _QWORD *a2);
+__int64 hsub_AE8D0D0(__int64 a1, _QWORD *a2) {
+    return 0;
+}
+
+__int64 (*osub_B4831F8)(__int64 a1, __int64 a2, int *a3);
+__int64 hsub_B4831F8(__int64 a1, __int64 a2, int *a3) {
+    return 0;
+}
+
+__int64 (*osub_B492378)(__int64 a1, int a2);
+__int64 hsub_B492378(__int64 a1, int a2) {
+    return 0;
+}
+
+__int64 *(*osub_B492D40)(__int64 a1, __int64 a2, char a3);
+__int64 *hsub_B492D40(__int64 a1, __int64 a2, char a3) {
+    return nullptr;
+}
+
+void *(*osub_BA82D98)(__int64 a1);
+void *hsub_BA82D98(__int64 a1) {
+    return nullptr;
+}
+
+void load_dump_hhh() {
+    PATCH_LIB("libUE4.so", "0x5ACC184", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x615974C", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x64081E0", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x640B598", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x640E800", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x68CEC0C", "00 00 80 D2 C0 03 5F D6");
+    HOOK_LIB("libUE4.so", "0x69A82C0", hsub_69A82C0, osub_69A82C0);
+    PATCH_LIB("libUE4.so", "0x69AE2E4", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x69AE538", "00 00 80 D2 C0 03 5F D6");
+    PATCH_LIB("libUE4.so", "0x6CCAA8C", "00 00 80 D2 C0 03 5F D6");
+    HOOK_LIB("libUE4.so", "0xAA63558", hsub_AA63558, osub_AA63558);
+    HOOK_LIB("libUE4.so", "0xAD1EBE0", hsub_AD1EBE0, osub_AD1EBE0);
+    HOOK_LIB("libUE4.so", "0xAE8D0D0", hsub_AE8D0D0, osub_AE8D0D0);
+    HOOK_LIB("libUE4.so", "0xB4831F8", hsub_B4831F8, osub_B4831F8);
+    HOOK_LIB("libUE4.so", "0xB492378", hsub_B492378, osub_B492378);
+    HOOK_LIB("libUE4.so", "0xB492D40", hsub_B492D40, osub_B492D40);
+    HOOK_LIB("libUE4.so", "0xBA82D98", hsub_BA82D98, osub_BA82D98);
+}
